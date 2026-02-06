@@ -109,6 +109,14 @@
           "value": "Europe/Paris"
         },
         {
+          "title": "Israel (IST/IDT)",
+          "value": "Asia/Jerusalem"
+        },
+        {
+          "title": "India (IST)",
+          "value": "Asia/Kolkata"
+        },
+        {
           "title": "Tokyo (JST)",
           "value": "Asia/Tokyo"
         },
