@@ -65,12 +65,15 @@ function getProviderConfig(
   const savvycalSlugs = parseSlugs(preferences.savvycalLink);
   const calcomSlugs = parseSlugs(preferences.calcomEventSlug);
 
+  const isSavvycalSlug = selectedSlug ? savvycalSlugs.includes(selectedSlug) : false;
+  const isCalcomSlug = selectedSlug ? calcomSlugs.includes(selectedSlug) : false;
+
   return {
     savvycalToken: preferences.savvycalToken,
-    savvycalLink: selectedSlug || savvycalSlugs[0] || preferences.savvycalLink,
+    savvycalLink: isSavvycalSlug ? selectedSlug : savvycalSlugs[0],
     savvycalUsername: preferences.savvycalUsername,
     calcomUsername: preferences.calcomUsername,
-    calcomEventSlug: selectedSlug || calcomSlugs[0] || preferences.calcomEventSlug,
+    calcomEventSlug: isCalcomSlug ? selectedSlug : calcomSlugs[0],
   };
 }
 
@@ -190,6 +193,12 @@ export default function Command() {
   const hasMultipleSlugs = allSlugs.length > 1;
 
   const [selectedSlug, setSelectedSlug] = useState<string>(allSlugs[0] || "");
+
+  // Reset selected slug when provider or slug preferences change
+  useEffect(() => {
+    setSelectedSlug(allSlugs[0] || "");
+  }, [providerType, preferences.savvycalLink, preferences.calcomEventSlug]);
+
   const config = getProviderConfig(preferences, selectedSlug);
 
   // Fresh dates on every render
