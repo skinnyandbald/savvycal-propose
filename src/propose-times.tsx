@@ -71,10 +71,14 @@ function getProviderConfig(
 
   return {
     savvycalToken: preferences.savvycalToken,
-    savvycalLink: providerType === "savvycal" ? selectedSlug || savvycalSlugs[0] : undefined,
+    savvycalLink:
+      providerType === "savvycal"
+        ? selectedSlug || savvycalSlugs[0]
+        : undefined,
     savvycalUsername: preferences.savvycalUsername,
     calcomUsername: preferences.calcomUsername,
-    calcomEventSlug: providerType === "calcom" ? selectedSlug || calcomSlugs[0] : undefined,
+    calcomEventSlug:
+      providerType === "calcom" ? selectedSlug || calcomSlugs[0] : undefined,
   };
 }
 
@@ -165,9 +169,7 @@ function generateMessage(
   }
 
   lines.push("");
-  lines.push(
-    `If none of those work, feel free to grab any open time here:`,
-  );
+  lines.push(`If none of those work, feel free to grab any open time here:`);
   lines.push(provider.getFallbackUrl(config));
 
   return lines.join("\n");
@@ -226,7 +228,11 @@ export default function Command() {
   // Fetch link info to get available durations
   useEffect(() => {
     const currentProvider = getProvider(providerType);
-    const currentConfig = getProviderConfig(preferences, providerType, selectedSlug);
+    const currentConfig = getProviderConfig(
+      preferences,
+      providerType,
+      selectedSlug,
+    );
     const fetchDate = normalizeDate(new Date());
 
     const loadLinkInfo = async () => {
@@ -357,10 +363,7 @@ export default function Command() {
         </ActionPanel>
       }
     >
-      <Form.Description
-        title="Propose Times"
-        text={dateRangeText}
-      />
+      <Form.Description title="Propose Times" text={dateRangeText} />
 
       <Form.DatePicker
         id="startDate"
