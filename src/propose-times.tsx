@@ -9,7 +9,7 @@ import {
   getPreferenceValues,
   Form,
 } from "@raycast/api";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { format, addDays } from "date-fns";
 import { formatInTimeZone, utcToZonedTime } from "date-fns-tz";
 import { getProvider } from "./providers";
@@ -50,13 +50,29 @@ function getTimezoneAbbr(tzValue: string): string {
   return tz?.abbr || tzValue;
 }
 
-function getProviderConfig(preferences: Preferences): ProviderConfig {
+function parseSlugs(raw: string | undefined): string[] {
+  if (!raw) return [];
+  const slugs = raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  return [...new Set(slugs)];
+}
+
+function getProviderConfig(
+  preferences: Preferences,
+  providerType: ProviderType,
+  selectedSlug?: string,
+): ProviderConfig {
+  const savvycalSlugs = parseSlugs(preferences.savvycalLink);
+  const calcomSlugs = parseSlugs(preferences.calcomEventSlug);
+
   return {
     savvycalToken: preferences.savvycalToken,
-    savvycalLink: preferences.savvycalLink,
+    savvycalLink: providerType === "savvycal" ? selectedSlug || savvycalSlugs[0] : undefined,
     savvycalUsername: preferences.savvycalUsername,
     calcomUsername: preferences.calcomUsername,
-    calcomEventSlug: preferences.calcomEventSlug,
+    calcomEventSlug: providerType === "calcom" ? selectedSlug || calcomSlugs[0] : undefined,
   };
 }
 
@@ -148,7 +164,7 @@ function generateMessage(
 
   lines.push("");
   lines.push(
-    `Feel free to use this booking page (contains more availabilities):`,
+    `If none of those work, feel free to grab any open time here:`,
   );
   lines.push(provider.getFallbackUrl(config));
 
@@ -167,7 +183,30 @@ export default function Command() {
   const defaultDays = parseInt(preferences.defaultDaysAhead) || 10;
   const providerType = preferences.provider || "savvycal";
   const provider = getProvider(providerType);
-  const config = getProviderConfig(preferences);
+
+  // Parse slugs for the active provider
+  const allSlugs = useMemo(
+    () =>
+      providerType === "savvycal"
+        ? parseSlugs(preferences.savvycalLink)
+        : parseSlugs(preferences.calcomEventSlug),
+    [providerType, preferences.savvycalLink, preferences.calcomEventSlug],
+  );
+  const hasMultipleSlugs = allSlugs.length > 1;
+
+  const [selectedSlug, setSelectedSlug] = useState<string>(allSlugs[0] || "");
+  const isInitialMount = useRef(true);
+
+  // Reset selected slug when provider or slug preferences change (skip initial mount)
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    setSelectedSlug(allSlugs[0] || "");
+  }, [allSlugs]);
+
+  const config = getProviderConfig(preferences, providerType, selectedSlug);
 
   // Fresh dates on every render
   const today = normalizeDate(new Date());
@@ -184,17 +223,19 @@ export default function Command() {
 
   // Fetch link info to get available durations
   useEffect(() => {
+    const currentProvider = getProvider(providerType);
+    const currentConfig = getProviderConfig(preferences, providerType, selectedSlug);
+    const fetchDate = normalizeDate(new Date());
+
     const loadLinkInfo = async () => {
       try {
-        // Use a small date range just to get link info
-        const result = await provider.fetchSlots(
-          config,
-          today,
-          addDays(today, 1),
+        const result = await currentProvider.fetchSlots(
+          currentConfig,
+          fetchDate,
+          addDays(fetchDate, 1),
         );
         setLinkInfo(result.linkInfo);
         setDurations(result.linkInfo.durations);
-        // Default to 25 if available, otherwise use the link's default
         const defaultDur = result.linkInfo.durations.includes(25)
           ? 25
           : result.linkInfo.defaultDuration;
@@ -204,7 +245,7 @@ export default function Command() {
       }
     };
     loadLinkInfo();
-  }, [providerType]);
+  }, [providerType, selectedSlug]);
 
   // Reset to fresh dates on mount
   useEffect(() => {
@@ -316,7 +357,7 @@ export default function Command() {
     >
       <Form.Description
         title="Propose Times"
-        text={`Generate a message with your ${provider.name} availability: ${dateRangeText}`}
+        text={dateRangeText}
       />
 
       <Form.DatePicker
@@ -336,6 +377,19 @@ export default function Command() {
       />
 
       <Form.Separator />
+
+      {hasMultipleSlugs && (
+        <Form.Dropdown
+          id="eventType"
+          title="Event Type"
+          value={selectedSlug}
+          onChange={setSelectedSlug}
+        >
+          {allSlugs.map((slug) => (
+            <Form.Dropdown.Item key={slug} value={slug} title={slug} />
+          ))}
+        </Form.Dropdown>
+      )}
 
       <Form.Dropdown
         id="duration"
