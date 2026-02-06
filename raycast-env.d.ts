@@ -12,13 +12,13 @@ type ExtensionPreferences = {
   "provider": "savvycal" | "calcom",
   /** SavvyCal API Token - Your SavvyCal Personal Access Token (starts with pt_secret_). Required if using SavvyCal. */
   "savvycalToken"?: string,
-  /** SavvyCal Link Slug - Comma-separated slugs from your SavvyCal URLs (e.g., 'chat' or 'chat, interview'). First slug is the default. Required if using SavvyCal. */
+  /** SavvyCal Link Slug(s) - Comma-separated slugs from your SavvyCal URLs (e.g., 'chat' or 'chat, interview'). First slug is the default. Required if using SavvyCal. */
   "savvycalLink": string,
   /** SavvyCal Username - Your SavvyCal username (e.g., 'skinnyandbald'). Required if using SavvyCal. */
   "savvycalUsername"?: string,
   /** Cal.com Username - Your Cal.com username (e.g., 'skinnyandbald' from cal.com/skinnyandbald/...). Required if using Cal.com. */
   "calcomUsername"?: string,
-  /** Cal.com Event Slug - Comma-separated event type slugs (e.g., 'pow-wow' or 'pow-wow, 30min'). First slug is the default. Required if using Cal.com. */
+  /** Cal.com Event Slug(s) - Comma-separated event type slugs (e.g., 'pow-wow' or 'pow-wow, 30min'). First slug is the default. Required if using Cal.com. */
   "calcomEventSlug"?: string,
   /** Default Recipient Timezone - Default timezone for the person you're proposing times to */
   "defaultTimezone": "America/New_York" | "America/Chicago" | "America/Denver" | "America/Los_Angeles" | "UTC" | "Europe/London" | "Europe/Paris" | "Asia/Jerusalem" | "Asia/Kolkata" | "Asia/Tokyo" | "Australia/Sydney",
