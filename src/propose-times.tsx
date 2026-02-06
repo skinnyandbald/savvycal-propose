@@ -41,6 +41,8 @@ const TIMEZONES = [
   { title: "UTC", value: "UTC", abbr: "UTC" },
   { title: "London (GMT/BST)", value: "Europe/London", abbr: "GMT" },
   { title: "Paris (CET/CEST)", value: "Europe/Paris", abbr: "CET" },
+  { title: "Israel (IST/IDT)", value: "Asia/Jerusalem", abbr: "IDT" },
+  { title: "India (IST)", value: "Asia/Kolkata", abbr: "IST" },
   { title: "Tokyo (JST)", value: "Asia/Tokyo", abbr: "JST" },
   { title: "Sydney (AEST/AEDT)", value: "Australia/Sydney", abbr: "AEST" },
 ];
