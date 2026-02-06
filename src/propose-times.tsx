@@ -52,13 +52,30 @@ function getTimezoneAbbr(tzValue: string): string {
   return tz?.abbr || tzValue;
 }
 
-function getProviderConfig(preferences: Preferences): ProviderConfig {
+function parseSlugs(raw: string | undefined): string[] {
+  if (!raw) return [];
+  return raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+function getProviderConfig(
+  preferences: Preferences,
+  selectedSlug?: string,
+): ProviderConfig {
+  const savvycalSlugs = parseSlugs(preferences.savvycalLink);
+  const calcomSlugs = parseSlugs(preferences.calcomEventSlug);
+
+  const isSavvycalSlug = selectedSlug ? savvycalSlugs.includes(selectedSlug) : false;
+  const isCalcomSlug = selectedSlug ? calcomSlugs.includes(selectedSlug) : false;
+
   return {
     savvycalToken: preferences.savvycalToken,
-    savvycalLink: preferences.savvycalLink,
+    savvycalLink: isSavvycalSlug ? selectedSlug : savvycalSlugs[0],
     savvycalUsername: preferences.savvycalUsername,
     calcomUsername: preferences.calcomUsername,
-    calcomEventSlug: preferences.calcomEventSlug,
+    calcomEventSlug: isCalcomSlug ? selectedSlug : calcomSlugs[0],
   };
 }
 
@@ -150,7 +167,7 @@ function generateMessage(
 
   lines.push("");
   lines.push(
-    `Feel free to use this booking page (contains more availabilities):`,
+    `If none of those work, feel free to grab any open time here:`,
   );
   lines.push(provider.getFallbackUrl(config));
 
@@ -169,7 +186,22 @@ export default function Command() {
   const defaultDays = parseInt(preferences.defaultDaysAhead) || 10;
   const providerType = preferences.provider || "savvycal";
   const provider = getProvider(providerType);
-  const config = getProviderConfig(preferences);
+
+  // Parse slugs for the active provider
+  const allSlugs =
+    providerType === "savvycal"
+      ? parseSlugs(preferences.savvycalLink)
+      : parseSlugs(preferences.calcomEventSlug);
+  const hasMultipleSlugs = allSlugs.length > 1;
+
+  const [selectedSlug, setSelectedSlug] = useState<string>(allSlugs[0] || "");
+
+  // Reset selected slug when provider or slug preferences change
+  useEffect(() => {
+    setSelectedSlug(allSlugs[0] || "");
+  }, [providerType, preferences.savvycalLink, preferences.calcomEventSlug]);
+
+  const config = getProviderConfig(preferences, selectedSlug);
 
   // Fresh dates on every render
   const today = normalizeDate(new Date());
@@ -206,7 +238,7 @@ export default function Command() {
       }
     };
     loadLinkInfo();
-  }, [providerType]);
+  }, [providerType, selectedSlug]);
 
   // Reset to fresh dates on mount
   useEffect(() => {
@@ -318,7 +350,7 @@ export default function Command() {
     >
       <Form.Description
         title="Propose Times"
-        text={`Generate a message with your ${provider.name} availability: ${dateRangeText}`}
+        text={dateRangeText}
       />
 
       <Form.DatePicker
@@ -338,6 +370,19 @@ export default function Command() {
       />
 
       <Form.Separator />
+
+      {hasMultipleSlugs && (
+        <Form.Dropdown
+          id="eventType"
+          title="Event Type"
+          value={selectedSlug}
+          onChange={setSelectedSlug}
+        >
+          {allSlugs.map((slug) => (
+            <Form.Dropdown.Item key={slug} value={slug} title={slug} />
+          ))}
+        </Form.Dropdown>
+      )}
 
       <Form.Dropdown
         id="duration"
