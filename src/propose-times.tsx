@@ -9,7 +9,7 @@ import {
   getPreferenceValues,
   Form,
 } from "@raycast/api";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { format, addDays } from "date-fns";
 import { formatInTimeZone, utcToZonedTime } from "date-fns-tz";
 import { getProvider } from "./providers";
@@ -52,28 +52,27 @@ function getTimezoneAbbr(tzValue: string): string {
 
 function parseSlugs(raw: string | undefined): string[] {
   if (!raw) return [];
-  return raw
+  const slugs = raw
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
+  return [...new Set(slugs)];
 }
 
 function getProviderConfig(
   preferences: Preferences,
+  providerType: ProviderType,
   selectedSlug?: string,
 ): ProviderConfig {
   const savvycalSlugs = parseSlugs(preferences.savvycalLink);
   const calcomSlugs = parseSlugs(preferences.calcomEventSlug);
 
-  const isSavvycalSlug = selectedSlug ? savvycalSlugs.includes(selectedSlug) : false;
-  const isCalcomSlug = selectedSlug ? calcomSlugs.includes(selectedSlug) : false;
-
   return {
     savvycalToken: preferences.savvycalToken,
-    savvycalLink: isSavvycalSlug ? selectedSlug : savvycalSlugs[0],
+    savvycalLink: providerType === "savvycal" ? selectedSlug || savvycalSlugs[0] : undefined,
     savvycalUsername: preferences.savvycalUsername,
     calcomUsername: preferences.calcomUsername,
-    calcomEventSlug: isCalcomSlug ? selectedSlug : calcomSlugs[0],
+    calcomEventSlug: providerType === "calcom" ? selectedSlug || calcomSlugs[0] : undefined,
   };
 }
 
@@ -186,10 +185,13 @@ export default function Command() {
   const provider = getProvider(providerType);
 
   // Parse slugs for the active provider
-  const allSlugs =
-    providerType === "savvycal"
-      ? parseSlugs(preferences.savvycalLink)
-      : parseSlugs(preferences.calcomEventSlug);
+  const allSlugs = useMemo(
+    () =>
+      providerType === "savvycal"
+        ? parseSlugs(preferences.savvycalLink)
+        : parseSlugs(preferences.calcomEventSlug),
+    [providerType, preferences.savvycalLink, preferences.calcomEventSlug],
+  );
   const hasMultipleSlugs = allSlugs.length > 1;
 
   const [selectedSlug, setSelectedSlug] = useState<string>(allSlugs[0] || "");
@@ -197,9 +199,9 @@ export default function Command() {
   // Reset selected slug when provider or slug preferences change
   useEffect(() => {
     setSelectedSlug(allSlugs[0] || "");
-  }, [providerType, preferences.savvycalLink, preferences.calcomEventSlug]);
+  }, [allSlugs]);
 
-  const config = getProviderConfig(preferences, selectedSlug);
+  const config = getProviderConfig(preferences, providerType, selectedSlug);
 
   // Fresh dates on every render
   const today = normalizeDate(new Date());
