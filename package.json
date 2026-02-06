@@ -47,7 +47,7 @@
       "name": "savvycalLink",
       "type": "textfield",
       "required": false,
-      "title": "SavvyCal Link Slug",
+      "title": "SavvyCal Link Slug(s)",
       "description": "Comma-separated slugs from your SavvyCal URLs (e.g., 'chat' or 'chat, interview'). First slug is the default. Required if using SavvyCal.",
       "default": "chat"
     },
@@ -69,7 +69,7 @@
       "name": "calcomEventSlug",
       "type": "textfield",
       "required": false,
-      "title": "Cal.com Event Slug",
+      "title": "Cal.com Event Slug(s)",
       "description": "Comma-separated event type slugs (e.g., 'pow-wow' or 'pow-wow, 30min'). First slug is the default. Required if using Cal.com."
     },
     {

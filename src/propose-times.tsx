@@ -9,7 +9,7 @@ import {
   getPreferenceValues,
   Form,
 } from "@raycast/api";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { format, addDays } from "date-fns";
 import { formatInTimeZone, utcToZonedTime } from "date-fns-tz";
 import { getProvider } from "./providers";
@@ -195,9 +195,14 @@ export default function Command() {
   const hasMultipleSlugs = allSlugs.length > 1;
 
   const [selectedSlug, setSelectedSlug] = useState<string>(allSlugs[0] || "");
+  const isInitialMount = useRef(true);
 
-  // Reset selected slug when provider or slug preferences change
+  // Reset selected slug when provider or slug preferences change (skip initial mount)
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
     setSelectedSlug(allSlugs[0] || "");
   }, [allSlugs]);
 
@@ -218,17 +223,19 @@ export default function Command() {
 
   // Fetch link info to get available durations
   useEffect(() => {
+    const currentProvider = getProvider(providerType);
+    const currentConfig = getProviderConfig(preferences, providerType, selectedSlug);
+    const fetchDate = normalizeDate(new Date());
+
     const loadLinkInfo = async () => {
       try {
-        // Use a small date range just to get link info
-        const result = await provider.fetchSlots(
-          config,
-          today,
-          addDays(today, 1),
+        const result = await currentProvider.fetchSlots(
+          currentConfig,
+          fetchDate,
+          addDays(fetchDate, 1),
         );
         setLinkInfo(result.linkInfo);
         setDurations(result.linkInfo.durations);
-        // Default to 25 if available, otherwise use the link's default
         const defaultDur = result.linkInfo.durations.includes(25)
           ? 25
           : result.linkInfo.defaultDuration;
