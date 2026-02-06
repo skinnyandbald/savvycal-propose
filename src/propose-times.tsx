@@ -162,7 +162,7 @@ function generateMessage(
 
   lines.push("");
   lines.push(
-    `Feel free to use this booking page (contains more availabilities):`,
+    `If none of those work, feel free to grab any open time here:`,
   );
   lines.push(provider.getFallbackUrl(config));
 
