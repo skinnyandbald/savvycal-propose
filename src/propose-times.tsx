@@ -339,7 +339,7 @@ export default function Command() {
     >
       <Form.Description
         title="Propose Times"
-        text={`Generate a message with your ${provider.name} availability: ${dateRangeText}`}
+        text={dateRangeText}
       />
 
       <Form.DatePicker
