@@ -3,9 +3,11 @@ import { filterSlotsByTime } from "../utils";
 import type { TimeSlot } from "../types";
 
 function makeSlot(utcTime: string, date: string = "2026-02-09"): TimeSlot {
+  const start = new Date(`${date}T${utcTime}:00Z`);
+  const end = new Date(start.getTime() + 60 * 60 * 1000);
   return {
-    start_at: `${date}T${utcTime}:00Z`,
-    end_at: `${date}T${utcTime.replace(/(\d+):/, (_, h) => `${parseInt(h) + 1}:`)}:00Z`,
+    start_at: start.toISOString(),
+    end_at: end.toISOString(),
   };
 }
 
@@ -13,8 +15,8 @@ describe("filterSlotsByTime", () => {
   it("removes slots at or after 7pm in recipient timezone", () => {
     // In ET (UTC-5): 22:00 UTC = 5pm, 00:00+1 UTC = 7pm, 02:00+1 UTC = 9pm
     const slots = [
-      makeSlot("22:00"),          // 5pm ET - keep
-      makeSlot("23:00"),          // 6pm ET - keep
+      makeSlot("22:00"), // 5pm ET - keep
+      makeSlot("23:00"), // 6pm ET - keep
       makeSlot("00:00", "2026-02-10"), // 7pm ET - drop
       makeSlot("02:00", "2026-02-10"), // 9pm ET - drop
     ];
@@ -61,7 +63,7 @@ describe("filterSlotsByTime", () => {
     expect(etResult).toHaveLength(1);
   });
 
-  it("accepts custom latestHour", () => {
+  it("accepts custom cutoffHour", () => {
     // 20:00 UTC = 3pm ET
     const slots = [makeSlot("20:00")];
 

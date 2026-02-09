@@ -24,16 +24,16 @@ export function filterSlotsByDuration(
 }
 
 /**
- * Remove slots that start at or after `latestHour` in the recipient's timezone.
+ * Remove slots that start at or after `cutoffHour` in the recipient's timezone.
  */
 export function filterSlotsByTime(
   slots: TimeSlot[],
   timezone: string,
-  latestHour: number = 19,
+  cutoffHour: number = 19,
 ): TimeSlot[] {
   return slots.filter((s) => {
     const zonedDate = utcToZonedTime(new Date(s.start_at), timezone);
-    return zonedDate.getHours() < latestHour;
+    return zonedDate.getHours() < cutoffHour;
   });
 }
 
