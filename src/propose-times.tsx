@@ -15,6 +15,7 @@ import { formatInTimeZone, utcToZonedTime } from "date-fns-tz";
 import { getProvider } from "./providers";
 import { selectSmartSlots } from "./slotSelection";
 import type { ProviderType, ProviderConfig, TimeSlot, LinkInfo } from "./types";
+import { filterSlotsByDuration } from "./utils";
 
 interface Preferences {
   provider: ProviderType;
@@ -268,19 +269,37 @@ export default function Command() {
     setIsLoading(true);
 
     try {
-      const result = await provider.fetchSlots(config, startDate, endDate);
+      const duration = parseInt(selectedDuration);
+      if (isNaN(duration) || duration <= 0) {
+        await showToast({
+          style: Toast.Style.Failure,
+          title: "Invalid duration",
+          message: "Please select a valid meeting duration",
+        });
+        setIsLoading(false);
+        return;
+      }
+      const result = await provider.fetchSlots(
+        config,
+        startDate,
+        endDate,
+        duration,
+      );
 
-      if (result.slots.length === 0) {
+      // Guard: ensure every slot can fit the full meeting duration,
+      // regardless of what the provider already filtered.
+      const validSlots = filterSlotsByDuration(result.slots, duration);
+
+      if (validSlots.length === 0) {
         await showToast({
           style: Toast.Style.Failure,
           title: "No available slots",
-          message: "No availability found in the selected date range",
+          message: `No ${duration}-minute slots found in the selected date range`,
         });
         setIsLoading(false);
         return;
       }
 
-      const duration = parseInt(selectedDuration);
       const parsedMaxDays = parseInt(preferences.maxDaysToShow);
       const maxDays =
         !isNaN(parsedMaxDays) && parsedMaxDays > 0 ? parsedMaxDays : 3;
@@ -289,7 +308,7 @@ export default function Command() {
         !isNaN(parsedMaxSlots) && parsedMaxSlots > 0 ? parsedMaxSlots : 3;
 
       const htmlMessage = generateMessage(
-        result.slots,
+        validSlots,
         timezone,
         clickableSlots,
         providerType,
@@ -303,7 +322,7 @@ export default function Command() {
 
       // Also generate plain text version (strip HTML tags)
       const plainTextMessage = generateMessage(
-        result.slots,
+        validSlots,
         timezone,
         false, // No clickable slots for plain text
         providerType,

@@ -35,6 +35,7 @@ export interface CalendarProvider {
     config: ProviderConfig,
     startDate: Date,
     endDate: Date,
+    duration?: number,
   ): Promise<FetchSlotsResult>;
   generateBookingUrl(
     config: ProviderConfig,
