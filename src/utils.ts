@@ -11,6 +11,10 @@ export function filterSlotsByDuration(
   slots: TimeSlot[],
   durationMinutes: number,
 ): TimeSlot[] {
+  if (!durationMinutes || durationMinutes <= 0) {
+    return slots;
+  }
+
   const minMs = minutesToMs(durationMinutes);
   return slots.filter((s) => {
     const span = new Date(s.end_at).getTime() - new Date(s.start_at).getTime();

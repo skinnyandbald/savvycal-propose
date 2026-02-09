@@ -270,6 +270,15 @@ export default function Command() {
 
     try {
       const duration = parseInt(selectedDuration);
+      if (isNaN(duration) || duration <= 0) {
+        await showToast({
+          style: Toast.Style.Failure,
+          title: "Invalid duration",
+          message: "Please select a valid meeting duration",
+        });
+        setIsLoading(false);
+        return;
+      }
       const result = await provider.fetchSlots(
         config,
         startDate,
