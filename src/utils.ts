@@ -1,3 +1,4 @@
+import { utcToZonedTime } from "date-fns-tz";
 import type { TimeSlot } from "./types";
 
 export function minutesToMs(minutes: number): number {
@@ -19,6 +20,20 @@ export function filterSlotsByDuration(
   return slots.filter((s) => {
     const span = new Date(s.end_at).getTime() - new Date(s.start_at).getTime();
     return span >= minMs;
+  });
+}
+
+/**
+ * Remove slots that start at or after `cutoffHour` in the recipient's timezone.
+ */
+export function filterSlotsByTime(
+  slots: TimeSlot[],
+  timezone: string,
+  cutoffHour: number = 19,
+): TimeSlot[] {
+  return slots.filter((s) => {
+    const zonedDate = utcToZonedTime(new Date(s.start_at), timezone);
+    return zonedDate.getHours() < cutoffHour;
   });
 }
 
