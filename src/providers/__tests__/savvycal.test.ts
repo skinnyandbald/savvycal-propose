@@ -189,6 +189,68 @@ describe("savvycalProvider", () => {
       expect(result.linkInfo.defaultDuration).toBe(30);
     });
 
+    it("filters slots by duration when duration is provided", async () => {
+      const linksResponse = {
+        data: [
+          {
+            id: "link_123",
+            slug: "chat",
+            name: "Chat",
+            durations: [25, 45],
+            default_duration: 25,
+          },
+        ],
+      };
+      // API returns slots for both 25-min and 45-min durations
+      const slotsResponse = [
+        // 25-min slot at 10:00
+        { start_at: "2026-01-07T10:00:00Z", end_at: "2026-01-07T10:25:00Z" },
+        // 45-min slot at 10:00
+        { start_at: "2026-01-07T10:00:00Z", end_at: "2026-01-07T10:45:00Z" },
+        // 25-min slot at 11:00
+        { start_at: "2026-01-07T11:00:00Z", end_at: "2026-01-07T11:25:00Z" },
+        // 45-min slot at 14:00
+        { start_at: "2026-01-07T14:00:00Z", end_at: "2026-01-07T14:45:00Z" },
+      ];
+
+      mockLinksAndSlots(linksResponse, slotsResponse);
+
+      const result = await savvycalProvider.fetchSlots(
+        config,
+        startDate,
+        endDate,
+        45, // Request 45-minute slots
+      );
+
+      // Only 45-min slots should remain
+      expect(result.slots).toHaveLength(2);
+      expect(result.slots[0].start_at).toBe("2026-01-07T10:00:00Z");
+      expect(result.slots[0].end_at).toBe("2026-01-07T10:45:00Z");
+      expect(result.slots[1].start_at).toBe("2026-01-07T14:00:00Z");
+    });
+
+    it("returns all slots when no duration is provided", async () => {
+      const linksResponse = {
+        data: [{ id: "link_123", slug: "chat", name: "Chat" }],
+      };
+      const slotsResponse = [
+        { start_at: "2026-01-07T10:00:00Z", end_at: "2026-01-07T10:25:00Z" },
+        { start_at: "2026-01-07T10:00:00Z", end_at: "2026-01-07T10:45:00Z" },
+        { start_at: "2026-01-07T11:00:00Z", end_at: "2026-01-07T11:25:00Z" },
+      ];
+
+      mockLinksAndSlots(linksResponse, slotsResponse);
+
+      const result = await savvycalProvider.fetchSlots(
+        config,
+        startDate,
+        endDate,
+      );
+
+      // All slots returned when no duration filter
+      expect(result.slots).toHaveLength(3);
+    });
+
     it("throws error when token is missing", async () => {
       const badConfig: ProviderConfig = {
         savvycalLink: "chat",

@@ -6,7 +6,7 @@ import type {
   LinkInfo,
   FetchSlotsResult,
 } from "../types";
-import { encodeAlternativeSlots } from "../utils";
+import { encodeAlternativeSlots, minutesToMs } from "../utils";
 
 interface CalComSlot {
   start: string;
@@ -40,6 +40,7 @@ export const calcomProvider: CalendarProvider = {
     config: ProviderConfig,
     startDate: Date,
     endDate: Date,
+    duration?: number,
   ): Promise<FetchSlotsResult> {
     const { calcomUsername, calcomEventSlug } = config;
 
@@ -86,7 +87,8 @@ export const calcomProvider: CalendarProvider = {
     const startStr = format(startDate, "yyyy-MM-dd");
     const endStr = format(endDate, "yyyy-MM-dd");
 
-    const url = `https://api.cal.com/v2/slots?eventTypeSlug=${encodeURIComponent(calcomEventSlug)}&username=${encodeURIComponent(calcomUsername)}&start=${startStr}&end=${endStr}&timeZone=UTC`;
+    const durationParam = duration ? `&duration=${duration}` : "";
+    const url = `https://api.cal.com/v2/slots?eventTypeSlug=${encodeURIComponent(calcomEventSlug)}&username=${encodeURIComponent(calcomUsername)}&start=${startStr}&end=${endStr}&timeZone=UTC${durationParam}`;
 
     console.log("Cal.com slots request:", url);
 
@@ -117,6 +119,7 @@ export const calcomProvider: CalendarProvider = {
 
     // Get default duration from event type or fallback
     const defaultDuration = eventType?.lengthInMinutes || 30;
+    const slotDuration = duration || defaultDuration;
 
     // Convert Cal.com's grouped format to our flat TimeSlot array
     // Response format: { data: { "2024-01-15": [{ start: "2024-01-15T10:00:00Z" }] }, status: "success" }
@@ -128,9 +131,8 @@ export const calcomProvider: CalendarProvider = {
       for (const slot of daySlots) {
         // Cal.com returns { start: "2024-01-15T10:00:00Z" }
         const startTime = slot.start;
-        // Calculate end time using actual default duration
         const endTime = new Date(
-          new Date(startTime).getTime() + defaultDuration * 60 * 1000,
+          new Date(startTime).getTime() + minutesToMs(slotDuration),
         ).toISOString();
         slots.push({
           start_at: startTime,

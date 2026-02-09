@@ -107,7 +107,7 @@ describe("calcomProvider", () => {
       expect(result.slots).toHaveLength(0);
     });
 
-    it("calculates end_at based on event type default duration", async () => {
+    it("calculates end_at based on event type default duration when no duration passed", async () => {
       const eventTypeResponse = {
         status: "success",
         data: [
@@ -134,8 +134,93 @@ describe("calcomProvider", () => {
         endDate,
       );
 
-      // End time should be 45 minutes after start
+      // End time should be 45 minutes after start (event type default)
       expect(result.slots[0].end_at).toBe("2026-01-07T10:45:00.000Z");
+    });
+
+    it("calculates end_at based on requested duration when provided", async () => {
+      const eventTypeResponse = {
+        status: "success",
+        data: [
+          {
+            id: 123,
+            slug: "meeting",
+            title: "Meeting",
+            lengthInMinutes: 30,
+            lengthInMinutesOptions: [25, 45, 60],
+          },
+        ],
+      };
+      const slotsResponse = {
+        status: "success",
+        data: {
+          "2026-01-07": [{ start: "2026-01-07T10:00:00Z" }],
+        },
+      };
+
+      mockEventTypeAndSlots(eventTypeResponse, slotsResponse);
+
+      const result = await calcomProvider.fetchSlots(
+        config,
+        startDate,
+        endDate,
+        60, // Request 60-minute slots
+      );
+
+      // End time should be 60 minutes after start (requested duration)
+      expect(result.slots[0].end_at).toBe("2026-01-07T11:00:00.000Z");
+    });
+
+    it("passes duration parameter to the API URL", async () => {
+      const eventTypeResponse = {
+        status: "success",
+        data: [
+          {
+            id: 123,
+            slug: "meeting",
+            title: "Meeting",
+            lengthInMinutes: 30,
+            lengthInMinutesOptions: [25, 45],
+          },
+        ],
+      };
+      const slotsResponse = {
+        status: "success",
+        data: {},
+      };
+
+      mockEventTypeAndSlots(eventTypeResponse, slotsResponse);
+
+      await calcomProvider.fetchSlots(config, startDate, endDate, 45);
+
+      // Second fetch call (slots) should include duration param
+      const slotsUrl = mockFetch.mock.calls[1][0] as string;
+      expect(slotsUrl).toContain("duration=45");
+    });
+
+    it("omits duration parameter from API URL when not provided", async () => {
+      const eventTypeResponse = {
+        status: "success",
+        data: [
+          {
+            id: 123,
+            slug: "meeting",
+            title: "Meeting",
+            lengthInMinutes: 30,
+          },
+        ],
+      };
+      const slotsResponse = {
+        status: "success",
+        data: {},
+      };
+
+      mockEventTypeAndSlots(eventTypeResponse, slotsResponse);
+
+      await calcomProvider.fetchSlots(config, startDate, endDate);
+
+      const slotsUrl = mockFetch.mock.calls[1][0] as string;
+      expect(slotsUrl).not.toContain("duration=");
     });
 
     it("returns LinkInfo with durations from event type", async () => {

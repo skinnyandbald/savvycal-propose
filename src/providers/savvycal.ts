@@ -6,7 +6,7 @@ import type {
   LinkInfo,
   FetchSlotsResult,
 } from "../types";
-import { encodeAlternativeSlots } from "../utils";
+import { encodeAlternativeSlots, filterSlotsByDuration } from "../utils";
 
 interface SchedulingLink {
   id: string;
@@ -71,6 +71,7 @@ export const savvycalProvider: CalendarProvider = {
     config: ProviderConfig,
     startDate: Date,
     endDate: Date,
+    duration?: number,
   ): Promise<FetchSlotsResult> {
     const { savvycalToken, savvycalLink } = config;
 
@@ -114,7 +115,7 @@ export const savvycalProvider: CalendarProvider = {
       : data.data || data.entries || [];
 
     // Normalize to our TimeSlot format, filtering out malformed slots
-    const slots: TimeSlot[] = rawSlots
+    let slots: TimeSlot[] = rawSlots
       .filter(
         (s: { start_at?: string; end_at?: string }) => s.start_at && s.end_at,
       )
@@ -122,6 +123,12 @@ export const savvycalProvider: CalendarProvider = {
         start_at: s.start_at,
         end_at: s.end_at,
       }));
+
+    // SavvyCal returns slots for all configured durations, so filter
+    // to only those that can accommodate the requested duration.
+    if (duration) {
+      slots = filterSlotsByDuration(slots, duration);
+    }
 
     return { slots, linkInfo };
   },
