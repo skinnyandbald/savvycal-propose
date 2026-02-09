@@ -15,7 +15,7 @@ import { formatInTimeZone, utcToZonedTime } from "date-fns-tz";
 import { getProvider } from "./providers";
 import { selectSmartSlots } from "./slotSelection";
 import type { ProviderType, ProviderConfig, TimeSlot, LinkInfo } from "./types";
-import { filterSlotsByDuration } from "./utils";
+import { filterSlotsByDuration, filterSlotsByTime } from "./utils";
 
 interface Preferences {
   provider: ProviderType;
@@ -288,13 +288,16 @@ export default function Command() {
 
       // Guard: ensure every slot can fit the full meeting duration,
       // regardless of what the provider already filtered.
-      const validSlots = filterSlotsByDuration(result.slots, duration);
+      const durationFiltered = filterSlotsByDuration(result.slots, duration);
+
+      // Remove slots starting at or after 7pm in the recipient's timezone.
+      const validSlots = filterSlotsByTime(durationFiltered, timezone);
 
       if (validSlots.length === 0) {
         await showToast({
           style: Toast.Style.Failure,
           title: "No available slots",
-          message: `No ${duration}-minute slots found in the selected date range`,
+          message: `No ${duration}-minute slots found before 7pm in the selected date range`,
         });
         setIsLoading(false);
         return;
