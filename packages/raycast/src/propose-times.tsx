@@ -12,10 +12,8 @@ import {
 import { useState, useEffect, useMemo, useRef } from "react";
 import { format, addDays } from "date-fns";
 import { formatInTimeZone, utcToZonedTime } from "date-fns-tz";
-import { getProvider } from "./providers";
-import { selectSmartSlots } from "./slotSelection";
-import type { ProviderType, ProviderConfig, TimeSlot, LinkInfo } from "./types";
-import { filterSlotsByDuration, filterSlotsByTime } from "./utils";
+import type { ProviderType, ProviderConfig, TimeSlot, LinkInfo } from "@propose/core";
+import { getProvider, selectSmartSlots, filterSlotsByDuration, filterSlotsByTime } from "@propose/core";
 
 interface Preferences {
   provider: ProviderType;

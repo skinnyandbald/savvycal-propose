@@ -1,0 +1,19 @@
+{
+  "name": "@propose/core",
+  "version": "0.0.1",
+  "private": true,
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "test": "vitest",
+    "test:run": "vitest run"
+  },
+  "dependencies": {
+    "date-fns": "^2.30.0",
+    "date-fns-tz": "^2.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2",
+    "vitest": "^4.0.16"
+  }
+}
