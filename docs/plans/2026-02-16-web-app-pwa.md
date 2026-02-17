@@ -2,13 +2,11 @@
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
-**Goal:** Build a mobile-first PWA sharing core scheduling logic with the existing Raycast extension via a pnpm monorepo.
+**Goal:** Deploy Propose Times as a PWA on Vercel, sharing core logic with the Raycast extension via a pnpm monorepo.
 
-**Architecture:** Three packages — `@propose/core` (pure TS), `packages/raycast` (thin Raycast shell), `packages/web` (Next.js App Router on Vercel). Supabase Google OAuth gates access to a single email.
+**Architecture:** Three packages — `@propose/core` (pure TS logic extracted from current `src/`), `packages/raycast` (thin Raycast UI shell), `packages/web` (Next.js 15 App Router). Core is imported by both consumers. Web app uses Supabase Google OAuth with single-user email gate.
 
-**Tech Stack:** pnpm workspaces, TypeScript, Next.js 15 (App Router), Tailwind CSS v4, Supabase Auth, Vitest
-
-**Reference:** Design doc at `docs/plans/2026-02-16-web-app-design.md`
+**Tech Stack:** pnpm workspaces, TypeScript, Next.js 15 (App Router), Tailwind CSS v4, Supabase Auth (`@supabase/ssr`), Vitest
 
 ---
 
@@ -17,8 +15,8 @@
 ### Task 1: Initialize pnpm workspace
 
 **Files:**
+- Modify: `package.json`
 - Create: `pnpm-workspace.yaml`
-- Modify: `package.json` (convert to workspace root)
 
 **Step 1: Create workspace config**
 
@@ -28,13 +26,12 @@ packages:
   - "packages/*"
 ```
 
-**Step 2: Update root package.json**
+**Step 2: Strip root package.json to workspace root**
 
-Strip Raycast-specific fields (`commands`, `preferences`, `categories`, `dependencies`, `devDependencies`, etc.) from root. Keep it minimal:
+Replace `package.json` contents with:
 
 ```json
 {
-  "name": "savvycal-propose",
   "private": true,
   "scripts": {
     "test": "pnpm --filter @propose/core test",
@@ -45,10 +42,15 @@ Strip Raycast-specific fields (`commands`, `preferences`, `categories`, `depende
 }
 ```
 
-**Step 3: Commit**
+**Step 3: Verify**
+
+Run: `pnpm install`
+Expected: installs successfully, creates/updates `pnpm-lock.yaml`
+
+**Step 4: Commit**
 
 ```bash
-git add pnpm-workspace.yaml package.json
+git add pnpm-workspace.yaml package.json pnpm-lock.yaml
 git commit -m "chore: initialize pnpm workspace"
 ```
 
@@ -60,15 +62,11 @@ git commit -m "chore: initialize pnpm workspace"
 - Create: `packages/core/package.json`
 - Create: `packages/core/tsconfig.json`
 - Create: `packages/core/vitest.config.ts`
-- Create: `packages/core/src/index.ts` (barrel export)
-- Move: `src/types.ts` → `packages/core/src/types.ts`
-- Move: `src/utils.ts` → `packages/core/src/utils.ts`
-- Move: `src/slotSelection.ts` → `packages/core/src/slotSelection.ts`
-- Move: `src/providers/` → `packages/core/src/providers/`
-- Move: `src/__tests__/` → `packages/core/src/__tests__/`
-- Delete: `vitest.config.ts` (root — replaced by core's)
+- Create: `packages/core/src/index.ts`
+- Move: `src/*` → `packages/core/src/`
+- Delete: root `vitest.config.ts`, root `tsconfig.json`
 
-**Step 1: Create packages/core/package.json**
+**Step 1: Create core package.json**
 
 ```json
 {
@@ -82,45 +80,47 @@ git commit -m "chore: initialize pnpm workspace"
     "test:run": "vitest run"
   },
   "dependencies": {
-    "date-fns": "^3.6.0",
-    "date-fns-tz": "^3.2.0"
+    "date-fns": "^2.30.0",
+    "date-fns-tz": "^2.0.0"
   },
   "devDependencies": {
-    "typescript": "^5.4.5",
-    "vitest": "^2.1.8"
+    "typescript": "^5.2.2",
+    "vitest": "^4.0.16"
   }
 }
 ```
 
-**Step 2: Create packages/core/tsconfig.json**
+**Step 2: Create core tsconfig.json**
 
 ```json
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "target": "ES2021",
+    "lib": ["ES2021"],
     "module": "ESNext",
+    "target": "ES2021",
     "moduleResolution": "bundler",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
     "declaration": true,
-    "outDir": "dist",
-    "rootDir": "src"
+    "outDir": "dist"
   },
-  "include": ["src"]
+  "include": ["src/**/*"]
 }
 ```
 
-**Step 3: Create packages/core/vitest.config.ts**
+**Step 3: Create vitest config**
 
 ```ts
+// packages/core/vitest.config.ts
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    include: ["src/**/*.test.ts"],
-    environment: "node",
+    globals: true,
   },
 });
 ```
@@ -129,62 +129,45 @@ export default defineConfig({
 
 ```bash
 mkdir -p packages/core/src/providers packages/core/src/__tests__
-git mv src/types.ts packages/core/src/types.ts
-git mv src/utils.ts packages/core/src/utils.ts
-git mv src/slotSelection.ts packages/core/src/slotSelection.ts
-git mv src/providers/index.ts packages/core/src/providers/index.ts
-git mv src/providers/savvycal.ts packages/core/src/providers/savvycal.ts
-git mv src/providers/calcom.ts packages/core/src/providers/calcom.ts
-git mv src/__tests__/slotSelection.test.ts packages/core/src/__tests__/slotSelection.test.ts
-git mv src/__tests__/utils.test.ts packages/core/src/__tests__/utils.test.ts
+mv src/types.ts src/utils.ts src/slotSelection.ts packages/core/src/
+mv src/providers/savvycal.ts src/providers/calcom.ts src/providers/index.ts packages/core/src/providers/
+mv src/__tests__/* packages/core/src/__tests__/
 ```
 
-**Step 5: Fix imports in moved files**
-
-All internal imports in the moved files use relative paths like `"../types"` — these still resolve correctly because the relative structure is preserved. No import changes needed in core files.
-
-**Step 6: Create barrel export**
+**Step 5: Create barrel export**
 
 ```ts
 // packages/core/src/index.ts
 export type {
+  ProviderType,
   TimeSlot,
   LinkInfo,
   FetchSlotsResult,
   ProviderConfig,
-  ProviderType,
   CalendarProvider,
 } from "./types";
 
-export { selectSmartSlots, detectGaps, scoreSlotByProximity, getTimeBucket } from "./slotSelection";
-export type { Gap, ScoredSlot, TimeBucket } from "./slotSelection";
-
+export { getProvider, savvycalProvider, calcomProvider } from "./providers";
+export { selectSmartSlots } from "./slotSelection";
 export {
-  minutesToMs,
   filterSlotsByDuration,
   filterSlotsByTime,
   encodeAlternativeSlots,
 } from "./utils";
-
-export { getProvider, savvycalProvider, calcomProvider } from "./providers";
 ```
 
-**Step 7: Delete root vitest config**
+**Step 6: Delete root config files**
 
 ```bash
-rm vitest.config.ts
+rm -f vitest.config.ts tsconfig.json
 ```
 
-**Step 8: Install and run tests**
+**Step 7: Run tests to verify nothing broke**
 
-```bash
-pnpm install
-cd packages/core && pnpm test:run
-```
+Run: `cd packages/core && pnpm install && pnpm test:run`
+Expected: all existing tests pass
 
-Expected: All existing tests pass.
-
-**Step 9: Commit**
+**Step 8: Commit**
 
 ```bash
 git add -A
@@ -198,23 +181,21 @@ git commit -m "refactor: extract core package into monorepo"
 **Files:**
 - Create: `packages/raycast/package.json`
 - Create: `packages/raycast/tsconfig.json`
-- Move: `src/propose-times.tsx` → `packages/raycast/src/propose-times.tsx`
-- Move: `raycast-env.d.ts` → `packages/raycast/raycast-env.d.ts`
+- Move: `src/propose-times.tsx` → `packages/raycast/src/`
 - Move: `assets/` → `packages/raycast/assets/`
+- Move: `raycast-env.d.ts` → `packages/raycast/`
+- Modify: `packages/raycast/src/propose-times.tsx` (update imports)
 
-**Step 1: Create packages/raycast/package.json**
+**Step 1: Create Raycast package.json**
 
-Take the current root `package.json` Raycast fields and adapt:
+Take the current root `package.json` Raycast fields (name, title, description, icon, author, categories, license, commands, preferences) and merge with:
 
 ```json
 {
-  "name": "@propose/raycast",
-  "version": "0.0.1",
-  "private": true,
-  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "propose-times",
   "title": "Propose Times",
-  "description": "Fetch availability and propose meeting times from SavvyCal or Cal.com",
-  "icon": "command-icon.png",
+  "description": "Generate meeting time proposals from your SavvyCal or Cal.com availability",
+  "icon": "extension-icon.png",
   "author": "skinnyandbald",
   "categories": ["Productivity"],
   "license": "MIT",
@@ -222,157 +203,109 @@ Take the current root `package.json` Raycast fields and adapt:
     {
       "name": "propose-times",
       "title": "Propose Times",
-      "description": "Fetch available slots and propose meeting times",
+      "description": "Generate a message with your available meeting times",
       "mode": "view"
     }
   ],
-  "preferences": [
-    {
-      "name": "provider",
-      "title": "Calendar Provider",
-      "description": "Which scheduling service to use",
-      "type": "dropdown",
-      "required": true,
-      "default": "savvycal",
-      "data": [
-        { "title": "SavvyCal", "value": "savvycal" },
-        { "title": "Cal.com", "value": "calcom" }
-      ]
-    },
-    {
-      "name": "savvycalToken",
-      "title": "SavvyCal API Token",
-      "description": "Your SavvyCal API token",
-      "type": "password",
-      "required": false
-    },
-    {
-      "name": "savvycalUsername",
-      "title": "SavvyCal Username",
-      "description": "Your SavvyCal username",
-      "type": "textfield",
-      "required": false
-    },
-    {
-      "name": "savvycalLinkSlugs",
-      "title": "SavvyCal Link Slugs",
-      "description": "Comma-separated scheduling link slugs",
-      "type": "textfield",
-      "required": false
-    },
-    {
-      "name": "calcomUsername",
-      "title": "Cal.com Username",
-      "description": "Your Cal.com username",
-      "type": "textfield",
-      "required": false
-    },
-    {
-      "name": "calcomEventSlug",
-      "title": "Cal.com Event Slug",
-      "description": "Your Cal.com event type slug",
-      "type": "textfield",
-      "required": false
-    },
-    {
-      "name": "bookerUrl",
-      "title": "Booker URL",
-      "description": "URL of your booking companion app (optional)",
-      "type": "textfield",
-      "required": false
-    }
-  ],
+  "preferences": [],
   "dependencies": {
-    "@propose/core": "workspace:*",
-    "@raycast/api": "^1.93.2",
-    "date-fns": "^3.6.0",
-    "date-fns-tz": "^3.2.0"
+    "@raycast/api": "^1.64.0",
+    "@raycast/utils": "^1.10.0",
+    "@propose/core": "workspace:*"
   },
   "devDependencies": {
-    "@raycast/eslint-config": "^1.0.14",
-    "typescript": "^5.4.5"
+    "@raycast/eslint-config": "^1.0.8",
+    "@types/node": "20.10.0",
+    "@types/react": "18.2.27",
+    "eslint": "^8.51.0",
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2"
   },
   "scripts": {
-    "build": "ray build",
+    "build": "ray build -e dist",
     "dev": "ray develop",
+    "fix-lint": "ray lint --fix",
     "lint": "ray lint"
   }
 }
 ```
 
-**Step 2: Move files**
+Copy the full `preferences` array from the current root `package.json`.
+
+**Step 2: Move Raycast files**
 
 ```bash
 mkdir -p packages/raycast/src
-git mv src/propose-times.tsx packages/raycast/src/propose-times.tsx
-git mv raycast-env.d.ts packages/raycast/raycast-env.d.ts
-git mv assets packages/raycast/assets
+mv src/propose-times.tsx packages/raycast/src/
+mv assets packages/raycast/
+mv raycast-env.d.ts packages/raycast/
 ```
 
-**Step 3: Update imports in propose-times.tsx**
-
-Replace relative imports with core package imports. Change:
-
-```ts
-// OLD
-import type { ProviderConfig, ProviderType, TimeSlot, LinkInfo } from "./types";
-import { filterSlotsByDuration, filterSlotsByTime, encodeAlternativeSlots } from "./utils";
-import { getProvider } from "./providers";
-import { selectSmartSlots } from "./slotSelection";
-```
-
-to:
-
-```ts
-// NEW
-import type { ProviderConfig, ProviderType, TimeSlot, LinkInfo } from "@propose/core";
-import { filterSlotsByDuration, filterSlotsByTime, encodeAlternativeSlots, getProvider, selectSmartSlots } from "@propose/core";
-```
-
-**Step 4: Create packages/raycast/tsconfig.json**
+**Step 3: Create Raycast tsconfig.json**
 
 ```json
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "target": "ES2021",
-    "module": "commonjs",
     "lib": ["ES2021"],
-    "jsx": "react-jsx",
+    "module": "commonjs",
+    "target": "ES2021",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "jsx": "react-jsx"
   },
-  "include": ["src", "raycast-env.d.ts"]
+  "include": ["src/**/*", "raycast-env.d.ts"]
 }
+```
+
+**Step 4: Update imports in propose-times.tsx**
+
+Replace all relative imports like `"../types"`, `"../providers"`, `"../slotSelection"`, `"../utils"` with imports from `"@propose/core"`.
+
+For example:
+```tsx
+// Before
+import type { ProviderType, ProviderConfig, TimeSlot, LinkInfo } from "../types";
+import { getProvider } from "../providers";
+import { selectSmartSlots } from "../slotSelection";
+import { filterSlotsByTime } from "../utils";
+
+// After
+import type { ProviderType, ProviderConfig, TimeSlot, LinkInfo } from "@propose/core";
+import { getProvider, selectSmartSlots, filterSlotsByTime } from "@propose/core";
 ```
 
 **Step 5: Install and verify**
 
 ```bash
 pnpm install
-cd packages/core && pnpm test:run  # core tests still pass
+cd packages/raycast && pnpm build
 ```
 
-Note: Raycast build verification requires `ray` CLI. Manual verification: `cd packages/raycast && pnpm build` if ray is installed.
+Expected: builds without errors
 
 **Step 6: Clean up root**
 
-Remove now-empty `src/` directory and old root configs that moved:
+Remove any remaining `src/` directory contents (should be empty now) and the old `src/` dir:
 
 ```bash
-rm -rf src/
-rm -f tsconfig.json
+rm -rf src
 ```
 
-**Step 7: Commit**
+**Step 7: Verify core tests still pass**
+
+Run: `cd packages/core && pnpm test:run`
+Expected: all tests pass
+
+**Step 8: Commit**
 
 ```bash
 git add -A
-git commit -m "refactor: create Raycast package, imports from core"
+git commit -m "refactor: create raycast package, import from @propose/core"
 ```
 
 ---
@@ -383,15 +316,14 @@ git commit -m "refactor: create Raycast package, imports from core"
 
 **Files:**
 - Create: `packages/web/package.json`
-- Create: `packages/web/tsconfig.json`
 - Create: `packages/web/next.config.ts`
+- Create: `packages/web/tsconfig.json`
 - Create: `packages/web/postcss.config.mjs`
 - Create: `packages/web/app/globals.css`
 - Create: `packages/web/app/layout.tsx`
-- Create: `packages/web/app/page.tsx` (placeholder)
-- Create: `packages/web/tailwind.config.ts`
+- Create: `packages/web/app/page.tsx`
 
-**Step 1: Create packages/web/package.json**
+**Step 1: Create web package.json**
 
 ```json
 {
@@ -404,44 +336,44 @@ git commit -m "refactor: create Raycast package, imports from core"
     "start": "next start"
   },
   "dependencies": {
-    "@propose/core": "workspace:*",
-    "@supabase/supabase-js": "^2.49.1",
-    "@supabase/ssr": "^0.5.2",
-    "next": "^15.1.0",
+    "next": "^15.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "date-fns": "^3.6.0",
-    "date-fns-tz": "^3.2.0"
+    "@propose/core": "workspace:*",
+    "@supabase/ssr": "^0.5.0",
+    "@supabase/supabase-js": "^2.45.0",
+    "date-fns": "^2.30.0",
+    "date-fns-tz": "^2.0.0"
   },
   "devDependencies": {
+    "@types/node": "^20.0.0",
     "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "typescript": "^5.4.5",
-    "@tailwindcss/postcss": "^4.0.0",
-    "tailwindcss": "^4.0.0"
+    "typescript": "^5.2.2",
+    "tailwindcss": "^4.0.0",
+    "@tailwindcss/postcss": "^4.0.0"
   }
 }
 ```
 
-**Step 2: Create packages/web/next.config.ts**
+**Step 2: Create next.config.ts**
 
 ```ts
+// packages/web/next.config.ts
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
+const config: NextConfig = {
   transpilePackages: ["@propose/core"],
 };
 
-export default nextConfig;
+export default config;
 ```
 
-**Step 3: Create packages/web/tsconfig.json**
+**Step 3: Create tsconfig.json**
 
 ```json
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "target": "ES2021",
+    "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -462,7 +394,7 @@ export default nextConfig;
 }
 ```
 
-**Step 4: Create Tailwind v4 setup**
+**Step 4: Create postcss.config.mjs**
 
 ```js
 // packages/web/postcss.config.mjs
@@ -474,12 +406,14 @@ const config = {
 export default config;
 ```
 
+**Step 5: Create globals.css**
+
 ```css
 /* packages/web/app/globals.css */
 @import "tailwindcss";
 ```
 
-**Step 5: Create root layout**
+**Step 6: Create layout.tsx**
 
 ```tsx
 // packages/web/app/layout.tsx
@@ -488,58 +422,56 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Propose Times",
-  description: "Propose meeting times from your calendar availability",
+  description: "Propose meeting times from your availability",
   manifest: "/manifest.json",
 };
 
 export const viewport: Viewport = {
+  themeColor: "#18181b",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-  themeColor: "#18181b",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className="bg-zinc-950 text-zinc-100 min-h-dvh">
-        {children}
+    <html lang="en" className="dark">
+      <body className="min-h-dvh bg-zinc-950 text-zinc-100 antialiased">
+        <main className="mx-auto max-w-md px-4 py-8">{children}</main>
       </body>
     </html>
   );
 }
 ```
 
-**Step 6: Create placeholder page**
+**Step 7: Create placeholder page**
 
 ```tsx
 // packages/web/app/page.tsx
 export default function Home() {
-  return (
-    <main className="flex min-h-dvh items-center justify-center p-4">
-      <h1 className="text-2xl font-bold">Propose Times</h1>
-    </main>
-  );
+  return <h1>Propose Times</h1>;
 }
 ```
 
-**Step 7: Install and verify dev server starts**
+**Step 8: Install and verify**
 
 ```bash
 pnpm install
-cd packages/web && pnpm dev
+cd packages/web && pnpm build
 ```
 
-Visit http://localhost:3000 — should show "Propose Times" heading.
+Expected: builds successfully
 
-**Step 8: Commit**
+**Step 9: Commit**
 
 ```bash
 git add -A
-git commit -m "feat: initialize Next.js web app package"
+git commit -m "feat: initialize next.js web app package"
 ```
 
 ---
+
+## Phase 3: Authentication
 
 ### Task 5: Set up Supabase auth
 
@@ -547,9 +479,16 @@ git commit -m "feat: initialize Next.js web app package"
 - Create: `packages/web/lib/supabase/server.ts`
 - Create: `packages/web/lib/supabase/client.ts`
 - Create: `packages/web/app/auth/callback/route.ts`
-- Modify: `packages/web/app/page.tsx` (login page)
+- Create: `packages/web/app/login/page.tsx`
+- Create: `packages/web/components/LoginButton.tsx`
 
-**Step 1: Create server-side Supabase client**
+**Step 1: Install Supabase dependencies**
+
+```bash
+cd packages/web && pnpm add @supabase/ssr @supabase/supabase-js
+```
+
+**Step 2: Create server Supabase client**
 
 ```ts
 // packages/web/lib/supabase/server.ts
@@ -570,19 +509,20 @@ export async function createClient() {
         setAll(cookiesToSet) {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
+              cookieStore.set(name, value, options),
             );
           } catch {
-            // Called from Server Component — ignore
+            // The `setAll` method was called from a Server Component.
+            // This can be ignored if you have middleware refreshing sessions.
           }
         },
       },
-    }
+    },
   );
 }
 ```
 
-**Step 2: Create browser-side Supabase client**
+**Step 3: Create browser Supabase client**
 
 ```ts
 // packages/web/lib/supabase/client.ts
@@ -591,12 +531,12 @@ import { createBrowserClient } from "@supabase/ssr";
 export function createClient() {
   return createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
   );
 }
 ```
 
-**Step 3: Create OAuth callback route**
+**Step 4: Create OAuth callback route**
 
 ```ts
 // packages/web/app/auth/callback/route.ts
@@ -606,61 +546,40 @@ import { createClient } from "@/lib/supabase/server";
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
+  const next = searchParams.get("next") ?? "/propose";
 
   if (code) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
-      // Check single-user gate
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user?.email === process.env.ALLOWED_EMAIL) {
-        return NextResponse.redirect(`${origin}/propose`);
+      // Verify email is allowed
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      const allowedEmail = process.env.ALLOWED_EMAIL;
+
+      if (user?.email === allowedEmail) {
+        return NextResponse.redirect(`${origin}${next}`);
       }
-      // Wrong user — sign them out
+
+      // Not allowed — sign out and redirect to login with error
       await supabase.auth.signOut();
+      return NextResponse.redirect(
+        `${origin}/login?error=unauthorized`,
+      );
     }
   }
 
-  return NextResponse.redirect(`${origin}/?error=unauthorized`);
+  // Auth error — redirect to login
+  return NextResponse.redirect(`${origin}/login?error=auth`);
 }
 ```
 
-**Step 4: Update login page**
+**Step 5: Create LoginButton component**
 
 ```tsx
-// packages/web/app/page.tsx
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
-import { LoginButton } from "./login-button";
-
-export default async function Home({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  // Already logged in and authorized — redirect
-  if (user?.email === process.env.ALLOWED_EMAIL) {
-    redirect("/propose");
-  }
-
-  const params = await searchParams;
-
-  return (
-    <main className="flex min-h-dvh flex-col items-center justify-center gap-6 p-4">
-      <h1 className="text-2xl font-bold">Propose Times</h1>
-      {params.error && (
-        <p className="text-red-400 text-sm">Not authorized. Check your Google account.</p>
-      )}
-      <LoginButton />
-    </main>
-  );
-}
-```
-
-**Step 5: Create login button (client component)**
-
-```tsx
-// packages/web/app/login-button.tsx
+// packages/web/components/LoginButton.tsx
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
@@ -679,7 +598,7 @@ export function LoginButton() {
   return (
     <button
       onClick={handleLogin}
-      className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-zinc-900 active:bg-zinc-200"
+      className="rounded-lg bg-white px-6 py-3 text-base font-medium text-zinc-900 shadow-sm active:bg-zinc-100"
     >
       Sign in with Google
     </button>
@@ -687,11 +606,82 @@ export function LoginButton() {
 }
 ```
 
-**Step 6: Commit**
+**Step 6: Create login page**
+
+```tsx
+// packages/web/app/login/page.tsx
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import { LoginButton } from "@/components/LoginButton";
+
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  // If already authenticated, redirect to propose
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user?.email === process.env.ALLOWED_EMAIL) {
+    redirect("/propose");
+  }
+
+  const params = await searchParams;
+
+  return (
+    <div className="flex min-h-dvh flex-col items-center justify-center gap-6">
+      <h1 className="text-2xl font-bold">Propose Times</h1>
+      {params.error === "unauthorized" && (
+        <p className="text-sm text-red-400">Access denied. Not an authorized account.</p>
+      )}
+      {params.error === "auth" && (
+        <p className="text-sm text-red-400">Authentication failed. Please try again.</p>
+      )}
+      <LoginButton />
+    </div>
+  );
+}
+```
+
+**Step 7: Update root page to redirect**
+
+Replace `packages/web/app/page.tsx` with:
+
+```tsx
+// packages/web/app/page.tsx
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+
+export default async function Home() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user?.email === process.env.ALLOWED_EMAIL) {
+    redirect("/propose");
+  }
+
+  redirect("/login");
+}
+```
+
+**Step 8: Verify build**
+
+```bash
+cd packages/web && pnpm build
+```
+
+Expected: builds successfully (pages won't function without env vars, but should compile)
+
+**Step 9: Commit**
 
 ```bash
 git add -A
-git commit -m "feat: add Supabase Google OAuth with single-user gate"
+git commit -m "feat: add supabase google oauth with email gate"
 ```
 
 ---
@@ -699,10 +689,10 @@ git commit -m "feat: add Supabase Google OAuth with single-user gate"
 ### Task 6: Add auth middleware
 
 **Files:**
-- Create: `packages/web/middleware.ts`
 - Create: `packages/web/lib/supabase/middleware.ts`
+- Create: `packages/web/middleware.ts`
 
-**Step 1: Create Supabase middleware helper**
+**Step 1: Create middleware helper**
 
 ```ts
 // packages/web/lib/supabase/middleware.ts
@@ -721,25 +711,31 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) => {
-            request.cookies.set(name, value);
-            supabaseResponse.cookies.set(name, value, options);
-          });
+          cookiesToSet.forEach(({ name, value }) =>
+            request.cookies.set(name, value),
+          );
+          supabaseResponse = NextResponse.next({ request });
+          cookiesToSet.forEach(({ name, value, options }) =>
+            supabaseResponse.cookies.set(name, value, options),
+          );
         },
       },
-    }
+    },
   );
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  // Protected routes require auth + correct email
-  if (request.nextUrl.pathname.startsWith("/propose") || request.nextUrl.pathname.startsWith("/api/")) {
-    if (!user || user.email !== process.env.ALLOWED_EMAIL) {
-      const url = request.nextUrl.clone();
-      url.pathname = "/";
-      url.searchParams.set("error", "unauthorized");
-      return NextResponse.redirect(url);
-    }
+  // If not authenticated and trying to access protected routes, redirect to login
+  if (
+    !user &&
+    !request.nextUrl.pathname.startsWith("/login") &&
+    !request.nextUrl.pathname.startsWith("/auth")
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
   }
 
   return supabaseResponse;
@@ -759,32 +755,45 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|manifest.json|icons/|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    /*
+     * Match all request paths except:
+     * - _next/static (static files)
+     * - _next/image (image optimization)
+     * - favicon.ico
+     * - public files (manifest.json, icons, etc.)
+     */
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|json)$).*)",
   ],
 };
 ```
 
-**Step 3: Commit**
+**Step 3: Verify build**
+
+```bash
+cd packages/web && pnpm build
+```
+
+Expected: builds successfully
+
+**Step 4: Commit**
 
 ```bash
 git add -A
-git commit -m "feat: add auth middleware protecting /propose and /api routes"
+git commit -m "feat: add auth middleware for protected routes"
 ```
 
 ---
 
+## Phase 4: Core Feature
+
 ### Task 7: Create slots API route
+
+This is the core server-side logic. The API route calls SavvyCal, runs slot selection, and returns a formatted message.
 
 **Files:**
 - Create: `packages/web/app/api/slots/route.ts`
 
-This is the server-side route that calls the core logic. It uses env vars for provider config instead of Raycast preferences.
-
-**Step 1: Write the failing test**
-
-Create a lightweight integration test (optional — this is a thin server route, so manual testing via the form is acceptable). Skip TDD for this route and test via the form in Task 9.
-
-**Step 2: Create the API route**
+**Step 1: Create the API route**
 
 ```ts
 // packages/web/app/api/slots/route.ts
@@ -793,379 +802,472 @@ import { createClient } from "@/lib/supabase/server";
 import {
   getProvider,
   selectSmartSlots,
-  filterSlotsByDuration,
   filterSlotsByTime,
 } from "@propose/core";
-import type { ProviderConfig, ProviderType } from "@propose/core";
+import type { ProviderConfig, TimeSlot, LinkInfo } from "@propose/core";
+import { format, addDays } from "date-fns";
+import { utcToZonedTime } from "date-fns-tz";
 
-interface SlotsRequest {
-  linkSlug: string;
+interface SlotsRequestBody {
   duration: number;
-  daysAhead: number;
   timezone: string;
-  maxSlotsPerDay?: number;
-  cutoffHour?: number;
+  daysAhead: number;
+  maxDaysToShow: number;
+  maxSlotsPerDay: number;
+  linkSlug: string;
 }
 
-function getProviderConfig(): { config: ProviderConfig; type: ProviderType } {
-  // For now, SavvyCal only (Cal.com support later)
-  return {
-    type: "savvycal",
-    config: {
-      savvycalToken: process.env.SAVVYCAL_TOKEN,
-      savvycalLink: "", // Set per-request from linkSlug
-      savvycalUsername: process.env.SAVVYCAL_USERNAME,
-    },
+function groupSlotsByDay(
+  slots: TimeSlot[],
+  timezone: string,
+): Record<string, TimeSlot[]> {
+  const groups: Record<string, TimeSlot[]> = {};
+
+  for (const slot of slots) {
+    const zonedDate = utcToZonedTime(new Date(slot.start_at), timezone);
+    const dayKey = format(zonedDate, "yyyy-MM-dd");
+    if (!groups[dayKey]) groups[dayKey] = [];
+    groups[dayKey].push(slot);
+  }
+
+  return groups;
+}
+
+function formatSlotTime(slot: TimeSlot, timezone: string): string {
+  const zonedDate = utcToZonedTime(new Date(slot.start_at), timezone);
+  return format(zonedDate, "h:mma").toLowerCase();
+}
+
+function getTimezoneAbbr(timezone: string): string {
+  const ABBRS: Record<string, string> = {
+    "America/New_York": "ET",
+    "America/Chicago": "CT",
+    "America/Denver": "MT",
+    "America/Los_Angeles": "PT",
+    "America/Phoenix": "AZ",
+    "Pacific/Honolulu": "HT",
+    "America/Anchorage": "AKT",
+    "Europe/London": "GMT",
+    "Europe/Paris": "CET",
+    "Asia/Tokyo": "JST",
+    "Australia/Sydney": "AEST",
   };
+  return ABBRS[timezone] || timezone;
 }
 
 export async function POST(request: Request) {
-  // Auth check (middleware handles this, but belt-and-suspenders)
+  // Verify authentication
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   if (!user || user.email !== process.env.ALLOWED_EMAIL) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const body = (await request.json()) as SlotsRequest;
-  const { linkSlug, duration, daysAhead, timezone, maxSlotsPerDay = 2, cutoffHour = 19 } = body;
+  const body = (await request.json()) as SlotsRequestBody;
+  const {
+    duration,
+    timezone,
+    daysAhead,
+    maxDaysToShow,
+    maxSlotsPerDay,
+    linkSlug,
+  } = body;
 
-  const { config, type } = getProviderConfig();
-  config.savvycalLink = linkSlug;
+  // Build provider config from env vars
+  const config: ProviderConfig = {
+    savvycalToken: process.env.SAVVYCAL_TOKEN,
+    savvycalLink: linkSlug,
+    savvycalUsername: process.env.SAVVYCAL_USERNAME,
+  };
 
-  const provider = getProvider(type);
-
-  const startDate = new Date();
-  const endDate = new Date();
-  endDate.setDate(endDate.getDate() + daysAhead);
+  const bookerUrl = process.env.BOOKER_URL;
+  const provider = getProvider("savvycal");
 
   try {
-    const { slots: rawSlots, linkInfo } = await provider.fetchSlots(config, startDate, endDate, duration);
+    const startDate = new Date();
+    const endDate = addDays(startDate, daysAhead);
 
-    let slots = filterSlotsByDuration(rawSlots, duration);
-    slots = filterSlotsByTime(slots, timezone, cutoffHour);
+    const { slots: rawSlots, linkInfo } = await provider.fetchSlots(
+      config,
+      startDate,
+      endDate,
+      duration,
+    );
 
-    const selected = selectSmartSlots(slots, timezone, maxSlotsPerDay * daysAhead);
+    // Filter out evening slots in recipient timezone
+    const filteredSlots = filterSlotsByTime(rawSlots, timezone);
 
-    // Generate booking URLs for each selected slot
-    const bookerUrl = process.env.BOOKER_URL;
-    const slotsWithUrls = selected.map((slot) => ({
-      ...slot,
-      bookingUrl: provider.generateBookingUrl(config, linkInfo, slot, timezone, bookerUrl, duration),
-    }));
+    // Group by day and select smart slots per day
+    const dayGroups = groupSlotsByDay(filteredSlots, timezone);
+    const sortedDays = Object.keys(dayGroups).sort();
+    const daysToShow = sortedDays.slice(0, maxDaysToShow);
 
-    return NextResponse.json({
-      slots: slotsWithUrls,
-      linkInfo,
-      fallbackUrl: provider.getFallbackUrl(config),
-    });
+    // Build all selected slots for alternative encoding
+    const allSelectedSlots: TimeSlot[] = [];
+    const dayMessages: string[] = [];
+
+    for (const dayKey of daysToShow) {
+      const daySlots = dayGroups[dayKey];
+      const selected = selectSmartSlots(daySlots, timezone, maxSlotsPerDay);
+      allSelectedSlots.push(...selected);
+
+      const dayDate = utcToZonedTime(new Date(dayKey + "T12:00:00Z"), timezone);
+      const dayLabel = format(dayDate, "EEEE M/d");
+
+      const slotLines = selected.map((slot) => {
+        const time = formatSlotTime(slot, timezone);
+        const url = provider.generateBookingUrl(
+          config,
+          linkInfo,
+          slot,
+          timezone,
+          bookerUrl,
+          duration,
+          allSelectedSlots,
+        );
+        return `  • ${time} — ${url}`;
+      });
+
+      dayMessages.push(`${dayLabel}\n${slotLines.join("\n")}`);
+    }
+
+    const tzAbbr = getTimezoneAbbr(timezone);
+    const message =
+      dayMessages.length > 0
+        ? `Here are some times that work (${tzAbbr}):\n\n${dayMessages.join("\n\n")}\n\nOr pick another time: ${provider.getFallbackUrl(config)}`
+        : `I couldn't find available times in the next ${daysAhead} days. Pick a time here: ${provider.getFallbackUrl(config)}`;
+
+    return NextResponse.json({ message, linkInfo });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to fetch slots";
-    return NextResponse.json({ error: message }, { status: 500 });
+    console.error("Slots API error:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch available times" },
+      { status: 500 },
+    );
   }
 }
 ```
+
+**Step 2: Verify build**
+
+```bash
+cd packages/web && pnpm build
+```
+
+Expected: builds successfully
 
 **Step 3: Commit**
 
 ```bash
 git add -A
-git commit -m "feat: add POST /api/slots route"
+git commit -m "feat: add POST /api/slots route with auth and message generation"
 ```
 
 ---
 
-## Phase 3: Web UI
-
-### Task 8: Build the propose form page
+### Task 8: Build propose form page
 
 **Files:**
+- Create: `packages/web/lib/config.ts`
 - Create: `packages/web/app/propose/page.tsx`
-- Create: `packages/web/components/propose-form.tsx`
-- Create: `packages/web/components/result-card.tsx`
-- Create: `packages/web/components/duration-picker.tsx`
-- Create: `packages/web/components/timezone-picker.tsx`
-- Create: `packages/web/components/days-stepper.tsx`
-- Create: `packages/web/lib/config.ts` (link slugs from env)
+- Create: `packages/web/components/DurationPicker.tsx`
+- Create: `packages/web/components/DaysStepper.tsx`
+- Create: `packages/web/components/TimezonePicker.tsx`
+- Create: `packages/web/components/ResultCard.tsx`
+- Create: `packages/web/components/ProposalForm.tsx`
 
 **Step 1: Create config helper**
 
 ```ts
 // packages/web/lib/config.ts
-export function getLinkSlugs(): string[] {
-  const raw = process.env.SAVVYCAL_LINK_SLUGS || "";
-  return raw.split(",").map((s) => s.trim()).filter(Boolean);
+export const TIMEZONES = [
+  { title: "Eastern", value: "America/New_York", abbr: "ET" },
+  { title: "Central", value: "America/Chicago", abbr: "CT" },
+  { title: "Mountain", value: "America/Denver", abbr: "MT" },
+  { title: "Pacific", value: "America/Los_Angeles", abbr: "PT" },
+  { title: "Arizona", value: "America/Phoenix", abbr: "AZ" },
+  { title: "Hawaii", value: "Pacific/Honolulu", abbr: "HT" },
+  { title: "Alaska", value: "America/Anchorage", abbr: "AKT" },
+  { title: "London", value: "Europe/London", abbr: "GMT" },
+  { title: "Paris", value: "Europe/Paris", abbr: "CET" },
+  { title: "Tokyo", value: "Asia/Tokyo", abbr: "JST" },
+  { title: "Sydney", value: "Australia/Sydney", abbr: "AEST" },
+] as const;
+
+export interface UserPreferences {
+  timezone: string;
+  daysAhead: number;
+  maxDaysToShow: number;
+  maxSlotsPerDay: number;
+  duration: number;
+  linkSlug: string;
 }
-```
 
-**Step 2: Create the propose page (server component)**
+const STORAGE_KEY = "propose-preferences";
 
-```tsx
-// packages/web/app/propose/page.tsx
-import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
-import { getLinkSlugs } from "@/lib/config";
-import { ProposalForm } from "@/components/propose-form";
+const DEFAULTS: UserPreferences = {
+  timezone: "America/New_York",
+  daysAhead: 5,
+  maxDaysToShow: 3,
+  maxSlotsPerDay: 4,
+  duration: 30,
+  linkSlug: "",
+};
 
-export default async function ProposePage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+export function loadPreferences(): UserPreferences {
+  if (typeof window === "undefined") return DEFAULTS;
 
-  if (!user || user.email !== process.env.ALLOWED_EMAIL) {
-    redirect("/");
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (!stored) return DEFAULTS;
+    return { ...DEFAULTS, ...JSON.parse(stored) };
+  } catch {
+    return DEFAULTS;
   }
+}
 
-  const linkSlugs = getLinkSlugs();
+export function savePreferences(prefs: Partial<UserPreferences>) {
+  if (typeof window === "undefined") return;
 
-  return (
-    <main className="mx-auto max-w-lg px-4 py-8">
-      <h1 className="mb-6 text-xl font-bold">Propose Times</h1>
-      <ProposalForm linkSlugs={linkSlugs} />
-    </main>
-  );
+  const current = loadPreferences();
+  const updated = { ...current, ...prefs };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
 }
 ```
 
-**Step 3: Create DurationPicker component**
+**Step 2: Create DurationPicker component**
 
 ```tsx
-// packages/web/components/duration-picker.tsx
+// packages/web/components/DurationPicker.tsx
 "use client";
 
-const DURATIONS = [15, 30, 45, 60];
-
 interface DurationPickerProps {
+  durations: number[];
   value: number;
-  onChange: (d: number) => void;
+  onChange: (duration: number) => void;
 }
 
-export function DurationPicker({ value, onChange }: DurationPickerProps) {
+export function DurationPicker({ durations, value, onChange }: DurationPickerProps) {
   return (
-    <div className="flex gap-2">
-      {DURATIONS.map((d) => (
-        <button
-          key={d}
-          type="button"
-          onClick={() => onChange(d)}
-          className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-            value === d
-              ? "bg-white text-zinc-900"
-              : "bg-zinc-800 text-zinc-300 active:bg-zinc-700"
-          }`}
-        >
-          {d}m
-        </button>
-      ))}
-    </div>
+    <fieldset>
+      <legend className="mb-2 text-sm font-medium text-zinc-400">Duration</legend>
+      <div className="flex gap-2">
+        {durations.map((d) => (
+          <button
+            key={d}
+            type="button"
+            onClick={() => onChange(d)}
+            className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+              d === value
+                ? "bg-white text-zinc-900"
+                : "bg-zinc-800 text-zinc-300 active:bg-zinc-700"
+            }`}
+          >
+            {d}m
+          </button>
+        ))}
+      </div>
+    </fieldset>
   );
 }
 ```
 
-**Step 4: Create DaysStepper component**
+**Step 3: Create DaysStepper component**
 
 ```tsx
-// packages/web/components/days-stepper.tsx
+// packages/web/components/DaysStepper.tsx
 "use client";
 
 interface DaysStepperProps {
   value: number;
-  onChange: (n: number) => void;
+  onChange: (days: number) => void;
 }
 
 export function DaysStepper({ value, onChange }: DaysStepperProps) {
   return (
-    <div className="flex items-center gap-4">
-      <button
-        type="button"
-        onClick={() => onChange(Math.max(1, value - 1))}
-        className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800 text-lg active:bg-zinc-700"
-      >
-        −
-      </button>
-      <span className="min-w-[5rem] text-center text-sm">
-        Next <strong>{value}</strong> {value === 1 ? "day" : "days"}
-      </span>
-      <button
-        type="button"
-        onClick={() => onChange(Math.min(14, value + 1))}
-        className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800 text-lg active:bg-zinc-700"
-      >
-        +
-      </button>
-    </div>
+    <fieldset>
+      <legend className="mb-2 text-sm font-medium text-zinc-400">
+        Look ahead
+      </legend>
+      <div className="flex items-center gap-4">
+        <button
+          type="button"
+          onClick={() => onChange(Math.max(1, value - 1))}
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800 text-lg font-medium text-zinc-300 active:bg-zinc-700"
+        >
+          −
+        </button>
+        <span className="min-w-[4rem] text-center text-lg font-medium">
+          {value} {value === 1 ? "day" : "days"}
+        </span>
+        <button
+          type="button"
+          onClick={() => onChange(Math.min(14, value + 1))}
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800 text-lg font-medium text-zinc-300 active:bg-zinc-700"
+        >
+          +
+        </button>
+      </div>
+    </fieldset>
   );
 }
 ```
 
-**Step 5: Create TimezonePicker component**
+**Step 4: Create TimezonePicker component**
 
 ```tsx
-// packages/web/components/timezone-picker.tsx
+// packages/web/components/TimezonePicker.tsx
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useRef, useEffect } from "react";
+import { TIMEZONES } from "@/lib/config";
 
 interface TimezonePickerProps {
   value: string;
   onChange: (tz: string) => void;
 }
 
-const COMMON_TIMEZONES = [
-  "America/New_York",
-  "America/Chicago",
-  "America/Denver",
-  "America/Los_Angeles",
-  "America/Phoenix",
-  "America/Anchorage",
-  "Pacific/Honolulu",
-  "Europe/London",
-  "Europe/Paris",
-  "Europe/Berlin",
-  "Asia/Tokyo",
-  "Asia/Shanghai",
-  "Asia/Kolkata",
-  "Australia/Sydney",
-  "Pacific/Auckland",
-];
-
 export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
-  const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const ref = useRef<HTMLDivElement>(null);
 
-  const allTimezones = useMemo(() => {
-    try {
-      return Intl.supportedValuesOf("timeZone");
-    } catch {
-      return COMMON_TIMEZONES;
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
     }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const filtered = useMemo(() => {
-    if (!search) return COMMON_TIMEZONES;
-    const q = search.toLowerCase();
-    return allTimezones.filter((tz) => tz.toLowerCase().includes(q));
-  }, [search, allTimezones]);
+  const filtered = TIMEZONES.filter(
+    (tz) =>
+      tz.title.toLowerCase().includes(search.toLowerCase()) ||
+      tz.abbr.toLowerCase().includes(search.toLowerCase()),
+  );
 
-  const displayValue = value.replace(/_/g, " ").split("/").pop() || value;
+  const selected = TIMEZONES.find((tz) => tz.value === value);
 
   return (
-    <div className="relative">
-      <button
-        type="button"
-        onClick={() => setOpen(!open)}
-        className="w-full rounded-lg bg-zinc-800 px-4 py-3 text-left text-sm active:bg-zinc-700"
-      >
-        {displayValue}
-      </button>
-      {open && (
-        <div className="absolute z-10 mt-1 max-h-64 w-full overflow-y-auto rounded-lg border border-zinc-700 bg-zinc-900 shadow-lg">
-          <input
-            autoFocus
-            type="text"
-            placeholder="Search timezones..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full border-b border-zinc-700 bg-transparent px-4 py-2 text-sm outline-none"
-          />
-          {filtered.slice(0, 20).map((tz) => (
-            <button
-              key={tz}
-              type="button"
-              onClick={() => { onChange(tz); setOpen(false); setSearch(""); }}
-              className={`w-full px-4 py-2 text-left text-sm hover:bg-zinc-800 ${tz === value ? "bg-zinc-800 font-medium" : ""}`}
-            >
-              {tz.replace(/_/g, " ")}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
+    <fieldset>
+      <legend className="mb-2 text-sm font-medium text-zinc-400">
+        Recipient timezone
+      </legend>
+      <div ref={ref} className="relative">
+        <button
+          type="button"
+          onClick={() => setOpen(!open)}
+          className="w-full rounded-lg bg-zinc-800 px-4 py-3 text-left text-base text-zinc-100"
+        >
+          {selected ? `${selected.title} (${selected.abbr})` : "Select timezone"}
+        </button>
+
+        {open && (
+          <div className="absolute z-10 mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-900 shadow-lg">
+            <input
+              type="text"
+              placeholder="Search…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full border-b border-zinc-700 bg-transparent px-4 py-2 text-sm text-zinc-100 outline-none placeholder:text-zinc-500"
+              autoFocus
+            />
+            <ul className="max-h-60 overflow-y-auto py-1">
+              {filtered.map((tz) => (
+                <li key={tz.value}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onChange(tz.value);
+                      setOpen(false);
+                      setSearch("");
+                    }}
+                    className={`w-full px-4 py-2 text-left text-sm active:bg-zinc-700 ${
+                      tz.value === value
+                        ? "bg-zinc-800 text-white"
+                        : "text-zinc-300"
+                    }`}
+                  >
+                    {tz.title} ({tz.abbr})
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </fieldset>
   );
 }
 ```
 
-**Step 6: Create ResultCard component**
+**Step 5: Create ResultCard component**
 
 ```tsx
-// packages/web/components/result-card.tsx
+// packages/web/components/ResultCard.tsx
 "use client";
 
-import { format } from "date-fns";
-import { utcToZonedTime } from "date-fns-tz";
-
-interface SlotWithUrl {
-  start_at: string;
-  end_at: string;
-  bookingUrl: string;
-}
+import { useState } from "react";
 
 interface ResultCardProps {
-  slots: SlotWithUrl[];
-  timezone: string;
-  fallbackUrl: string;
+  message: string;
 }
 
-function formatSlotLine(slot: SlotWithUrl, timezone: string): string {
-  const zonedDate = utcToZonedTime(new Date(slot.start_at), timezone);
-  const day = format(zonedDate, "EEEE, MMM d");
-  const time = format(zonedDate, "h:mma").toLowerCase();
-  return `${day} at ${time}`;
-}
-
-export function ResultCard({ slots, timezone, fallbackUrl }: ResultCardProps) {
-  const textMessage = slots
-    .map((s) => `• ${formatSlotLine(s, timezone)}`)
-    .join("\n");
-
-  const htmlMessage = slots
-    .map((s) => `<li><a href="${s.bookingUrl}">${formatSlotLine(s, timezone)}</a></li>`)
-    .join("");
-
-  const fullText = `Here are some times that work for me:\n\n${textMessage}\n\nOr pick another time: ${fallbackUrl}`;
-  const fullHtml = `<p>Here are some times that work for me:</p><ul>${htmlMessage}</ul><p>Or <a href="${fallbackUrl}">pick another time</a></p>`;
+export function ResultCard({ message }: ResultCardProps) {
+  const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
     try {
+      // Copy as both plain text and HTML (for rich links)
+      const htmlMessage = message.replace(
+        /(https?:\/\/[^\s]+)/g,
+        '<a href="$1">$1</a>',
+      );
+
       await navigator.clipboard.write([
         new ClipboardItem({
-          "text/html": new Blob([fullHtml], { type: "text/html" }),
-          "text/plain": new Blob([fullText], { type: "text/plain" }),
+          "text/plain": new Blob([message], { type: "text/plain" }),
+          "text/html": new Blob([htmlMessage], { type: "text/html" }),
         }),
       ]);
+
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     } catch {
-      await navigator.clipboard.writeText(fullText);
+      // Fallback to plain text
+      await navigator.clipboard.writeText(message);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     }
   };
 
   const handleShare = async () => {
     if (navigator.share) {
-      await navigator.share({ text: fullText });
-    } else {
-      await handleCopy();
+      await navigator.share({ text: message });
     }
   };
 
   return (
-    <div className="rounded-xl border border-zinc-700 bg-zinc-900 p-4">
-      <p className="mb-3 text-sm text-zinc-400">Here are some times that work for me:</p>
-      <ul className="mb-4 space-y-1">
-        {slots.map((s) => (
-          <li key={s.start_at} className="text-sm">
-            • {formatSlotLine(s, timezone)}
-          </li>
-        ))}
-      </ul>
+    <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
+      <pre className="mb-4 whitespace-pre-wrap text-sm leading-relaxed text-zinc-200">
+        {message}
+      </pre>
       <div className="flex gap-3">
         <button
           onClick={handleCopy}
-          className="flex-1 rounded-full bg-white px-4 py-3 text-sm font-semibold text-zinc-900 active:bg-zinc-200"
+          className="flex-1 rounded-lg bg-white px-4 py-3 text-sm font-medium text-zinc-900 active:bg-zinc-100"
         >
-          Copy
+          {copied ? "Copied!" : "Copy"}
         </button>
-        {"share" in navigator && (
+        {typeof navigator !== "undefined" && "share" in navigator && (
           <button
             onClick={handleShare}
-            className="flex-1 rounded-full bg-zinc-800 px-4 py-3 text-sm font-semibold active:bg-zinc-700"
+            className="flex-1 rounded-lg bg-zinc-800 px-4 py-3 text-sm font-medium text-zinc-300 active:bg-zinc-700"
           >
             Share
           </button>
@@ -1176,91 +1278,107 @@ export function ResultCard({ slots, timezone, fallbackUrl }: ResultCardProps) {
 }
 ```
 
-**Step 7: Create ProposalForm (main orchestrator component)**
+**Step 6: Create ProposalForm component**
 
 ```tsx
-// packages/web/components/propose-form.tsx
+// packages/web/components/ProposalForm.tsx
 "use client";
 
 import { useState, useEffect } from "react";
-import { DurationPicker } from "./duration-picker";
-import { DaysStepper } from "./days-stepper";
-import { TimezonePicker } from "./timezone-picker";
-import { ResultCard } from "./result-card";
+import { DurationPicker } from "./DurationPicker";
+import { DaysStepper } from "./DaysStepper";
+import { TimezonePicker } from "./TimezonePicker";
+import { ResultCard } from "./ResultCard";
+import { loadPreferences, savePreferences } from "@/lib/config";
+import type { LinkInfo } from "@propose/core";
 
 interface ProposalFormProps {
   linkSlugs: string[];
 }
 
-interface SlotWithUrl {
-  start_at: string;
-  end_at: string;
-  bookingUrl: string;
-}
-
-interface SlotsResponse {
-  slots: SlotWithUrl[];
-  linkInfo: { id: string; slug: string; durations: number[]; defaultDuration: number };
-  fallbackUrl: string;
-  error?: string;
-}
-
-function loadDefault<T>(key: string, fallback: T): T {
-  if (typeof window === "undefined") return fallback;
-  const stored = localStorage.getItem(key);
-  if (stored === null) return fallback;
-  try { return JSON.parse(stored) as T; } catch { return fallback; }
-}
-
-function saveDefault(key: string, value: unknown) {
-  localStorage.setItem(key, JSON.stringify(value));
-}
-
 export function ProposalForm({ linkSlugs }: ProposalFormProps) {
   const [duration, setDuration] = useState(30);
-  const [daysAhead, setDaysAhead] = useState(5);
   const [timezone, setTimezone] = useState("America/New_York");
+  const [daysAhead, setDaysAhead] = useState(5);
   const [linkSlug, setLinkSlug] = useState(linkSlugs[0] || "");
+  const [durations, setDurations] = useState<number[]>([30]);
+  const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<SlotsResponse | null>(null);
 
-  // Load saved defaults on mount
+  // Load saved preferences on mount
   useEffect(() => {
-    setDuration(loadDefault("propose:duration", 30));
-    setDaysAhead(loadDefault("propose:daysAhead", 5));
-    setTimezone(loadDefault("propose:timezone", Intl.DateTimeFormat().resolvedOptions().timeZone));
-    setLinkSlug(loadDefault("propose:linkSlug", linkSlugs[0] || ""));
+    const prefs = loadPreferences();
+    setTimezone(prefs.timezone);
+    setDaysAhead(prefs.daysAhead);
+    setDuration(prefs.duration);
+    if (prefs.linkSlug && linkSlugs.includes(prefs.linkSlug)) {
+      setLinkSlug(prefs.linkSlug);
+    }
   }, [linkSlugs]);
 
-  // Save defaults when changed
-  useEffect(() => { saveDefault("propose:duration", duration); }, [duration]);
-  useEffect(() => { saveDefault("propose:daysAhead", daysAhead); }, [daysAhead]);
-  useEffect(() => { saveDefault("propose:timezone", timezone); }, [timezone]);
-  useEffect(() => { saveDefault("propose:linkSlug", linkSlug); }, [linkSlug]);
+  // Fetch link info to get available durations
+  useEffect(() => {
+    if (!linkSlug) return;
+
+    async function fetchLinkInfo() {
+      try {
+        const res = await fetch("/api/slots", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            duration,
+            timezone,
+            daysAhead: 1,
+            maxDaysToShow: 1,
+            maxSlotsPerDay: 1,
+            linkSlug,
+          }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.linkInfo?.durations) {
+            setDurations(data.linkInfo.durations);
+          }
+        }
+      } catch {
+        // Non-critical — durations stay at default
+      }
+    }
+
+    fetchLinkInfo();
+  }, [linkSlug]);
 
   const handleSubmit = async () => {
     setLoading(true);
     setError(null);
-    setResult(null);
+    setMessage(null);
+
+    // Save preferences
+    savePreferences({ timezone, daysAhead, duration, linkSlug });
 
     try {
       const res = await fetch("/api/slots", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ linkSlug, duration, daysAhead, timezone }),
+        body: JSON.stringify({
+          duration,
+          timezone,
+          daysAhead,
+          maxDaysToShow: 3,
+          maxSlotsPerDay: 4,
+          linkSlug,
+        }),
       });
 
-      const data = (await res.json()) as SlotsResponse;
       if (!res.ok) {
-        setError(data.error || "Failed to fetch slots");
-      } else if (data.slots.length === 0) {
-        setError("No available slots found in that time range.");
-      } else {
-        setResult(data);
+        throw new Error("Failed to fetch times");
       }
+
+      const data = await res.json();
+      setMessage(data.message);
     } catch {
-      setError("Network error. Please try again.");
+      setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -1268,18 +1386,17 @@ export function ProposalForm({ linkSlugs }: ProposalFormProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Link selector (if multiple slugs) */}
       {linkSlugs.length > 1 && (
         <fieldset>
           <legend className="mb-2 text-sm font-medium text-zinc-400">Link</legend>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex gap-2">
             {linkSlugs.map((slug) => (
               <button
                 key={slug}
                 type="button"
                 onClick={() => setLinkSlug(slug)}
                 className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                  linkSlug === slug
+                  slug === linkSlug
                     ? "bg-white text-zinc-900"
                     : "bg-zinc-800 text-zinc-300 active:bg-zinc-700"
                 }`}
@@ -1291,78 +1408,100 @@ export function ProposalForm({ linkSlugs }: ProposalFormProps) {
         </fieldset>
       )}
 
-      {/* Duration */}
-      <fieldset>
-        <legend className="mb-2 text-sm font-medium text-zinc-400">Duration</legend>
-        <DurationPicker value={duration} onChange={setDuration} />
-      </fieldset>
+      <DurationPicker durations={durations} value={duration} onChange={setDuration} />
+      <DaysStepper value={daysAhead} onChange={setDaysAhead} />
+      <TimezonePicker value={timezone} onChange={setTimezone} />
 
-      {/* Days ahead */}
-      <fieldset>
-        <legend className="mb-2 text-sm font-medium text-zinc-400">Date Range</legend>
-        <DaysStepper value={daysAhead} onChange={setDaysAhead} />
-      </fieldset>
-
-      {/* Timezone */}
-      <fieldset>
-        <legend className="mb-2 text-sm font-medium text-zinc-400">Recipient Timezone</legend>
-        <TimezonePicker value={timezone} onChange={setTimezone} />
-      </fieldset>
-
-      {/* Submit */}
       <button
         onClick={handleSubmit}
         disabled={loading}
-        className="rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-zinc-900 active:bg-zinc-200 disabled:opacity-50"
+        className="rounded-lg bg-white px-6 py-3 text-base font-medium text-zinc-900 shadow-sm active:bg-zinc-100 disabled:opacity-50"
       >
-        {loading ? "Finding times..." : "Propose Times"}
+        {loading ? "Finding times…" : "Propose Times"}
       </button>
 
-      {/* Error */}
-      {error && (
-        <p className="rounded-lg bg-red-900/30 px-4 py-3 text-sm text-red-300">{error}</p>
-      )}
-
-      {/* Result */}
-      {result && (
-        <ResultCard
-          slots={result.slots}
-          timezone={timezone}
-          fallbackUrl={result.fallbackUrl}
-        />
-      )}
+      {error && <p className="text-center text-sm text-red-400">{error}</p>}
+      {message && <ResultCard message={message} />}
     </div>
   );
 }
 ```
 
-**Step 8: Verify dev server works**
+**Step 7: Create propose page**
 
-```bash
-cd packages/web && pnpm dev
+```tsx
+// packages/web/app/propose/page.tsx
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import { ProposalForm } from "@/components/ProposalForm";
+
+function parseSlugs(raw: string): string[] {
+  return [...new Set(
+    raw.split(",").map((s) => s.trim()).filter(Boolean),
+  )];
+}
+
+export default async function ProposePage() {
+  // Verify auth
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user || user.email !== process.env.ALLOWED_EMAIL) {
+    redirect("/login");
+  }
+
+  // Read link slugs from env
+  const linkSlugs = parseSlugs(process.env.SAVVYCAL_LINK_SLUGS || "");
+
+  if (linkSlugs.length === 0) {
+    return (
+      <div className="flex flex-col items-center gap-4 pt-12">
+        <h1 className="text-xl font-bold">Propose Times</h1>
+        <p className="text-sm text-zinc-400">
+          No scheduling links configured. Set SAVVYCAL_LINK_SLUGS env var.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-6">
+      <h1 className="text-xl font-bold">Propose Times</h1>
+      <ProposalForm linkSlugs={linkSlugs} />
+    </div>
+  );
+}
 ```
 
-Test the form manually. Without Supabase configured, you'll see the login page.
+**Step 8: Verify build**
+
+```bash
+cd packages/web && pnpm build
+```
+
+Expected: builds successfully
 
 **Step 9: Commit**
 
 ```bash
 git add -A
-git commit -m "feat: build propose form page with duration, timezone, and results"
+git commit -m "feat: add propose form page with components"
 ```
 
 ---
 
-## Phase 4: PWA
+## Phase 5: PWA & Polish
 
 ### Task 9: Add PWA manifest and icons
 
 **Files:**
 - Create: `packages/web/public/manifest.json`
-- Create: `packages/web/public/icons/icon-192.png` (placeholder)
-- Create: `packages/web/public/icons/icon-512.png` (placeholder)
+- Create: `packages/web/public/icon-192.png` (placeholder)
+- Create: `packages/web/public/icon-512.png` (placeholder)
 
-**Step 1: Create manifest**
+**Step 1: Create manifest.json**
 
 ```json
 {
@@ -1370,28 +1509,44 @@ git commit -m "feat: build propose form page with duration, timezone, and result
   "short_name": "Propose",
   "start_url": "/propose",
   "display": "standalone",
-  "background_color": "#18181b",
+  "background_color": "#09090b",
   "theme_color": "#18181b",
   "icons": [
-    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
   ]
 }
 ```
 
 **Step 2: Create placeholder icons**
 
-Generate simple placeholder PNGs (solid color squares). Replace with real icons later.
+Generate simple placeholder icons (solid color squares). These can be replaced with real icons later.
 
-**Step 3: Verify**
+```bash
+cd packages/web/public
+# Create a 1x1 white PNG and upscale — or use any simple icon generator
+# For now, just ensure the files exist so the manifest doesn't 404
+convert -size 192x192 xc:#18181b icon-192.png 2>/dev/null || touch icon-192.png
+convert -size 512x512 xc:#18181b icon-512.png 2>/dev/null || touch icon-512.png
+```
 
-Open Chrome DevTools → Application → Manifest. Confirm manifest loads.
+**Step 3: Verify manifest is referenced in layout**
+
+Confirm `packages/web/app/layout.tsx` already has `manifest: "/manifest.json"` in the metadata export (it was added in Task 4).
 
 **Step 4: Commit**
 
 ```bash
 git add -A
-git commit -m "feat: add PWA manifest for home screen install"
+git commit -m "feat: add PWA manifest and placeholder icons"
 ```
 
 ---
@@ -1399,56 +1554,82 @@ git commit -m "feat: add PWA manifest for home screen install"
 ### Task 10: Add sign-out button
 
 **Files:**
+- Create: `packages/web/components/SignOutButton.tsx`
 - Modify: `packages/web/app/propose/page.tsx`
 
-**Step 1: Add sign-out to propose page**
-
-Add a small sign-out link in the header:
+**Step 1: Create SignOutButton component**
 
 ```tsx
-// Add to packages/web/app/propose/page.tsx, in the JSX
-<header className="mb-6 flex items-center justify-between">
-  <h1 className="text-xl font-bold">Propose Times</h1>
-  <form action="/auth/signout" method="post">
-    <button type="submit" className="text-sm text-zinc-500 active:text-zinc-300">
+// packages/web/components/SignOutButton.tsx
+"use client";
+
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
+
+export function SignOutButton() {
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/login");
+  };
+
+  return (
+    <button
+      onClick={handleSignOut}
+      className="text-sm text-zinc-500 active:text-zinc-300"
+    >
       Sign out
     </button>
-  </form>
-</header>
-```
-
-**Step 2: Create signout route**
-
-```ts
-// packages/web/app/auth/signout/route.ts
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
-
-export async function POST() {
-  const supabase = await createClient();
-  await supabase.auth.signOut();
-  redirect("/");
+  );
 }
 ```
 
-**Step 3: Commit**
+**Step 2: Add SignOutButton to propose page**
+
+In `packages/web/app/propose/page.tsx`, add the import and render the button in the header area:
+
+```tsx
+// Add import at top:
+import { SignOutButton } from "@/components/SignOutButton";
+
+// Update the return JSX to include the button:
+return (
+  <div className="flex flex-col gap-6">
+    <div className="flex items-center justify-between">
+      <h1 className="text-xl font-bold">Propose Times</h1>
+      <SignOutButton />
+    </div>
+    <ProposalForm linkSlugs={linkSlugs} />
+  </div>
+);
+```
+
+**Step 3: Verify build**
+
+```bash
+cd packages/web && pnpm build
+```
+
+Expected: builds successfully
+
+**Step 4: Commit**
 
 ```bash
 git add -A
-git commit -m "feat: add sign-out button"
+git commit -m "feat: add sign-out button to propose page"
 ```
 
 ---
 
-## Phase 5: Environment & Deployment
-
-### Task 11: Create environment config and Vercel setup
+### Task 11: Environment config and Vercel deployment
 
 **Files:**
 - Create: `packages/web/.env.local.example`
-- Modify: root `.gitignore`
+- Create: `packages/web/.gitignore`
 
-**Step 1: Create env example**
+**Step 1: Create env example file**
 
 ```bash
 # packages/web/.env.local.example
@@ -1456,39 +1637,61 @@ NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ALLOWED_EMAIL=you@example.com
 SAVVYCAL_TOKEN=your-savvycal-api-token
-SAVVYCAL_USERNAME=your-username
-SAVVYCAL_LINK_SLUGS=link-slug-1,link-slug-2
+SAVVYCAL_USERNAME=your-savvycal-username
+SAVVYCAL_LINK_SLUGS=chat,call
 BOOKER_URL=https://your-booker.vercel.app
 ```
 
-**Step 2: Update .gitignore**
-
-Ensure `.env.local` is ignored (Next.js default). Add:
+**Step 2: Create web package .gitignore**
 
 ```
-# packages/web
-packages/web/.next/
-packages/web/node_modules/
+# packages/web/.gitignore
+.next/
+.env.local
+node_modules/
 ```
 
-**Step 3: Commit**
+**Step 3: Verify the full build from root**
+
+```bash
+cd /path/to/savvycal-propose
+pnpm test:run
+pnpm build:web
+```
+
+Expected: core tests pass, web app builds successfully
+
+**Step 4: Commit**
 
 ```bash
 git add -A
-git commit -m "chore: add env example and gitignore for web app"
+git commit -m "chore: add env example and web gitignore"
 ```
+
+**Step 5: Deploy to Vercel**
+
+1. Push to GitHub
+2. Import project in Vercel, set root directory to `packages/web`
+3. Set all env vars from `.env.local.example`
+4. Set build command: `cd ../.. && pnpm build:web` (or configure in `vercel.json`)
+5. Deploy
 
 ---
 
 ## Verification Checklist
 
-After completing all tasks:
+After all tasks are complete, verify end-to-end:
 
-1. `cd packages/core && pnpm test:run` — all core tests pass
-2. `cd packages/web && pnpm build` — Next.js builds without errors
-3. `cd packages/web && pnpm dev` — dev server starts, login page renders
-4. Auth flow works with Supabase configured
-5. Propose form fetches slots and shows results
-6. Copy/Share buttons work on mobile
-7. PWA manifest loads in DevTools
-8. App installable to home screen on mobile
+- [ ] `pnpm install` from root succeeds
+- [ ] `pnpm test:run` passes all core tests
+- [ ] `pnpm build:web` builds without errors
+- [ ] `cd packages/raycast && pnpm build` succeeds
+- [ ] Web app redirects unauthenticated users to `/login`
+- [ ] Google OAuth flow completes and redirects to `/propose`
+- [ ] Non-allowed emails are rejected with error message
+- [ ] Duration picker shows durations from SavvyCal link config
+- [ ] Propose Times button fetches slots and displays message
+- [ ] Copy button copies message with rich links
+- [ ] Share button opens native share sheet (mobile)
+- [ ] PWA is installable from mobile browser ("Add to Home Screen")
+- [ ] Sign out returns to login page
