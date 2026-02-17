@@ -23,7 +23,7 @@ function formatTimeInZone(tz: string): string {
 export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const [now, setNow] = useState(0);
+  const [now, setNow] = useState<number | null>(null);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -36,18 +36,16 @@ export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Tick every minute to keep times fresh
+  // Tick every minute to keep times fresh (always, not just when open)
   useEffect(() => {
-    if (!open) return;
     setNow(Date.now());
     const id = setInterval(() => setNow(Date.now()), 60_000);
     return () => clearInterval(id);
-  }, [open]);
+  }, []);
 
   const filtered = searchTimezones(search);
   const selected = TIMEZONES.find((tz) => tz.value === value);
-  // Use `now` to bust memoization on time strings
-  void now;
+  const mounted = now !== null;
 
   return (
     <fieldset>
@@ -61,7 +59,7 @@ export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
           className="w-full rounded-lg bg-zinc-800 px-4 py-3 text-left text-base text-zinc-100"
         >
           {selected
-            ? `${selected.title} (${selected.abbr}) · ${formatTimeInZone(selected.value)}`
+            ? `${selected.title} (${selected.abbr})${mounted ? ` · ${formatTimeInZone(selected.value)}` : ""}`
             : "Select timezone"}
         </button>
 
@@ -92,7 +90,7 @@ export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
                     }`}
                   >
                     <span>{tz.title} ({tz.abbr})</span>
-                    <span className="text-zinc-500">{formatTimeInZone(tz.value)}</span>
+                    {mounted && <span className="text-zinc-500">{formatTimeInZone(tz.value)}</span>}
                   </button>
                 </li>
               ))}
