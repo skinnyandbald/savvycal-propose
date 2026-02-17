@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ProposalForm } from "@/components/ProposalForm";
+import { SignOutButton } from "@/components/SignOutButton";
 
 function parseSlugs(raw: string): string[] {
   return [...new Set(
@@ -35,7 +36,10 @@ export default async function ProposePage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-xl font-bold">Propose Times</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-xl font-bold">Propose Times</h1>
+        <SignOutButton />
+      </div>
       <ProposalForm linkSlugs={linkSlugs} />
     </div>
   );
