@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { addDays, format, differenceInCalendarDays } from "date-fns";
 import { DurationPicker } from "./DurationPicker";
-import { DaysStepper } from "./DaysStepper";
+import { DateRangePicker } from "./DateRangePicker";
 import { TimezonePicker } from "./TimezonePicker";
 import { ResultCard } from "./ResultCard";
 import { loadPreferences, savePreferences } from "@/lib/config";
@@ -11,13 +12,22 @@ interface ProposalFormProps {
   linkSlugs: string[];
 }
 
+/** Today as yyyy-MM-dd in local time */
+function todayISO(): string {
+  return format(new Date(), "yyyy-MM-dd");
+}
+
 export function ProposalForm({ linkSlugs }: ProposalFormProps) {
   const [duration, setDuration] = useState(30);
   const [timezone, setTimezone] = useState("America/New_York");
-  const [daysAhead, setDaysAhead] = useState(5);
+  const [startDate, setStartDate] = useState(() => todayISO());
+  const [endDate, setEndDate] = useState(() =>
+    format(addDays(new Date(), 5), "yyyy-MM-dd"),
+  );
   const [linkSlug, setLinkSlug] = useState(linkSlugs[0] || "");
   const [durations, setDurations] = useState<number[]>([30]);
   const [message, setMessage] = useState<string | null>(null);
+  const [html, setHtml] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,11 +35,14 @@ export function ProposalForm({ linkSlugs }: ProposalFormProps) {
   useEffect(() => {
     const prefs = loadPreferences();
     setTimezone(prefs.timezone);
-    setDaysAhead(prefs.daysAhead);
     setDuration(prefs.duration);
     if (prefs.linkSlug && linkSlugs.includes(prefs.linkSlug)) {
       setLinkSlug(prefs.linkSlug);
     }
+    // Compute fresh dates from saved daysAhead
+    const today = new Date();
+    setStartDate(format(today, "yyyy-MM-dd"));
+    setEndDate(format(addDays(today, prefs.daysAhead), "yyyy-MM-dd"));
   }, [linkSlugs]);
 
   // Fetch link info to get available durations
@@ -44,7 +57,8 @@ export function ProposalForm({ linkSlugs }: ProposalFormProps) {
           body: JSON.stringify({
             duration,
             timezone,
-            daysAhead: 1,
+            startDate: todayISO(),
+            endDate: format(addDays(new Date(), 1), "yyyy-MM-dd"),
             maxDaysToShow: 1,
             maxSlotsPerDay: 1,
             linkSlug,
@@ -63,12 +77,20 @@ export function ProposalForm({ linkSlugs }: ProposalFormProps) {
         }
       } catch (e) {
         console.error("Failed to fetch link info:", e);
-        // Non-critical — durations stay at default
       }
     }
 
     fetchLinkInfo();
   }, [linkSlug]);
+
+  // When start date changes, ensure end date stays after it
+  const handleStartChange = (date: string) => {
+    setStartDate(date);
+    if (date > endDate) {
+      const [y, m, d] = date.split("-").map(Number);
+      setEndDate(format(addDays(new Date(y, m - 1, d), 5), "yyyy-MM-dd"));
+    }
+  };
 
   const handleSubmit = async () => {
     if (!linkSlug) {
@@ -79,8 +101,15 @@ export function ProposalForm({ linkSlugs }: ProposalFormProps) {
     setLoading(true);
     setError(null);
     setMessage(null);
+    setHtml(null);
 
-    // Save preferences
+    // Save daysAhead preference (computed from selected range)
+    const [sy, sm, sd] = startDate.split("-").map(Number);
+    const [ey, em, ed] = endDate.split("-").map(Number);
+    const daysAhead = differenceInCalendarDays(
+      new Date(ey, em - 1, ed),
+      new Date(sy, sm - 1, sd),
+    );
     savePreferences({ timezone, daysAhead, duration, linkSlug });
 
     try {
@@ -90,21 +119,24 @@ export function ProposalForm({ linkSlugs }: ProposalFormProps) {
         body: JSON.stringify({
           duration,
           timezone,
-          daysAhead,
+          startDate,
+          endDate,
           maxDaysToShow: 3,
           maxSlotsPerDay: 4,
           linkSlug,
         }),
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
-        throw new Error("Failed to fetch times");
+        setError(data.error || "Failed to fetch times");
+        return;
       }
 
-      const data = await res.json();
       setMessage(data.message);
-    } catch (e) {
-      console.error("Failed to fetch slots:", e);
+      setHtml(data.html);
+    } catch {
       setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
@@ -136,7 +168,12 @@ export function ProposalForm({ linkSlugs }: ProposalFormProps) {
       )}
 
       <DurationPicker durations={durations} value={duration} onChange={setDuration} />
-      <DaysStepper value={daysAhead} onChange={setDaysAhead} />
+      <DateRangePicker
+        startDate={startDate}
+        endDate={endDate}
+        onStartChange={handleStartChange}
+        onEndChange={setEndDate}
+      />
       <TimezonePicker value={timezone} onChange={setTimezone} />
 
       <button
@@ -148,7 +185,7 @@ export function ProposalForm({ linkSlugs }: ProposalFormProps) {
       </button>
 
       {error && <p className="text-center text-sm text-red-400">{error}</p>}
-      {message && <ResultCard message={message} />}
+      {message && <ResultCard message={message} html={html ?? message} />}
     </div>
   );
 }

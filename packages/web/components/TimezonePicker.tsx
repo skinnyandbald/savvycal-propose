@@ -1,16 +1,29 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { TIMEZONES } from "@/lib/config";
+import { TIMEZONES, searchTimezones } from "@/lib/config";
 
 interface TimezonePickerProps {
   value: string;
   onChange: (tz: string) => void;
 }
 
+function formatTimeInZone(tz: string): string {
+  try {
+    return new Date().toLocaleTimeString("en-US", {
+      timeZone: tz,
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  } catch {
+    return "";
+  }
+}
+
 export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const [now, setNow] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -23,13 +36,18 @@ export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const filtered = TIMEZONES.filter(
-    (tz) =>
-      tz.title.toLowerCase().includes(search.toLowerCase()) ||
-      tz.abbr.toLowerCase().includes(search.toLowerCase()),
-  );
+  // Tick every minute to keep times fresh
+  useEffect(() => {
+    if (!open) return;
+    setNow(Date.now());
+    const id = setInterval(() => setNow(Date.now()), 60_000);
+    return () => clearInterval(id);
+  }, [open]);
 
+  const filtered = searchTimezones(search);
   const selected = TIMEZONES.find((tz) => tz.value === value);
+  // Use `now` to bust memoization on time strings
+  void now;
 
   return (
     <fieldset>
@@ -42,17 +60,19 @@ export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
           onClick={() => setOpen(!open)}
           className="w-full rounded-lg bg-zinc-800 px-4 py-3 text-left text-base text-zinc-100"
         >
-          {selected ? `${selected.title} (${selected.abbr})` : "Select timezone"}
+          {selected
+            ? `${selected.title} (${selected.abbr}) · ${formatTimeInZone(selected.value)}`
+            : "Select timezone"}
         </button>
 
         {open && (
           <div className="absolute z-10 mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-900 shadow-lg">
             <input
               type="text"
-              placeholder="Search…"
+              placeholder="Search city, state, or timezone…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full border-b border-zinc-700 bg-transparent px-4 py-2 text-sm text-zinc-100 outline-none placeholder:text-zinc-500"
+              className="w-full border-b border-zinc-700 bg-transparent px-4 py-2 text-base text-zinc-100 outline-none placeholder:text-zinc-500"
               autoFocus
             />
             <ul className="max-h-60 overflow-y-auto py-1">
@@ -65,16 +85,22 @@ export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
                       setOpen(false);
                       setSearch("");
                     }}
-                    className={`w-full px-4 py-2 text-left text-sm active:bg-zinc-700 ${
+                    className={`flex w-full items-center justify-between px-4 py-2 text-left text-sm active:bg-zinc-700 ${
                       tz.value === value
                         ? "bg-zinc-800 text-white"
                         : "text-zinc-300"
                     }`}
                   >
-                    {tz.title} ({tz.abbr})
+                    <span>{tz.title} ({tz.abbr})</span>
+                    <span className="text-zinc-500">{formatTimeInZone(tz.value)}</span>
                   </button>
                 </li>
               ))}
+              {filtered.length === 0 && (
+                <li className="px-4 py-2 text-sm text-zinc-500">
+                  No timezones found
+                </li>
+              )}
             </ul>
           </div>
         )}

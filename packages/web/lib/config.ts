@@ -1,16 +1,4 @@
-export const TIMEZONES = [
-  { title: "Eastern", value: "America/New_York", abbr: "ET" },
-  { title: "Central", value: "America/Chicago", abbr: "CT" },
-  { title: "Mountain", value: "America/Denver", abbr: "MT" },
-  { title: "Pacific", value: "America/Los_Angeles", abbr: "PT" },
-  { title: "Arizona", value: "America/Phoenix", abbr: "AZ" },
-  { title: "Hawaii", value: "Pacific/Honolulu", abbr: "HT" },
-  { title: "Alaska", value: "America/Anchorage", abbr: "AKT" },
-  { title: "London", value: "Europe/London", abbr: "GMT" },
-  { title: "Paris", value: "Europe/Paris", abbr: "CET" },
-  { title: "Tokyo", value: "Asia/Tokyo", abbr: "JST" },
-  { title: "Sydney", value: "Australia/Sydney", abbr: "AEST" },
-] as const;
+export { TIMEZONES, searchTimezones } from "@propose/core";
 
 export interface UserPreferences {
   timezone: string;

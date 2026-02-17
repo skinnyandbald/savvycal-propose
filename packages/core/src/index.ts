@@ -14,3 +14,5 @@ export {
   filterSlotsByTime,
   encodeAlternativeSlots,
 } from "./utils";
+export type { TimezoneEntry } from "./timezones";
+export { TIMEZONES, getTimezoneAbbr, searchTimezones } from "./timezones";

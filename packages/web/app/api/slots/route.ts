@@ -4,15 +4,17 @@ import {
   getProvider,
   selectSmartSlots,
   filterSlotsByTime,
+  getTimezoneAbbr,
 } from "@propose/core";
 import type { ProviderConfig, TimeSlot } from "@propose/core";
-import { format, addDays } from "date-fns";
+import { format, differenceInCalendarDays } from "date-fns";
 import { utcToZonedTime } from "date-fns-tz";
 
 interface SlotsRequestBody {
   duration: number;
   timezone: string;
-  daysAhead: number;
+  startDate: string;
+  endDate: string;
   maxDaysToShow: number;
   maxSlotsPerDay: number;
   linkSlug: string;
@@ -39,22 +41,12 @@ function formatSlotTime(slot: TimeSlot, timezone: string): string {
   return format(zonedDate, "h:mma").toLowerCase();
 }
 
-function getTimezoneAbbr(timezone: string): string {
-  const ABBRS: Record<string, string> = {
-    "America/New_York": "ET",
-    "America/Chicago": "CT",
-    "America/Denver": "MT",
-    "America/Los_Angeles": "PT",
-    "America/Phoenix": "AZ",
-    "Pacific/Honolulu": "HT",
-    "America/Anchorage": "AKT",
-    "Europe/London": "GMT",
-    "Europe/Paris": "CET",
-    "Asia/Tokyo": "JST",
-    "Australia/Sydney": "AEST",
-  };
-  return ABBRS[timezone] || timezone;
+/** Parse a yyyy-MM-dd string as a local-midnight Date */
+function parseLocalDate(iso: string): Date {
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(y, m - 1, d);
 }
+
 
 export async function POST(request: Request) {
   // Verify authentication
@@ -83,36 +75,45 @@ export async function POST(request: Request) {
   const {
     duration,
     timezone,
-    daysAhead,
+    startDate: startDateStr,
+    endDate: endDateStr,
     maxDaysToShow,
     maxSlotsPerDay,
     linkSlug,
   } = body;
 
-  // Validate and clamp input parameters
-  if (
-    typeof daysAhead !== "number" ||
-    daysAhead < 1 ||
-    daysAhead > 30 ||
-    !Number.isInteger(daysAhead)
-  ) {
+  // Validate date strings
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  if (!dateRegex.test(startDateStr) || !dateRegex.test(endDateStr)) {
     return NextResponse.json(
-      { error: "daysAhead must be an integer between 1 and 30" },
+      { error: "startDate and endDate must be in yyyy-MM-dd format" },
       { status: 400 },
     );
   }
 
-  if (
-    typeof maxDaysToShow !== "number" ||
-    maxDaysToShow < 1 ||
-    maxDaysToShow > daysAhead ||
-    !Number.isInteger(maxDaysToShow)
-  ) {
+  const startDate = parseLocalDate(startDateStr);
+  const endDate = parseLocalDate(endDateStr);
+
+  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
     return NextResponse.json(
-      { error: `maxDaysToShow must be an integer between 1 and ${daysAhead}` },
+      { error: "Invalid date values" },
       { status: 400 },
     );
   }
+
+  const daysAhead = differenceInCalendarDays(endDate, startDate);
+  if (daysAhead < 1 || daysAhead > 60) {
+    return NextResponse.json(
+      { error: "Date range must be between 1 and 60 days" },
+      { status: 400 },
+    );
+  }
+
+  // Clamp maxDaysToShow to the available range instead of rejecting
+  const effectiveMaxDays = Math.min(
+    Math.max(1, Math.floor(maxDaysToShow || 3)),
+    daysAhead,
+  );
 
   if (
     typeof maxSlotsPerDay !== "number" ||
@@ -137,9 +138,6 @@ export async function POST(request: Request) {
   const provider = getProvider("savvycal");
 
   try {
-    const startDate = new Date();
-    const endDate = addDays(startDate, daysAhead);
-
     const { slots: rawSlots, linkInfo } = await provider.fetchSlots(
       config,
       startDate,
@@ -153,7 +151,7 @@ export async function POST(request: Request) {
     // Group by day and select smart slots per day
     const dayGroups = groupSlotsByDay(filteredSlots, timezone);
     const sortedDays = Object.keys(dayGroups).sort();
-    const daysToShow = sortedDays.slice(0, maxDaysToShow);
+    const daysToShow = sortedDays.slice(0, effectiveMaxDays);
 
     // First pass: collect all selected slots across all days
     const allSelectedSlots: TimeSlot[] = [];
@@ -163,17 +161,21 @@ export async function POST(request: Request) {
       allSelectedSlots.push(...selected);
     }
 
-    // Second pass: build day messages with complete allSelectedSlots array
-    const dayMessages: string[] = [];
+    // Second pass: build messages in both formats (matching Raycast output)
+    const plainLines: string[] = [];
+    const htmlLines: string[] = [];
 
     for (const dayKey of daysToShow) {
       const daySlots = dayGroups[dayKey];
       const selected = selectSmartSlots(daySlots, timezone, maxSlotsPerDay);
 
       const dayDate = utcToZonedTime(new Date(dayKey + "T12:00:00Z"), timezone);
-      const dayLabel = format(dayDate, "EEEE M/d");
+      const dayLabel = format(dayDate, "EEE, MMM d");
 
-      const slotLines = selected.map((slot) => {
+      const plainTimes: string[] = [];
+      const htmlTimes: string[] = [];
+
+      for (const slot of selected) {
         const time = formatSlotTime(slot, timezone);
         const url = provider.generateBookingUrl(
           config,
@@ -184,20 +186,39 @@ export async function POST(request: Request) {
           duration,
           allSelectedSlots,
         );
-        return `  \u2022 ${time} \u2014 ${url}`;
-      });
+        plainTimes.push(time);
+        htmlTimes.push(`<a href="${url}">${time}</a>`);
+      }
 
-      dayMessages.push(`${dayLabel}\n${slotLines.join("\n")}`);
-
+      plainLines.push(`\u2022 ${dayLabel}: ${plainTimes.join(", ")}`);
+      htmlLines.push(`\u2022 ${dayLabel}: ${htmlTimes.join(", ")}`);
     }
 
     const tzAbbr = getTimezoneAbbr(timezone);
-    const message =
-      dayMessages.length > 0
-        ? `Here are some times that work (${tzAbbr}):\n\n${dayMessages.join("\n\n")}\n\nOr pick another time: ${provider.getFallbackUrl(config)}`
-        : `I couldn't find available times in the next ${daysAhead} days. Pick a time here: ${provider.getFallbackUrl(config)}`;
+    const fallbackUrl = provider.getFallbackUrl(config);
+    const header = `Would any of these times work for a ${duration} min meeting (${tzAbbr})?`;
+    const footer = `If none of those work, feel free to grab any open time here:\n${fallbackUrl}`;
+    const noSlotsMsg = `I couldn't find available times in that range. Pick a time here: ${fallbackUrl}`;
 
-    return NextResponse.json({ message, linkInfo });
+    const plainText =
+      plainLines.length > 0
+        ? `${header}\n${plainLines.join("\n")}\n\n${footer}`
+        : noSlotsMsg;
+
+    // Build proper block-level HTML so inline links stay on one line
+    // when pasted into rich text editors (LinkedIn, etc.)
+    const html =
+      htmlLines.length > 0
+        ? [
+            `<div>${header}</div>`,
+            ...htmlLines.map((line) => `<div>${line}</div>`),
+            `<div><br></div>`,
+            `<div>If none of those work, feel free to grab any open time here:</div>`,
+            `<div><a href="${fallbackUrl}">${fallbackUrl}</a></div>`,
+          ].join("")
+        : noSlotsMsg;
+
+    return NextResponse.json({ message: plainText, html, linkInfo });
   } catch (error) {
     console.error("Slots API error:", error);
     return NextResponse.json(

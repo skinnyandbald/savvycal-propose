@@ -13,7 +13,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { format, addDays } from "date-fns";
 import { formatInTimeZone, utcToZonedTime } from "date-fns-tz";
 import type { ProviderType, ProviderConfig, TimeSlot, LinkInfo } from "@propose/core";
-import { getProvider, selectSmartSlots, filterSlotsByDuration, filterSlotsByTime } from "@propose/core";
+import { getProvider, selectSmartSlots, filterSlotsByDuration, filterSlotsByTime, TIMEZONES, getTimezoneAbbr } from "@propose/core";
 
 interface Preferences {
   provider: ProviderType;
@@ -32,24 +32,6 @@ interface Preferences {
   bookerUrl?: string;
 }
 
-const TIMEZONES = [
-  { title: "Eastern (EST/EDT)", value: "America/New_York", abbr: "ET" },
-  { title: "Central (CST/CDT)", value: "America/Chicago", abbr: "CT" },
-  { title: "Mountain (MST/MDT)", value: "America/Denver", abbr: "MT" },
-  { title: "Pacific (PST/PDT)", value: "America/Los_Angeles", abbr: "PT" },
-  { title: "UTC", value: "UTC", abbr: "UTC" },
-  { title: "London (GMT/BST)", value: "Europe/London", abbr: "GMT" },
-  { title: "Paris (CET/CEST)", value: "Europe/Paris", abbr: "CET" },
-  { title: "Israel (IST/IDT)", value: "Asia/Jerusalem", abbr: "IDT" },
-  { title: "India (IST)", value: "Asia/Kolkata", abbr: "IST" },
-  { title: "Tokyo (JST)", value: "Asia/Tokyo", abbr: "JST" },
-  { title: "Sydney (AEST/AEDT)", value: "Australia/Sydney", abbr: "AEST" },
-];
-
-function getTimezoneAbbr(tzValue: string): string {
-  const tz = TIMEZONES.find((t) => t.value === tzValue);
-  return tz?.abbr || tzValue;
-}
 
 function parseSlugs(raw: string | undefined): string[] {
   if (!raw) return [];
@@ -437,13 +419,24 @@ export default function Command() {
         value={timezone}
         onChange={setTimezone}
       >
-        {TIMEZONES.map((tz) => (
-          <Form.Dropdown.Item
-            key={tz.value}
-            value={tz.value}
-            title={tz.title}
-          />
-        ))}
+        {TIMEZONES.map((tz) => {
+          let timeStr = "";
+          try {
+            timeStr = new Date().toLocaleTimeString("en-US", {
+              timeZone: tz.value,
+              hour: "numeric",
+              minute: "2-digit",
+            });
+          } catch { /* skip for UTC etc. */ }
+          return (
+            <Form.Dropdown.Item
+              key={tz.value}
+              value={tz.value}
+              title={`${tz.title} (${tz.abbr})${timeStr ? ` · ${timeStr}` : ""}`}
+              keywords={[tz.title, tz.abbr, ...tz.keywords]}
+            />
+          );
+        })}
       </Form.Dropdown>
 
       <Form.Checkbox

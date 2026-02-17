@@ -62,13 +62,28 @@ describe("filterSlotsByTime", () => {
     expect(etResult).toHaveLength(1);
   });
 
-  it("accepts custom cutoffHour", () => {
+  it("accepts custom endHour", () => {
     // 20:00 UTC = 3pm ET
     const slots = [makeSlot("20:00")];
 
-    const result = filterSlotsByTime(slots, "America/New_York", 15);
+    const result = filterSlotsByTime(slots, "America/New_York", 8, 15);
 
     expect(result).toHaveLength(0);
+  });
+
+  it("filters out early morning slots", () => {
+    // Simulates Dubai timezone where ET afternoon = early morning Dubai
+    const slots = [
+      makeSlot("23:00"), // 3am Dubai (UTC+4) - drop
+      makeSlot("04:00", "2026-02-10"), // 8am Dubai - keep
+      makeSlot("07:00", "2026-02-10"), // 11am Dubai - keep
+    ];
+
+    const result = filterSlotsByTime(slots, "Asia/Dubai");
+
+    expect(result).toHaveLength(2);
+    expect(result[0].start_at).toContain("04:00");
+    expect(result[1].start_at).toContain("07:00");
   });
 
   it("returns empty array for empty input", () => {
