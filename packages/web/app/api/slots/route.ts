@@ -154,10 +154,12 @@ export async function POST(request: Request) {
     const daysToShow = sortedDays.slice(0, effectiveMaxDays);
 
     // First pass: collect all selected slots across all days
+    const selectedByDay = new Map<string, TimeSlot[]>();
     const allSelectedSlots: TimeSlot[] = [];
     for (const dayKey of daysToShow) {
       const daySlots = dayGroups[dayKey];
       const selected = selectSmartSlots(daySlots, timezone, maxSlotsPerDay);
+      selectedByDay.set(dayKey, selected);
       allSelectedSlots.push(...selected);
     }
 
@@ -166,8 +168,7 @@ export async function POST(request: Request) {
     const htmlLines: string[] = [];
 
     for (const dayKey of daysToShow) {
-      const daySlots = dayGroups[dayKey];
-      const selected = selectSmartSlots(daySlots, timezone, maxSlotsPerDay);
+      const selected = selectedByDay.get(dayKey)!;
 
       const dayDate = utcToZonedTime(new Date(dayKey + "T12:00:00Z"), timezone);
       const dayLabel = format(dayDate, "EEE, MMM d");

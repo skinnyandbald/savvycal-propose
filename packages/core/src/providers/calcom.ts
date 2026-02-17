@@ -50,7 +50,6 @@ export const calcomProvider: CalendarProvider = {
 
     // First, fetch event type info to get allowed durations
     const eventTypeUrl = `https://api.cal.com/v2/event-types?username=${encodeURIComponent(calcomUsername)}&eventSlug=${encodeURIComponent(calcomEventSlug)}`;
-    console.log("Cal.com event type request:", eventTypeUrl);
 
     const eventTypeResponse = await fetch(eventTypeUrl, {
       headers: {
@@ -66,18 +65,11 @@ export const calcomProvider: CalendarProvider = {
           (await eventTypeResponse.json()) as CalComEventTypesResponse;
         if (eventTypeData.data && eventTypeData.data.length > 0) {
           eventType = eventTypeData.data[0];
-          console.log(
-            "Cal.com event type found:",
-            eventType.title,
-            "durations:",
-            eventType.lengthInMinutesOptions,
-          );
         }
-      } catch (err) {
-        console.log("Failed to parse event type response:", err);
+      } catch {
+        // Ignore parse errors — proceed without event type details
       }
     } else {
-      console.error("Failed to fetch event type:", eventTypeResponse.status);
       throw new Error(
         `Could not fetch Cal.com event type details (status: ${eventTypeResponse.status}). Please check your username and event slug.`,
       );
@@ -90,8 +82,6 @@ export const calcomProvider: CalendarProvider = {
     const durationParam = duration ? `&duration=${duration}` : "";
     const url = `https://api.cal.com/v2/slots?eventTypeSlug=${encodeURIComponent(calcomEventSlug)}&username=${encodeURIComponent(calcomUsername)}&start=${startStr}&end=${endStr}&timeZone=UTC${durationParam}`;
 
-    console.log("Cal.com slots request:", url);
-
     const response = await fetch(url, {
       headers: {
         "cal-api-version": "2024-09-04",
@@ -100,7 +90,6 @@ export const calcomProvider: CalendarProvider = {
     });
 
     const responseText = await response.text();
-    console.log("Cal.com slots response:", response.status);
 
     if (!response.ok) {
       throw new Error(
@@ -169,9 +158,6 @@ export const calcomProvider: CalendarProvider = {
   ): string {
     const { calcomUsername, calcomEventSlug } = config;
     if (!calcomUsername || !calcomEventSlug) {
-      console.error(
-        "Cal.com username or event slug is missing for generating booking URL.",
-      );
       return "https://cal.com";
     }
     const slotDate = new Date(slot.start_at);
