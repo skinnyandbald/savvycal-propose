@@ -55,7 +55,7 @@ function copyPlainText(text: string): boolean {
 async function writeRichClipboard(
   htmlContent: string,
   plainText: string,
-): Promise<void> {
+): Promise<boolean> {
   // Try modern Clipboard API first (requires HTTPS or localhost)
   if (navigator.clipboard?.write) {
     try {
@@ -65,14 +65,14 @@ async function writeRichClipboard(
           "text/html": new Blob([htmlContent], { type: "text/html" }),
         }),
       ]);
-      return;
+      return true;
     } catch {
       // Fall through to selection-based approach
     }
   }
 
   // Selection-based copy preserves rich text (links) on iOS
-  copyRichText(htmlContent);
+  return copyRichText(htmlContent);
 }
 
 export function ResultCard({ message, html }: ResultCardProps) {
@@ -85,8 +85,9 @@ export function ResultCard({ message, html }: ResultCardProps) {
   };
 
   const handleCopyRich = async () => {
-    await writeRichClipboard(html, message);
-    flash("rich");
+    if (await writeRichClipboard(html, message)) {
+      flash("rich");
+    }
   };
 
   const handleCopyPlain = async () => {
