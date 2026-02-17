@@ -13,13 +13,17 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet: { name: string; value: string; options?: Record<string, unknown> }[]) {
-          cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value),
-          );
+          for (const { name, value } of cookiesToSet) {
+            request.cookies.set(name, value);
+          }
           supabaseResponse = NextResponse.next({ request });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options as Parameters<typeof supabaseResponse.cookies.set>[2]),
-          );
+          for (const { name, value, options } of cookiesToSet) {
+            supabaseResponse.cookies.set(
+              name,
+              value,
+              options as Parameters<typeof supabaseResponse.cookies.set>[2],
+            );
+          }
         },
       },
     },
@@ -28,6 +32,16 @@ export async function updateSession(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  // Enforce ALLOWED_EMAIL if set
+  const allowedEmail = process.env.ALLOWED_EMAIL?.toLowerCase();
+  if (user && (!allowedEmail || user.email?.toLowerCase() !== allowedEmail)) {
+    await supabase.auth.signOut();
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    url.searchParams.set("error", "unauthorized");
+    return NextResponse.redirect(url);
+  }
 
   // If not authenticated and trying to access protected routes, redirect to login
   if (

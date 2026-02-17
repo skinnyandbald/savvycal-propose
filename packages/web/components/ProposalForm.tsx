@@ -52,11 +52,17 @@ export function ProposalForm({ linkSlugs }: ProposalFormProps) {
         });
         if (res.ok) {
           const data = await res.json();
-          if (data.linkInfo?.durations) {
+          if (data.linkInfo?.durations?.length) {
             setDurations(data.linkInfo.durations);
+            setDuration((prev) =>
+              data.linkInfo.durations.includes(prev)
+                ? prev
+                : data.linkInfo.durations[0],
+            );
           }
         }
-      } catch {
+      } catch (e) {
+        console.error("Failed to fetch link info:", e);
         // Non-critical — durations stay at default
       }
     }
@@ -65,6 +71,11 @@ export function ProposalForm({ linkSlugs }: ProposalFormProps) {
   }, [linkSlug]);
 
   const handleSubmit = async () => {
+    if (!linkSlug) {
+      setError("Select a link first.");
+      return;
+    }
+
     setLoading(true);
     setError(null);
     setMessage(null);
@@ -92,7 +103,8 @@ export function ProposalForm({ linkSlugs }: ProposalFormProps) {
 
       const data = await res.json();
       setMessage(data.message);
-    } catch {
+    } catch (e) {
+      console.error("Failed to fetch slots:", e);
       setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
@@ -129,7 +141,7 @@ export function ProposalForm({ linkSlugs }: ProposalFormProps) {
 
       <button
         onClick={handleSubmit}
-        disabled={loading}
+        disabled={loading || !linkSlug}
         className="rounded-lg bg-white px-6 py-3 text-base font-medium text-zinc-900 shadow-sm active:bg-zinc-100 disabled:opacity-50"
       >
         {loading ? "Finding times\u2026" : "Propose Times"}

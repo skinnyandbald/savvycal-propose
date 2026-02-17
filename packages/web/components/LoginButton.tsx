@@ -15,6 +15,7 @@ export function LoginButton() {
 
   return (
     <button
+      type="button"
       onClick={handleLogin}
       className="rounded-lg bg-white px-6 py-3 text-base font-medium text-zinc-900 shadow-sm active:bg-zinc-100"
     >

@@ -8,7 +8,11 @@ export function SignOutButton() {
 
   const handleSignOut = async () => {
     const supabase = createClient();
-    await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error(error);
+      return;
+    }
     router.push("/login");
   };
 

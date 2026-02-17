@@ -16,7 +16,8 @@ export default async function ProposePage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user || user.email !== process.env.ALLOWED_EMAIL) {
+  const allowedEmail = process.env.ALLOWED_EMAIL?.toLowerCase();
+  if (!user || user.email?.toLowerCase() !== allowedEmail) {
     redirect("/login");
   }
 

@@ -7,7 +7,8 @@ export default async function Home() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (user?.email === process.env.ALLOWED_EMAIL) {
+  const allowedEmail = process.env.ALLOWED_EMAIL?.toLowerCase();
+  if (user?.email?.toLowerCase() === allowedEmail) {
     redirect("/propose");
   }
 

@@ -35,8 +35,11 @@ export function ResultCard({ message }: ResultCardProps) {
   };
 
   const handleShare = async () => {
-    if (navigator.share) {
+    if (!navigator.share) return;
+    try {
       await navigator.share({ text: message });
+    } catch {
+      // Ignore user-cancel/abort
     }
   };
 

@@ -63,11 +63,23 @@ export async function POST(request: Request) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user || user.email !== process.env.ALLOWED_EMAIL) {
+  if (
+    !user ||
+    user.email?.toLowerCase() !== process.env.ALLOWED_EMAIL?.toLowerCase()
+  ) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const body = (await request.json()) as SlotsRequestBody;
+  let body: SlotsRequestBody;
+  try {
+    body = (await request.json()) as SlotsRequestBody;
+  } catch {
+    return NextResponse.json(
+      { error: "Invalid JSON in request body" },
+      { status: 400 },
+    );
+  }
+
   const {
     duration,
     timezone,
@@ -76,6 +88,43 @@ export async function POST(request: Request) {
     maxSlotsPerDay,
     linkSlug,
   } = body;
+
+  // Validate and clamp input parameters
+  if (
+    typeof daysAhead !== "number" ||
+    daysAhead < 1 ||
+    daysAhead > 30 ||
+    !Number.isInteger(daysAhead)
+  ) {
+    return NextResponse.json(
+      { error: "daysAhead must be an integer between 1 and 30" },
+      { status: 400 },
+    );
+  }
+
+  if (
+    typeof maxDaysToShow !== "number" ||
+    maxDaysToShow < 1 ||
+    maxDaysToShow > daysAhead ||
+    !Number.isInteger(maxDaysToShow)
+  ) {
+    return NextResponse.json(
+      { error: `maxDaysToShow must be an integer between 1 and ${daysAhead}` },
+      { status: 400 },
+    );
+  }
+
+  if (
+    typeof maxSlotsPerDay !== "number" ||
+    maxSlotsPerDay < 1 ||
+    maxSlotsPerDay > 10 ||
+    !Number.isInteger(maxSlotsPerDay)
+  ) {
+    return NextResponse.json(
+      { error: "maxSlotsPerDay must be an integer between 1 and 10" },
+      { status: 400 },
+    );
+  }
 
   // Build provider config from env vars
   const config: ProviderConfig = {
@@ -106,14 +155,20 @@ export async function POST(request: Request) {
     const sortedDays = Object.keys(dayGroups).sort();
     const daysToShow = sortedDays.slice(0, maxDaysToShow);
 
-    // Build all selected slots for alternative encoding
+    // First pass: collect all selected slots across all days
     const allSelectedSlots: TimeSlot[] = [];
+    for (const dayKey of daysToShow) {
+      const daySlots = dayGroups[dayKey];
+      const selected = selectSmartSlots(daySlots, timezone, maxSlotsPerDay);
+      allSelectedSlots.push(...selected);
+    }
+
+    // Second pass: build day messages with complete allSelectedSlots array
     const dayMessages: string[] = [];
 
     for (const dayKey of daysToShow) {
       const daySlots = dayGroups[dayKey];
       const selected = selectSmartSlots(daySlots, timezone, maxSlotsPerDay);
-      allSelectedSlots.push(...selected);
 
       const dayDate = utcToZonedTime(new Date(dayKey + "T12:00:00Z"), timezone);
       const dayLabel = format(dayDate, "EEEE M/d");
@@ -133,6 +188,7 @@ export async function POST(request: Request) {
       });
 
       dayMessages.push(`${dayLabel}\n${slotLines.join("\n")}`);
+
     }
 
     const tzAbbr = getTimezoneAbbr(timezone);
