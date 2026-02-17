@@ -242,7 +242,9 @@
   "dependencies": {
     "@raycast/api": "^1.64.0",
     "@raycast/utils": "^1.10.0",
-    "@propose/core": "workspace:*"
+    "@propose/core": "workspace:*",
+    "date-fns": "^2.30.0",
+    "date-fns-tz": "^2.0.0"
   },
   "devDependencies": {
     "@raycast/eslint-config": "^1.0.8",

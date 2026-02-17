@@ -21,7 +21,7 @@ type ExtensionPreferences = {
   /** Cal.com Event Slug(s) - Comma-separated event type slugs (e.g., 'pow-wow' or 'pow-wow, 30min'). First slug is the default. Required if using Cal.com. */
   "calcomEventSlug"?: string,
   /** Default Recipient Timezone - Default timezone for the person you're proposing times to */
-  "defaultTimezone": "America/New_York" | "America/Chicago" | "America/Denver" | "America/Los_Angeles" | "UTC" | "Europe/London" | "Europe/Paris" | "Asia/Jerusalem" | "Asia/Kolkata" | "Asia/Tokyo" | "Australia/Sydney",
+  "defaultTimezone": "Pacific/Auckland" | "Australia/Sydney" | "Asia/Tokyo" | "Asia/Singapore" | "Asia/Bangkok" | "Asia/Kolkata" | "Asia/Dubai" | "Europe/Moscow" | "Europe/Istanbul" | "Asia/Jerusalem" | "Europe/Athens" | "Africa/Cairo" | "Africa/Johannesburg" | "Europe/Paris" | "Africa/Lagos" | "Europe/London" | "UTC" | "America/Sao_Paulo" | "America/Argentina/Buenos_Aires" | "America/Santiago" | "America/Bogota" | "America/New_York" | "America/Toronto" | "America/Chicago" | "America/Mexico_City" | "America/Denver" | "America/Phoenix" | "America/Los_Angeles" | "America/Vancouver" | "America/Anchorage" | "Pacific/Honolulu",
   /** Default Days Ahead - Default number of days to look ahead for availability */
   "defaultDaysAhead": string,
   /** Max Days to Show - Maximum number of days to include in the message */
