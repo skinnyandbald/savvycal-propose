@@ -4,8 +4,6 @@ import type { TimeSlot } from "../types";
 
 function makeSlot(utcTime: string, date: string = "2026-02-09"): TimeSlot {
   const start = new Date(`${date}T${utcTime}:00Z`);
-function makeSlot(utcTime: string, date: string = "2026-02-09"): TimeSlot {
-  const start = new Date(`${date}T${utcTime}:00Z`);
   return {
     start_at: start.toISOString(),
     end_at: new Date(start.getTime() + 3600 * 1000).toISOString(),
