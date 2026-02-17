@@ -81,48 +81,128 @@
       "default": "America/New_York",
       "data": [
         {
-          "title": "Eastern (EST/EDT)",
-          "value": "America/New_York"
+          "title": "Auckland (NZST)",
+          "value": "Pacific/Auckland"
         },
         {
-          "title": "Central (CST/CDT)",
-          "value": "America/Chicago"
-        },
-        {
-          "title": "Mountain (MST/MDT)",
-          "value": "America/Denver"
-        },
-        {
-          "title": "Pacific (PST/PDT)",
-          "value": "America/Los_Angeles"
-        },
-        {
-          "title": "UTC",
-          "value": "UTC"
-        },
-        {
-          "title": "London (GMT/BST)",
-          "value": "Europe/London"
-        },
-        {
-          "title": "Paris (CET/CEST)",
-          "value": "Europe/Paris"
-        },
-        {
-          "title": "Israel (IST/IDT)",
-          "value": "Asia/Jerusalem"
-        },
-        {
-          "title": "India (IST)",
-          "value": "Asia/Kolkata"
+          "title": "Sydney (AEST)",
+          "value": "Australia/Sydney"
         },
         {
           "title": "Tokyo (JST)",
           "value": "Asia/Tokyo"
         },
         {
-          "title": "Sydney (AEST/AEDT)",
-          "value": "Australia/Sydney"
+          "title": "Singapore (SGT)",
+          "value": "Asia/Singapore"
+        },
+        {
+          "title": "Bangkok (ICT)",
+          "value": "Asia/Bangkok"
+        },
+        {
+          "title": "Mumbai (IST)",
+          "value": "Asia/Kolkata"
+        },
+        {
+          "title": "Dubai (GST)",
+          "value": "Asia/Dubai"
+        },
+        {
+          "title": "Moscow (MSK)",
+          "value": "Europe/Moscow"
+        },
+        {
+          "title": "Istanbul (TRT)",
+          "value": "Europe/Istanbul"
+        },
+        {
+          "title": "Tel Aviv (IST)",
+          "value": "Asia/Jerusalem"
+        },
+        {
+          "title": "Athens (EET)",
+          "value": "Europe/Athens"
+        },
+        {
+          "title": "Cairo (EET)",
+          "value": "Africa/Cairo"
+        },
+        {
+          "title": "Johannesburg (SAST)",
+          "value": "Africa/Johannesburg"
+        },
+        {
+          "title": "Paris (CET)",
+          "value": "Europe/Paris"
+        },
+        {
+          "title": "Lagos (WAT)",
+          "value": "Africa/Lagos"
+        },
+        {
+          "title": "London (GMT)",
+          "value": "Europe/London"
+        },
+        {
+          "title": "UTC (UTC)",
+          "value": "UTC"
+        },
+        {
+          "title": "Sao Paulo (BRT)",
+          "value": "America/Sao_Paulo"
+        },
+        {
+          "title": "Buenos Aires (ART)",
+          "value": "America/Argentina/Buenos_Aires"
+        },
+        {
+          "title": "Santiago (CLT)",
+          "value": "America/Santiago"
+        },
+        {
+          "title": "Bogota (COT)",
+          "value": "America/Bogota"
+        },
+        {
+          "title": "New York (ET)",
+          "value": "America/New_York"
+        },
+        {
+          "title": "Toronto (ET)",
+          "value": "America/Toronto"
+        },
+        {
+          "title": "Chicago (CT)",
+          "value": "America/Chicago"
+        },
+        {
+          "title": "Mexico City (CST)",
+          "value": "America/Mexico_City"
+        },
+        {
+          "title": "Denver (MT)",
+          "value": "America/Denver"
+        },
+        {
+          "title": "Phoenix (MST)",
+          "value": "America/Phoenix"
+        },
+        {
+          "title": "Los Angeles (PT)",
+          "value": "America/Los_Angeles"
+        },
+        {
+          "title": "Vancouver (PT)",
+          "value": "America/Vancouver"
+        },
+        {
+          "title": "Anchorage (AKT)",
+          "value": "America/Anchorage"
+        },
+        {
+          "title": "Honolulu (HT)",
+          "value": "Pacific/Honolulu"
         }
       ]
     },
@@ -173,6 +253,9 @@
     "typescript": "^5.2.2"
   },
   "scripts": {
+    "sync-preferences": "node scripts/sync-preferences.mjs",
+    "predev": "node scripts/sync-preferences.mjs",
+    "prebuild": "node scripts/sync-preferences.mjs",
     "build": "ray build -e dist",
     "dev": "ray develop",
     "fix-lint": "ray lint --fix",

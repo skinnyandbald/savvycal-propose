@@ -13,7 +13,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { format, addDays } from "date-fns";
 import { formatInTimeZone, utcToZonedTime } from "date-fns-tz";
 import type { ProviderType, ProviderConfig, TimeSlot, LinkInfo } from "@propose/core";
-import { getProvider, selectSmartSlots, filterSlotsByDuration, filterSlotsByTime, TIMEZONES, getTimezoneAbbr } from "@propose/core";
+import { getProvider, selectSmartSlots, filterSlotsByDuration, filterSlotsByTime, TIMEZONES, getTimezoneAbbr, parseNaturalDate } from "@propose/core";
 
 interface Preferences {
   provider: ProviderType;
@@ -156,6 +156,66 @@ function generateMessage(
   return lines.join("\n");
 }
 
+interface DateSuggestion {
+  id: string;
+  label: string;
+  date: Date;
+}
+
+const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+function generateDateSuggestions(from: Date, selected?: Date | null): DateSuggestion[] {
+  const fmt = (d: Date) => format(d, "EEE, MMM d");
+  const added = new Set<string>();
+  const suggestions: DateSuggestion[] = [];
+
+  const add = (id: string, label: string, date: Date) => {
+    const key = format(date, "yyyy-MM-dd");
+    if (added.has(key)) return;
+    added.add(key);
+    suggestions.push({ id, label: `${label}  ·  ${fmt(date)}`, date });
+  };
+
+  add("today", "Today", from);
+  add("tomorrow", "Tomorrow", addDays(from, 1));
+
+  // Next 5 days: show as plain weekday name ("Thursday")
+  for (let offset = 2; offset <= 6; offset++) {
+    const d = addDays(from, offset);
+    add(`offset-${offset}`, DAY_NAMES[d.getDay()], d);
+  }
+
+  // Next week: "Next Monday" … "Next Friday"
+  for (const day of ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]) {
+    const d = parseNaturalDate(`next ${day.toLowerCase()}`, from);
+    if (d) add(`next-${day.toLowerCase()}`, `Next ${day}`, d);
+  }
+
+  // Two and three weeks out
+  add("in-2-weeks", "In 2 weeks", addDays(from, 14));
+  add("in-3-weeks", "In 3 weeks", addDays(from, 21));
+
+  // If the currently selected date isn't already listed, prepend it
+  if (selected) {
+    const key = format(selected, "yyyy-MM-dd");
+    if (!added.has(key)) {
+      suggestions.unshift({ id: "current", label: fmt(selected), date: selected });
+    }
+  }
+
+  return suggestions;
+}
+
+function dateToVal(d: Date | null): string {
+  return d ? format(d, "yyyy-MM-dd") : "";
+}
+
+function valToDate(v: string): Date | null {
+  if (!v) return null;
+  const [y, m, d] = v.split("-").map(Number);
+  return new Date(y, m - 1, d);
+}
+
 // Normalize date for comparison (strip time component)
 function normalizeDate(d: Date): Date {
   const normalized = new Date(d);
@@ -205,6 +265,9 @@ export default function Command() {
   const [durations, setDurations] = useState<number[]>([25, 30, 45, 60]);
   const [selectedDuration, setSelectedDuration] = useState<string>("25");
   const [, setLinkInfo] = useState<LinkInfo | null>(null);
+
+  const startSuggestions = useMemo(() => generateDateSuggestions(today, startDate), [today, startDate]);
+  const endSuggestions = useMemo(() => generateDateSuggestions(startDate ?? today, endDate), [startDate, today, endDate]);
 
   // Fetch link info to get available durations
   useEffect(() => {
@@ -367,21 +430,44 @@ export default function Command() {
     >
       <Form.Description title="Propose Times" text={dateRangeText} />
 
-      <Form.DatePicker
+      <Form.Dropdown
         id="startDate"
         title="Start Date"
-        value={startDate}
-        onChange={setStartDate}
-        type={Form.DatePicker.Type.Date}
-      />
+        value={dateToVal(startDate)}
+        onChange={(v) => {
+          const d = valToDate(v);
+          setStartDate(d);
+          // Auto-advance end date if it's now before start
+          if (d && endDate && endDate < d) {
+            setEndDate(addDays(d, 5));
+          }
+        }}
+      >
+        {startSuggestions.map((s) => (
+          <Form.Dropdown.Item
+            key={s.id}
+            value={format(s.date, "yyyy-MM-dd")}
+            title={s.label}
+            keywords={[format(s.date, "EEE, MMM d"), format(s.date, "MMM d"), s.label.split("  ·  ")[0]]}
+          />
+        ))}
+      </Form.Dropdown>
 
-      <Form.DatePicker
+      <Form.Dropdown
         id="endDate"
         title="End Date"
-        value={endDate}
-        onChange={setEndDate}
-        type={Form.DatePicker.Type.Date}
-      />
+        value={dateToVal(endDate)}
+        onChange={(v) => setEndDate(valToDate(v))}
+      >
+        {endSuggestions.map((s) => (
+          <Form.Dropdown.Item
+            key={s.id}
+            value={format(s.date, "yyyy-MM-dd")}
+            title={s.label}
+            keywords={[format(s.date, "EEE, MMM d"), format(s.date, "MMM d"), s.label.split("  ·  ")[0]]}
+          />
+        ))}
+      </Form.Dropdown>
 
       <Form.Separator />
 

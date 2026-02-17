@@ -16,3 +16,4 @@ export {
 } from "./utils";
 export type { TimezoneEntry } from "./timezones";
 export { TIMEZONES, getTimezoneAbbr, searchTimezones } from "./timezones";
+export { parseNaturalDate } from "./parseNaturalDate";

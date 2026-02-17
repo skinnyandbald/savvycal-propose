@@ -4,7 +4,7 @@ import type { ProviderConfig, LinkInfo, TimeSlot } from "../../types";
 
 // Mock fetch globally
 const mockFetch = vi.fn();
-global.fetch = mockFetch;
+vi.stubGlobal("fetch", mockFetch);
 
 describe("calcomProvider", () => {
   beforeEach(() => {
