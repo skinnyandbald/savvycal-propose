@@ -7,7 +7,7 @@ interface ResultCardProps {
   html: string;
 }
 
-function copyRichText(htmlContent: string, _plainText: string): boolean {
+function copyRichText(htmlContent: string): boolean {
   // Create a temporary off-screen div with rendered HTML
   const div = document.createElement("div");
   div.innerHTML = htmlContent;
@@ -52,6 +52,29 @@ function copyPlainText(text: string): boolean {
   return ok;
 }
 
+async function writeRichClipboard(
+  htmlContent: string,
+  plainText: string,
+): Promise<void> {
+  // Try modern Clipboard API first (requires HTTPS or localhost)
+  if (navigator.clipboard?.write) {
+    try {
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          "text/plain": new Blob([plainText], { type: "text/plain" }),
+          "text/html": new Blob([htmlContent], { type: "text/html" }),
+        }),
+      ]);
+      return;
+    } catch {
+      // Fall through to selection-based approach
+    }
+  }
+
+  // Selection-based copy preserves rich text (links) on iOS
+  copyRichText(htmlContent);
+}
+
 export function ResultCard({ message, html }: ResultCardProps) {
   const [copied, setCopied] = useState<"rich" | "plain" | false>(false);
   const [emailHint, setEmailHint] = useState(false);
@@ -62,26 +85,8 @@ export function ResultCard({ message, html }: ResultCardProps) {
   };
 
   const handleCopyRich = async () => {
-    // Try modern Clipboard API first (requires HTTPS or localhost)
-    if (navigator.clipboard?.write) {
-      try {
-        await navigator.clipboard.write([
-          new ClipboardItem({
-            "text/plain": new Blob([message], { type: "text/plain" }),
-            "text/html": new Blob([html], { type: "text/html" }),
-          }),
-        ]);
-        flash("rich");
-        return;
-      } catch {
-        // Fall through to selection-based approach
-      }
-    }
-
-    // Selection-based copy preserves rich text (links) on iOS
-    if (copyRichText(html, message)) {
-      flash("rich");
-    }
+    await writeRichClipboard(html, message);
+    flash("rich");
   };
 
   const handleCopyPlain = async () => {
@@ -105,20 +110,7 @@ export function ResultCard({ message, html }: ResultCardProps) {
     // then open a blank email compose for the user to paste into.
     // mailto: only supports plain text, so this two-step approach
     // is the only way to get HTML links into an email from the web.
-    if (navigator.clipboard?.write) {
-      try {
-        await navigator.clipboard.write([
-          new ClipboardItem({
-            "text/plain": new Blob([message], { type: "text/plain" }),
-            "text/html": new Blob([html], { type: "text/html" }),
-          }),
-        ]);
-      } catch {
-        copyRichText(html, message);
-      }
-    } else {
-      copyRichText(html, message);
-    }
+    await writeRichClipboard(html, message);
 
     setEmailHint(true);
     setTimeout(() => setEmailHint(false), 4000);

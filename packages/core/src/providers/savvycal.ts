@@ -30,7 +30,6 @@ async function fetchLinkInfo(token: string, slug: string): Promise<LinkInfo> {
   });
 
   const responseText = await response.text();
-  console.log("SavvyCal /v1/links response:", response.status);
 
   if (!response.ok) {
     throw new Error(`SavvyCal API error fetching links: ${response.status}`);
@@ -97,7 +96,6 @@ export const savvycalProvider: CalendarProvider = {
     );
 
     const responseText = await response.text();
-    console.log("SavvyCal slots response:", response.status);
 
     if (!response.ok) {
       throw new Error(`SavvyCal API error: ${response.status}`);
