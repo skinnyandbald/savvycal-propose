@@ -1,3 +1,15 @@
-export default function Home() {
-  return <h1>Propose Times</h1>;
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+
+export default async function Home() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user?.email === process.env.ALLOWED_EMAIL) {
+    redirect("/propose");
+  }
+
+  redirect("/login");
 }
