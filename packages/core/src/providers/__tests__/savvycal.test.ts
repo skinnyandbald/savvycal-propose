@@ -19,27 +19,35 @@ describe("savvycalProvider", () => {
       savvycalLink: "chat",
       savvycalUsername: "testuser",
     };
-    const startDate = new Date("2026-01-07");
-    const endDate = new Date("2026-01-10");
+    // Use local dates (not UTC-parsed) to match real usage
+    const startDate = new Date(2026, 0, 7);
+    const endDate = new Date(2026, 0, 7); // single day for most tests
 
-    // Helper to set up two-call mock (links then slots)
+    /**
+     * Mock fetch to return linksResponse for the /links call and
+     * slotsResponse for any /slots call (each per-day request).
+     */
     function mockLinksAndSlots(
       linksResponse: unknown,
       slotsResponse: unknown,
       linksOk = true,
       slotsOk = true,
     ) {
-      mockFetch
-        .mockResolvedValueOnce({
-          ok: linksOk,
-          status: linksOk ? 200 : 400,
-          text: async () => JSON.stringify(linksResponse),
-        })
-        .mockResolvedValueOnce({
+      mockFetch.mockImplementation(async (url: string) => {
+        if (url === "https://api.savvycal.com/v1/links") {
+          return {
+            ok: linksOk,
+            status: linksOk ? 200 : 400,
+            text: async () => JSON.stringify(linksResponse),
+          };
+        }
+        // Any /slots call returns the same response
+        return {
           ok: slotsOk,
           status: slotsOk ? 200 : 400,
           text: async () => JSON.stringify(slotsResponse),
-        });
+        };
+      });
     }
 
     it("fetches link info then slots", async () => {
@@ -63,10 +71,9 @@ describe("savvycalProvider", () => {
 
       await savvycalProvider.fetchSlots(config, startDate, endDate);
 
-      // Verify both API calls were made
+      // 1 links call + 1 per-day slots call (single day range)
       expect(mockFetch).toHaveBeenCalledTimes(2);
-      expect(mockFetch).toHaveBeenNthCalledWith(
-        1,
+      expect(mockFetch).toHaveBeenCalledWith(
         "https://api.savvycal.com/v1/links",
         expect.objectContaining({
           headers: expect.objectContaining({
@@ -74,8 +81,7 @@ describe("savvycalProvider", () => {
           }),
         }),
       );
-      expect(mockFetch).toHaveBeenNthCalledWith(
-        2,
+      expect(mockFetch).toHaveBeenCalledWith(
         expect.stringContaining("/v1/links/link_123/slots"),
         expect.any(Object),
       );
@@ -87,7 +93,7 @@ describe("savvycalProvider", () => {
       };
       const slotsResponse = [
         { start_at: "2026-01-07T10:00:00Z", end_at: "2026-01-07T10:30:00Z" },
-        { start_at: "2026-01-08T14:00:00Z", end_at: "2026-01-08T14:30:00Z" },
+        { start_at: "2026-01-07T14:00:00Z", end_at: "2026-01-07T14:30:00Z" },
       ];
 
       mockLinksAndSlots(linksResponse, slotsResponse);
@@ -103,6 +109,36 @@ describe("savvycalProvider", () => {
         start_at: "2026-01-07T10:00:00Z",
         end_at: "2026-01-07T10:30:00Z",
       });
+    });
+
+    it("fetches slots across a multi-day range", async () => {
+      const multiDayStart = new Date(2026, 0, 7);
+      const multiDayEnd = new Date(2026, 0, 9); // 3 days
+
+      const linksResponse = {
+        data: [{ id: "link_123", slug: "chat", name: "Chat" }],
+      };
+      const slotsResponse = [
+        { start_at: "2026-01-07T10:00:00Z", end_at: "2026-01-07T10:30:00Z" },
+        { start_at: "2026-01-08T10:00:00Z", end_at: "2026-01-08T10:30:00Z" },
+        { start_at: "2026-01-09T10:00:00Z", end_at: "2026-01-09T10:30:00Z" },
+      ];
+
+      mockLinksAndSlots(linksResponse, slotsResponse);
+
+      const result = await savvycalProvider.fetchSlots(
+        config,
+        multiDayStart,
+        multiDayEnd,
+      );
+
+      // 1 links call + 1 slots call with from/until covering the range
+      expect(mockFetch).toHaveBeenCalledTimes(2);
+      expect(result.slots).toHaveLength(3);
+      const startDates = result.slots.map((s) => s.start_at.slice(0, 10));
+      expect(startDates).toContain("2026-01-07");
+      expect(startDates).toContain("2026-01-08");
+      expect(startDates).toContain("2026-01-09");
     });
 
     it("handles nested data structure in slots response", async () => {

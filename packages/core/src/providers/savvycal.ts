@@ -80,20 +80,17 @@ export const savvycalProvider: CalendarProvider = {
 
     const linkInfo = await fetchLinkInfo(savvycalToken, savvycalLink);
 
-    const fromDate = new Date(startDate);
-    fromDate.setHours(0, 0, 0, 0);
-    const toDate = new Date(endDate);
-    toDate.setHours(23, 59, 59, 999);
+    // The SavvyCal API uses `from` and `until` (not `to`).
+    const fromISO = format(startDate, "yyyy-MM-dd") + "T00:00:00Z";
+    const untilISO = format(endDate, "yyyy-MM-dd") + "T23:59:59Z";
 
-    const response = await fetch(
-      `https://api.savvycal.com/v1/links/${linkInfo.id}/slots?from=${fromDate.toISOString()}&to=${toDate.toISOString()}`,
-      {
-        headers: {
-          Authorization: `Bearer ${savvycalToken}`,
-          "Content-Type": "application/json",
-        },
+    const url = `https://api.savvycal.com/v1/links/${linkInfo.id}/slots?from=${fromISO}&until=${untilISO}`;
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${savvycalToken}`,
+        "Content-Type": "application/json",
       },
-    );
+    });
 
     const responseText = await response.text();
 
