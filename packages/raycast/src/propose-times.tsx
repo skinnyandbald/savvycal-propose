@@ -203,13 +203,16 @@ function generateDateSuggestions(from: Date, selected?: Date | null, actualToday
   add("in-2-weeks", "In 2 weeks", addDays(from, 14));
   add("in-3-weeks", "In 3 weeks", addDays(from, 21));
 
-  // If the currently selected date isn't already listed, prepend it
+  // If the currently selected date isn't already listed, add it
   if (selected) {
     const key = format(selected, "yyyy-MM-dd");
     if (!added.has(key)) {
-      suggestions.unshift({ id: "current", label: fmt(selected), date: selected });
+      suggestions.push({ id: "current", label: fmt(selected), date: selected });
     }
   }
+
+  // Keep the list in chronological order regardless of insertion order
+  suggestions.sort((a, b) => a.date.getTime() - b.date.getTime());
 
   return suggestions;
 }
