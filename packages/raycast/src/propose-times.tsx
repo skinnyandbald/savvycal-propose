@@ -10,7 +10,7 @@ import {
   Form,
 } from "@raycast/api";
 import { useState, useEffect, useMemo, useRef } from "react";
-import { format, addDays } from "date-fns";
+import { format, addDays, differenceInCalendarDays } from "date-fns";
 import { formatInTimeZone, utcToZonedTime } from "date-fns-tz";
 import type { ProviderType, ProviderConfig, TimeSlot, LinkInfo } from "@propose/core";
 import { getProvider, selectSmartSlots, filterSlotsByDuration, filterSlotsByTime, TIMEZONES, getTimezoneAbbr, parseNaturalDate } from "@propose/core";
@@ -164,10 +164,18 @@ interface DateSuggestion {
 
 const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-function generateDateSuggestions(from: Date, selected?: Date | null): DateSuggestion[] {
+function generateDateSuggestions(from: Date, selected?: Date | null, actualToday?: Date): DateSuggestion[] {
   const fmt = (d: Date) => format(d, "EEE, MMM d");
   const added = new Set<string>();
   const suggestions: DateSuggestion[] = [];
+  const reference = actualToday ?? from;
+
+  const relativeLabel = (date: Date): string => {
+    const diff = differenceInCalendarDays(date, reference);
+    if (diff === 0) return "Today";
+    if (diff === 1) return "Tomorrow";
+    return DAY_NAMES[date.getDay()];
+  };
 
   const add = (id: string, label: string, date: Date) => {
     const key = format(date, "yyyy-MM-dd");
@@ -176,8 +184,8 @@ function generateDateSuggestions(from: Date, selected?: Date | null): DateSugges
     suggestions.push({ id, label: `${label}  ·  ${fmt(date)}`, date });
   };
 
-  add("today", "Today", from);
-  add("tomorrow", "Tomorrow", addDays(from, 1));
+  add("from", relativeLabel(from), from);
+  add("from+1", relativeLabel(addDays(from, 1)), addDays(from, 1));
 
   // Next 5 days: show as plain weekday name ("Thursday")
   for (let offset = 2; offset <= 6; offset++) {
@@ -267,7 +275,7 @@ export default function Command() {
   const [, setLinkInfo] = useState<LinkInfo | null>(null);
 
   const startSuggestions = useMemo(() => generateDateSuggestions(today, startDate), [today, startDate]);
-  const endSuggestions = useMemo(() => generateDateSuggestions(startDate ?? today, endDate), [startDate, today, endDate]);
+  const endSuggestions = useMemo(() => generateDateSuggestions(startDate ?? today, endDate, today), [startDate, today, endDate]);
 
   // Fetch link info to get available durations
   useEffect(() => {
