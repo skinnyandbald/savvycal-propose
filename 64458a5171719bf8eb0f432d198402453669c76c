@@ -1,0 +1,23 @@
+.github/workflows/keep-supabase-alive.yml
+  4f31860c4f76d790 1-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.15",
+  "base_commit_sha": "64458a5171719bf8eb0f432d198402453669c76c",
+  "prompts": {
+    "4f31860c4f76d790": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "30a54854-4bdd-4664-9a31-020c2434c11b",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Ben Fisher <ben@skinnyandbald.com>",
+      "messages": [],
+      "total_additions": 24,
+      "total_deletions": 0,
+      "accepted_lines": 24,
+      "overriden_lines": 0
+    }
+  }
+}
