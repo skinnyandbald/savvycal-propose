@@ -417,6 +417,25 @@ export default function Command() {
       ? `${format(startDate, "EEE, MMM d")} → ${format(endDate, "EEE, MMM d, yyyy")}`
       : "Select dates";
 
+  const usTzs = TIMEZONES.filter((tz) => tz.group === "US");
+  const worldTzs = TIMEZONES.filter((tz) => tz.group === "World");
+
+  // Raycast requires unique values per item. We use "group:title" as the item value
+  // and resolve back to the IANA zone on selection.
+  function resolveTimezone(itemValue: string): string {
+    const entry = TIMEZONES.find(
+      (tz) => `${tz.group}:${tz.title}` === itemValue,
+    );
+    return entry?.value ?? itemValue;
+  }
+
+  // Map the stored IANA zone back to the composite item value for the controlled dropdown.
+  // If multiple cities share the zone, the first one in TIMEZONES is used.
+  const firstMatch = TIMEZONES.find((tz) => tz.value === timezone);
+  const timezoneItemValue = firstMatch
+    ? `${firstMatch.group}:${firstMatch.title}`
+    : timezone;
+
   return (
     <Form
       isLoading={isLoading}
@@ -513,27 +532,49 @@ export default function Command() {
       <Form.Dropdown
         id="timezone"
         title="Recipient's Timezone"
-        value={timezone}
-        onChange={setTimezone}
+        value={timezoneItemValue}
+        onChange={(val) => setTimezone(resolveTimezone(val))}
       >
-        {TIMEZONES.map((tz) => {
-          let timeStr = "";
-          try {
-            timeStr = new Date().toLocaleTimeString("en-US", {
-              timeZone: tz.value,
-              hour: "numeric",
-              minute: "2-digit",
-            });
-          } catch { /* skip for UTC etc. */ }
-          return (
-            <Form.Dropdown.Item
-              key={tz.value}
-              value={tz.value}
-              title={`${tz.title} (${tz.abbr})${timeStr ? ` · ${timeStr}` : ""}`}
-              keywords={[tz.title, tz.abbr, ...tz.keywords]}
-            />
-          );
-        })}
+        <Form.Dropdown.Section title="United States">
+          {usTzs.map((tz) => {
+            let timeStr = "";
+            try {
+              timeStr = new Date().toLocaleTimeString("en-US", {
+                timeZone: tz.value,
+                hour: "numeric",
+                minute: "2-digit",
+              });
+            } catch { /* skip */ }
+            return (
+              <Form.Dropdown.Item
+                key={`${tz.group}-${tz.value}-${tz.title}`}
+                value={`${tz.group}:${tz.title}`}
+                title={`${tz.title}  ·  ${timeStr}`}
+                keywords={[tz.title, tz.abbr, tz.badge, ...tz.keywords]}
+              />
+            );
+          })}
+        </Form.Dropdown.Section>
+        <Form.Dropdown.Section title="World">
+          {worldTzs.map((tz) => {
+            let timeStr = "";
+            try {
+              timeStr = new Date().toLocaleTimeString("en-US", {
+                timeZone: tz.value,
+                hour: "numeric",
+                minute: "2-digit",
+              });
+            } catch { /* skip */ }
+            return (
+              <Form.Dropdown.Item
+                key={`${tz.group}-${tz.value}-${tz.title}`}
+                value={`${tz.group}:${tz.title}`}
+                title={`${tz.title}  ·  ${timeStr}`}
+                keywords={[tz.title, tz.abbr, tz.badge, ...tz.keywords]}
+              />
+            );
+          })}
+        </Form.Dropdown.Section>
       </Form.Dropdown>
 
       <Form.Checkbox
