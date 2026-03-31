@@ -234,6 +234,22 @@ function normalizeDate(d: Date): Date {
   return normalized;
 }
 
+function formatTimeInZone(tzValue: string): string {
+  try {
+    return new Date().toLocaleTimeString("en-US", {
+      timeZone: tzValue,
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  } catch {
+    return "";
+  }
+}
+
+// TIMEZONES is static — split once at module load to avoid per-render filtering.
+const US_TZS = TIMEZONES.filter((tz) => tz.group === "US");
+const WORLD_TZS = TIMEZONES.filter((tz) => tz.group === "World");
+
 // Raycast requires unique values per item. We use "group:title" as the item value
 // and resolve back to the IANA zone on selection.
 function resolveTimezone(itemValue: string): string {
@@ -424,9 +440,6 @@ export default function Command() {
       ? `${format(startDate, "EEE, MMM d")} → ${format(endDate, "EEE, MMM d, yyyy")}`
       : "Select dates";
 
-  const usTzs = TIMEZONES.filter((tz) => tz.group === "US");
-  const worldTzs = TIMEZONES.filter((tz) => tz.group === "World");
-
   // Map the stored IANA zone back to the composite item value for the controlled dropdown.
   // If multiple cities share the zone, the first one in TIMEZONES is used.
   const firstMatch = TIMEZONES.find((tz) => tz.value === timezone);
@@ -534,44 +547,24 @@ export default function Command() {
         onChange={(val) => setTimezone(resolveTimezone(val))}
       >
         <Form.Dropdown.Section title="United States">
-          {usTzs.map((tz) => {
-            let timeStr = "";
-            try {
-              timeStr = new Date().toLocaleTimeString("en-US", {
-                timeZone: tz.value,
-                hour: "numeric",
-                minute: "2-digit",
-              });
-            } catch { /* skip */ }
-            return (
-              <Form.Dropdown.Item
-                key={`${tz.group}-${tz.value}-${tz.title}`}
-                value={`${tz.group}:${tz.title}`}
-                title={`${tz.title}  ·  ${timeStr}`}
-                keywords={[tz.title, tz.abbr, tz.badge, ...tz.keywords]}
-              />
-            );
-          })}
+          {US_TZS.map((tz) => (
+            <Form.Dropdown.Item
+              key={`${tz.group}-${tz.value}-${tz.title}`}
+              value={`${tz.group}:${tz.title}`}
+              title={`${tz.title}  ·  ${formatTimeInZone(tz.value)}`}
+              keywords={[tz.title, tz.abbr, tz.badge, ...tz.keywords]}
+            />
+          ))}
         </Form.Dropdown.Section>
         <Form.Dropdown.Section title="World">
-          {worldTzs.map((tz) => {
-            let timeStr = "";
-            try {
-              timeStr = new Date().toLocaleTimeString("en-US", {
-                timeZone: tz.value,
-                hour: "numeric",
-                minute: "2-digit",
-              });
-            } catch { /* skip */ }
-            return (
-              <Form.Dropdown.Item
-                key={`${tz.group}-${tz.value}-${tz.title}`}
-                value={`${tz.group}:${tz.title}`}
-                title={`${tz.title}  ·  ${timeStr}`}
-                keywords={[tz.title, tz.abbr, tz.badge, ...tz.keywords]}
-              />
-            );
-          })}
+          {WORLD_TZS.map((tz) => (
+            <Form.Dropdown.Item
+              key={`${tz.group}-${tz.value}-${tz.title}`}
+              value={`${tz.group}:${tz.title}`}
+              title={`${tz.title}  ·  ${formatTimeInZone(tz.value)}`}
+              keywords={[tz.title, tz.abbr, tz.badge, ...tz.keywords]}
+            />
+          ))}
         </Form.Dropdown.Section>
       </Form.Dropdown>
 

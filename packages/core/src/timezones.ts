@@ -26,6 +26,7 @@ export function searchTimezones(query: string): TimezoneEntry[] {
     (tz) =>
       tz.title.toLowerCase().includes(q) ||
       tz.abbr.toLowerCase().includes(q) ||
+      tz.badge.toLowerCase().includes(q) ||
       tz.value.toLowerCase().includes(q) ||
       tz.keywords.some((kw) => kw.toLowerCase().includes(q)),
   );

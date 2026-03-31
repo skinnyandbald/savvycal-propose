@@ -83,8 +83,10 @@ export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
     if (selectedKey) {
       return timezoneKey(tz) === selectedKey;
     }
-    // Fallback: highlight first entry with matching IANA zone (externally set value)
-    return tz.value === value;
+    // Multiple cities share one IANA zone (e.g. 18 cities on America/New_York).
+    // Only highlight the first match to avoid the whole group lighting up on initial open.
+    const firstMatch = TIMEZONES.find((t) => t.value === value);
+    return firstMatch ? timezoneKey(tz) === timezoneKey(firstMatch) : false;
   }
 
   function renderEntry(tz: TimezoneEntry) {
