@@ -26,7 +26,7 @@ export interface TimezoneEntry {
   value: string;       // IANA timezone: "America/New_York" | "Europe/Belgrade"
   abbr: string;        // "ET" | "CET"
   badge: string;       // "ET · Eastern" | "CET · Serbia"
-  keywords: string[];  // ["NYC", "EST", "EDT", "NY"] | ["Serbia", "CEST"]
+  keywords: string[];  // ["New York", "NY", "EST", "EDT", "ET · Eastern"] | ["Serbia", "RS", "CEST"]
   group: "US" | "World";
 }
 ```
@@ -35,19 +35,23 @@ export interface TimezoneEntry {
 - US entries: `"ET · Eastern"`, `"CT · Central"`, `"MT · Mountain"`, `"PT · Pacific"`, `"MST · Arizona"`, `"AKT · Alaska"`, `"HT · Hawaii"`
 - World entries: `abbr + " · " + countryName` (e.g., `"CET · Serbia"`, `"JST · Japan"`)
 
-**Ordering:** Descending UTC offset (east to west). US section first, then World. Within each section, entries sharing the same IANA zone are contiguous (all ET cities together, then all CT cities, etc.).
+**Ordering:** Sort by `rawOffsetInMinutes` descending (east to west, stable year-round regardless of DST). US section first, then World. Within the US section, entries sharing the same IANA zone are contiguous (all ET cities together, then all CT, etc.).
 
-**React/Raycast keys:** `${group}-${title}` — necessary because multiple cities share the same IANA `value`.
+**React keys:** `${group}-${value}-${title}` — composite key guarantees uniqueness even if two world timezones share the same `mainCities[0]`.
 
-**`searchTimezones()` is unchanged** — it already searches `title`, `abbr`, `value`, and `keywords`. The `badge` and `group` fields are not searched (abbr covers the abbreviation; city names are in `title` and `keywords`).
+**Badge in keywords:** The badge string (e.g., `"ET · Eastern"`, `"CET · Serbia"`) is included in `keywords` so both web `searchTimezones()` and Raycast native search match it. Searching "Eastern" or "Serbia" returns results on both platforms.
+
+**`searchTimezones()` is unchanged** — it searches `title`, `abbr`, `value`, and `keywords`. Badge search works because the badge text is already in `keywords`.
 
 **`getTimezoneAbbr()` is unchanged** — still looks up by IANA `value`, returns `abbr`.
+
+**Atomic update requirement:** `badge` and `group` are new required fields on a shared interface. `packages/web` and `packages/raycast` must be updated in the same PR. Before implementation, grep for any code that manually constructs `TimezoneEntry` objects (outside the JSON import) — there are currently none, but confirm this.
 
 ---
 
 ## Generation Script
 
-The data is generated via a script in `packages/core`, committed to the repo. This is a dev-time script — the JSON is the source of truth at runtime.
+The data is generated via a script in `packages/core`, committed to the repo. This is a dev-time script — `@vvo/tzdb` is a devDependency only and must never be imported from `src/` files.
 
 ### File Structure
 
@@ -76,10 +80,10 @@ export interface USCity {
 
 export const US_CITIES: USCity[] = [
   // Eastern Time
-  { city: "New York", ianaTimezone: "America/New_York", state: "New York", stateAbbr: "NY", extraKeywords: ["NYC"] },
+  { city: "New York", ianaTimezone: "America/New_York", state: "New York", stateAbbr: "NY", extraKeywords: ["NYC", "New York City"] },
   { city: "Boston", ianaTimezone: "America/New_York", state: "Massachusetts", stateAbbr: "MA" },
   { city: "Philadelphia", ianaTimezone: "America/New_York", state: "Pennsylvania", stateAbbr: "PA" },
-  { city: "Washington DC", ianaTimezone: "America/New_York", state: "District of Columbia", stateAbbr: "DC" },
+  { city: "Washington DC", ianaTimezone: "America/New_York", state: "District of Columbia", stateAbbr: "DC", extraKeywords: ["Washington", "Washington, DC", "District of Columbia"] },
   { city: "Atlanta", ianaTimezone: "America/New_York", state: "Georgia", stateAbbr: "GA" },
   { city: "Miami", ianaTimezone: "America/New_York", state: "Florida", stateAbbr: "FL" },
   { city: "Orlando", ianaTimezone: "America/New_York", state: "Florida", stateAbbr: "FL" },
@@ -88,7 +92,7 @@ export const US_CITIES: USCity[] = [
   { city: "Raleigh", ianaTimezone: "America/New_York", state: "North Carolina", stateAbbr: "NC" },
   { city: "Pittsburgh", ianaTimezone: "America/New_York", state: "Pennsylvania", stateAbbr: "PA" },
   { city: "Baltimore", ianaTimezone: "America/New_York", state: "Maryland", stateAbbr: "MD" },
-  { city: "Detroit", ianaTimezone: "America/New_York", state: "Michigan", stateAbbr: "MI" },
+  { city: "Detroit", ianaTimezone: "America/Detroit", state: "Michigan", stateAbbr: "MI" },
   { city: "Cleveland", ianaTimezone: "America/New_York", state: "Ohio", stateAbbr: "OH" },
   { city: "Columbus", ianaTimezone: "America/New_York", state: "Ohio", stateAbbr: "OH" },
   { city: "Cincinnati", ianaTimezone: "America/New_York", state: "Ohio", stateAbbr: "OH" },
@@ -130,7 +134,7 @@ export const US_CITIES: USCity[] = [
   { city: "Los Angeles", ianaTimezone: "America/Los_Angeles", state: "California", stateAbbr: "CA", extraKeywords: ["LA", "Hollywood"] },
   { city: "San Francisco", ianaTimezone: "America/Los_Angeles", state: "California", stateAbbr: "CA", extraKeywords: ["SF", "Silicon Valley"] },
   { city: "Seattle", ianaTimezone: "America/Los_Angeles", state: "Washington", stateAbbr: "WA" },
-  { city: "Portland", ianaTimezone: "America/Los_Angeles", state: "Oregon", stateAbbr: "OR" },
+  { city: "Portland", ianaTimezone: "America/Los_Angeles", state: "Oregon", stateAbbr: "OR", extraKeywords: ["Portland OR", "Portland Oregon"] },
   { city: "San Diego", ianaTimezone: "America/Los_Angeles", state: "California", stateAbbr: "CA" },
   { city: "San Jose", ianaTimezone: "America/Los_Angeles", state: "California", stateAbbr: "CA" },
   { city: "Sacramento", ianaTimezone: "America/Los_Angeles", state: "California", stateAbbr: "CA" },
@@ -141,25 +145,27 @@ export const US_CITIES: USCity[] = [
   { city: "Juneau", ianaTimezone: "America/Anchorage", state: "Alaska", stateAbbr: "AK" },
   // Hawaii
   { city: "Honolulu", ianaTimezone: "Pacific/Honolulu", state: "Hawaii", stateAbbr: "HI" },
-  { city: "Maui", ianaTimezone: "Pacific/Honolulu", state: "Hawaii", stateAbbr: "HI" },
+  { city: "Kahului", ianaTimezone: "Pacific/Honolulu", state: "Hawaii", stateAbbr: "HI", extraKeywords: ["Maui"] },
 ];
 ```
 
-Each US city entry uses: `title = city`, `value = ianaTimezone`, `abbr` and `badge` from the US zone info table, `keywords = [state, stateAbbr, ...extraKeywords, ...zoneKeywords]`.
+Each US city entry uses: `title = city`, `value = ianaTimezone`, `abbr` and `badge` from the US zone info table, `keywords = [state, stateAbbr, badge, ...dstKeywords, ...extraKeywords]`.
 
 ### `generate-timezones.ts`
 
-1. Import all timezones from `@vvo/tzdb` via `getTimezones()` (returns all ~600 IANA timezone entries)
-2. **US section:** For each city in `US_CITIES`, look up its IANA zone in tzdb to get `rawOffsetInMinutes`. Emit one `TimezoneEntry` per city with `group: "US"`. Sort by `rawOffsetInMinutes` descending (ET first, HT last). Within the same IANA zone, preserve the order from `us-cities.ts`.
-3. **World section:** Filter `getTimezones()` results to entries where `countryCode !== "US"` and `mainCities.length > 0`. Skip synthetic zones (`Etc/GMT+X`, `UTC`, `Factory`) by checking that the IANA name does not start with `Etc/`. For each qualifying entry, emit one `TimezoneEntry` with `title = mainCities[0]`, `group: "World"`, `badge = abbr + " · " + countryName`. Sort by `rawOffsetInMinutes` descending.
-4. Concatenate US entries + World entries → write to `src/timezones-data.json`.
+1. `import { getTimeZones } from "@vvo/tzdb"` — note capital Z. Returns ~400 IANA timezone entries with `mainCities` populated.
+2. **US section:** For each city in `US_CITIES`, look up its IANA zone in the tzdb map by `name`. Emit one `TimezoneEntry` per city with `group: "US"`. Sort by `rawOffsetInMinutes` descending (`b.raw - a.raw`); within the same IANA zone preserve `us-cities.ts` order.
+3. **World section:** Filter `getTimeZones()` to `countryCode !== "US"` and `mainCities.length > 0`. The IANA name check `!name.startsWith("Etc/")` is redundant but kept as a safety guard. Emit one `TimezoneEntry` per qualifying zone: `title = mainCities[0]`, `group: "World"`, `badge = abbr + " · " + countryName`, `keywords = [countryName, countryCode, badge, ...mainCities.slice(1)]`. Sort by `rawOffsetInMinutes` descending. This produces one row per IANA zone (not one per country) — multiple European countries with separate IANA zones each get their own entry. Expected total: ~65 US + ~200–250 World rows.
+4. **Validation pass** (fail-fast before writing): assert no duplicate `title+group` combos, every `US_CITIES[i].ianaTimezone` exists in `US_ZONE_INFO`, no entry has empty `title`/`abbr`/`badge`.
+5. Concatenate US + World → write to `src/timezones-data.json`.
 
-**US zone info table** (used to resolve `abbr` and `badge` for US IANA timezones):
+**US zone info table:**
 ```typescript
 const US_ZONE_INFO: Record<string, { abbr: string; badge: string }> = {
   "America/New_York": { abbr: "ET", badge: "ET · Eastern" },
   "America/Indiana/Indianapolis": { abbr: "ET", badge: "ET · Eastern" },
   "America/Kentucky/Louisville": { abbr: "ET", badge: "ET · Eastern" },
+  "America/Detroit": { abbr: "ET", badge: "ET · Eastern" },
   "America/Chicago": { abbr: "CT", badge: "CT · Central" },
   "America/Denver": { abbr: "MT", badge: "MT · Mountain" },
   "America/Phoenix": { abbr: "MST", badge: "MST · Arizona" },
@@ -169,17 +175,13 @@ const US_ZONE_INFO: Record<string, { abbr: string; badge: string }> = {
 };
 ```
 
-**Keywords for US cities:**
-`keywords = [state, stateAbbr, abbr, "EST"/"CST"/etc., ...extraKeywords]`
-Each city includes DST-aware abbreviation variants as keywords (e.g., ET entries include both "EST" and "EDT").
-
-**World keywords:** `keywords = [countryName, countryCode, abbreviation, ...mainCities.slice(1)]`
-
 ### Running the script
 
 ```bash
 pnpm --filter @propose/core generate-timezones
 ```
+
+Package.json script definition: `"generate-timezones": "tsx scripts/generate-timezones.ts"`. Requires `tsx` as a devDependency in `packages/core`.
 
 The output `timezones-data.json` is committed. Re-run to update if new cities are needed.
 
@@ -193,7 +195,7 @@ export interface TimezoneEntry {
   title: string;
   value: string;
   abbr: string;
-  badge: string;       // new
+  badge: string;       // new — display pill text, also included in keywords for search
   keywords: string[];
   group: "US" | "World"; // new
 }
@@ -220,71 +222,111 @@ Each row: city title + badge pill on the left, current time on the right:
 
 ### Trigger button display
 
-Shows abbreviation + current time (no city name — avoids ambiguity when multiple cities share an IANA zone):
+Shows abbreviation + current time. When not yet mounted (SSR/hydration), shows abbreviation only — no trailing separator:
 ```tsx
-{selected ? `${selected.abbr} · ${mounted ? formatTimeInZone(selected.value) : ""}` : "Select timezone"}
+{selected
+  ? mounted
+    ? `${selected.abbr} · ${formatTimeInZone(selected.value)}`
+    : selected.abbr
+  : "Select timezone"}
 ```
 
 ### Group headers
 
-When the dropdown is open, entries are split into US and World sections:
+Entries are split into US and World sections. Section headers render only when that group has results (works correctly during search):
 ```tsx
 const usFiltered = filtered.filter(tz => tz.group === "US");
 const worldFiltered = filtered.filter(tz => tz.group === "World");
 ```
 
-Section headers (`<li>`) are shown only when entries exist in that group. This works correctly during search — if the query matches only US cities, only the US header + entries render.
-
 ### React key
 
-`key={`${tz.group}-${tz.title}`}` — unique because `title` is unique within a group.
+`key={`${tz.group}-${tz.value}-${tz.title}`}` — composite key prevents collisions even if two world timezones share the same `mainCities[0]`.
 
-### Highlight
+### Selection tracking
 
-`tz.value === value` still correctly identifies the selected IANA zone. Multiple city entries sharing the same IANA zone will all highlight — this is desirable (shows the user which cities are in their selected timezone).
+The web picker tracks selection by the exact item clicked, not by IANA zone, to avoid multi-highlight confusion:
+```tsx
+const [selectedKey, setSelectedKey] = useState<string | null>(null);
+
+// On click:
+setSelectedKey(`${tz.group}-${tz.value}-${tz.title}`);
+onChange(tz.value); // still passes IANA zone to the parent
+
+// Highlight condition:
+const isSelected = selectedKey
+  ? selectedKey === `${tz.group}-${tz.value}-${tz.title}`
+  : tz.value === value; // fallback for externally-set value (e.g. default preference)
+```
+
+The fallback `tz.value === value` handles the case where the user's stored preference is an IANA zone with no selectedKey yet (e.g., first load). In that case the first matching entry in the list highlights, which is the correct zone representative.
 
 ---
 
 ## Raycast (`propose-times.tsx`)
 
-Replace the flat `TIMEZONES.map(...)` with two `Form.Dropdown.Section` blocks:
+Raycast `Form.Dropdown.Item` requires each item to have a **unique `value`**. Since multiple cities share the same IANA zone, use a composite value and resolve it back to IANA in `onChange`:
 
 ```tsx
 const usTzs = TIMEZONES.filter(tz => tz.group === "US");
 const worldTzs = TIMEZONES.filter(tz => tz.group === "World");
 
-<Form.Dropdown.Section title="United States">
-  {usTzs.map(tz => (
-    <Form.Dropdown.Item
-      key={`${tz.group}-${tz.title}`}
-      value={tz.value}
-      title={`${tz.title}  ·  ${getTimeStr(tz.value)}`}
-      keywords={[tz.title, tz.abbr, tz.badge, ...tz.keywords]}
-    />
-  ))}
-</Form.Dropdown.Section>
-<Form.Dropdown.Section title="World">
-  {worldTzs.map(tz => (
-    <Form.Dropdown.Item
-      key={`${tz.group}-${tz.title}`}
-      value={tz.value}
-      title={`${tz.title}  ·  ${getTimeStr(tz.value)}`}
-      keywords={[tz.title, tz.abbr, tz.badge, ...tz.keywords]}
-    />
-  ))}
-</Form.Dropdown.Section>
+// Resolver: composite value → IANA zone
+function resolveTimezone(itemValue: string): string {
+  // Format: "group:title" → look up in TIMEZONES
+  const entry = TIMEZONES.find(tz => `${tz.group}:${tz.title}` === itemValue);
+  return entry?.value ?? itemValue; // fallback: treat as IANA zone (for stored preferences)
+}
+
+// In the dropdown onChange:
+onChange={val => setTimezone(resolveTimezone(val))}
+
+// Default value mapping (stored preference is an IANA zone → find representative item):
+const defaultItemValue = TIMEZONES.find(tz => tz.value === timezone)
+  ? `${TIMEZONES.find(tz => tz.value === timezone)!.group}:${TIMEZONES.find(tz => tz.value === timezone)!.title}`
+  : timezone;
+
+<Form.Dropdown
+  id="timezone"
+  title="Recipient's Timezone"
+  value={defaultItemValue}
+  onChange={val => setTimezone(resolveTimezone(val))}
+>
+  <Form.Dropdown.Section title="United States">
+    {usTzs.map(tz => {
+      const timeStr = getTimeStr(tz.value);
+      return (
+        <Form.Dropdown.Item
+          key={`${tz.group}-${tz.value}-${tz.title}`}
+          value={`${tz.group}:${tz.title}`}
+          title={`${tz.title}  ·  ${timeStr}`}
+          keywords={[tz.title, tz.abbr, tz.badge, ...tz.keywords]}
+        />
+      );
+    })}
+  </Form.Dropdown.Section>
+  <Form.Dropdown.Section title="World">
+    {worldTzs.map(tz => {
+      const timeStr = getTimeStr(tz.value);
+      return (
+        <Form.Dropdown.Item
+          key={`${tz.group}-${tz.value}-${tz.title}`}
+          value={`${tz.group}:${tz.title}`}
+          title={`${tz.title}  ·  ${timeStr}`}
+          keywords={[tz.title, tz.abbr, tz.badge, ...tz.keywords]}
+        />
+      );
+    })}
+  </Form.Dropdown.Section>
+</Form.Dropdown>
 ```
-
-`tz.badge` is added to `keywords` so Raycast's native search matches "ET · Eastern" and "Serbia" etc.
-
-The `getTimeStr` helper (inline in the map, same pattern as current code) formats the current time in `tz.value`.
 
 ---
 
 ## What Does Not Change
 
 - `getTimezoneAbbr(timezone)` — still looks up by IANA `value`
-- `searchTimezones(query)` — unchanged, still searches title/abbr/value/keywords
+- `searchTimezones(query)` — unchanged; badge search works via `keywords`
 - `TIMEZONES` export — still the full ordered array
 - API route (`/api/slots`) — uses `timezone` as IANA value, unaffected
 - `filterSlotsByTime()` — uses IANA value directly, unaffected
@@ -295,10 +337,10 @@ The `getTimeStr` helper (inline in the map, same pattern as current code) format
 
 | File | Change |
 |------|--------|
-| `packages/core/package.json` | Add `@vvo/tzdb` devDep, add `generate-timezones` script |
-| `packages/core/scripts/us-cities.ts` | New — curated US city list |
-| `packages/core/scripts/generate-timezones.ts` | New — generation script |
+| `packages/core/package.json` | Add `@vvo/tzdb` devDep, add `tsx` devDep, add `generate-timezones` script |
+| `packages/core/scripts/us-cities.ts` | New — curated US city list (~65 entries) |
+| `packages/core/scripts/generate-timezones.ts` | New — generation script with validation pass |
 | `packages/core/src/timezones.ts` | Add `badge` and `group` to `TimezoneEntry` interface |
-| `packages/core/src/timezones-data.json` | Regenerated — ~120+ entries |
-| `packages/web/components/TimezonePicker.tsx` | Group headers, badge pill, trigger label update, key fix |
-| `packages/raycast/src/propose-times.tsx` | Add `Form.Dropdown.Section` wrappers, key fix, badge in keywords |
+| `packages/core/src/timezones-data.json` | Regenerated — ~270–320 entries (65 US + ~200–250 World) |
+| `packages/web/components/TimezonePicker.tsx` | Group headers, badge pill, trigger label fix, composite key, `selectedKey` state |
+| `packages/raycast/src/propose-times.tsx` | `Form.Dropdown.Section` wrappers, composite item values, `resolveTimezone()`, badge in keywords |
