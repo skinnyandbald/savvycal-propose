@@ -1,15 +1,13 @@
 "use client";
 
-import { createClient } from "@/lib/supabase/client";
+import { authClient } from "@/lib/auth/client";
 
 export function LoginButton() {
   const handleLogin = async () => {
-    const supabase = createClient();
-    await supabase.auth.signInWithOAuth({
+    await authClient.signIn.social({
       provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
+      callbackURL: "/propose",
+      errorCallbackURL: "/login?error=auth",
     });
   };
 
