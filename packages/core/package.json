@@ -6,13 +6,16 @@
   "types": "src/index.ts",
   "scripts": {
     "test": "vitest",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "generate-timezones": "tsx scripts/generate-timezones.ts"
   },
   "dependencies": {
     "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.0"
   },
   "devDependencies": {
+    "@vvo/tzdb": "^6.0.0",
+    "tsx": "^4.0.0",
     "typescript": "^5.2.2",
     "vitest": "^4.0.16"
   }
