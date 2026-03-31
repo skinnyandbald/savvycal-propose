@@ -197,6 +197,8 @@ ls -la packages/web/lib/db/schema.ts
 
 Expected: File exists with size > 0. It should contain `pgTable` definitions for `user`, `session`, `account`, `verification`.
 
+> **Note:** Verify that all four `updatedAt` fields (`user`, `session`, `account`, `verification`) include `.defaultNow()`. The CLI-generated schema may omit `.defaultNow()` on `session.updatedAt` and `account.updatedAt`, causing INSERT failures on `.notNull()` columns when Better Auth does not supply the value. Add `.defaultNow()` manually to any `updatedAt` fields that are missing it.
+
 - [ ] **Step 3: Verify TypeScript compiles (auth + db layer)**
 
 ```bash

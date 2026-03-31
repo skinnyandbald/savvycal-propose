@@ -123,12 +123,11 @@ export const US_CITIES: USCity[] = [
   { city: "Richmond", ianaTimezone: "America/New_York", state: "Virginia", stateAbbr: "VA" },
   { city: "Buffalo", ianaTimezone: "America/New_York", state: "New York", stateAbbr: "NY" },
   { city: "Jacksonville", ianaTimezone: "America/New_York", state: "Florida", stateAbbr: "FL" },
-  // Eastern Time — America/Detroit
-  { city: "Detroit", ianaTimezone: "America/Detroit", state: "Michigan", stateAbbr: "MI" },
-  // Eastern Time — America/Indiana/Indianapolis
-  { city: "Indianapolis", ianaTimezone: "America/Indiana/Indianapolis", state: "Indiana", stateAbbr: "IN" },
-  // Eastern Time — America/Kentucky/Louisville
-  { city: "Louisville", ianaTimezone: "America/Kentucky/Louisville", state: "Kentucky", stateAbbr: "KY" },
+  // Eastern Time — America/New_York (Detroit, Indianapolis, Louisville: intentionally consolidated;
+  // @vvo/tzdb maps these cities to America/New_York rather than their canonical IANA zones)
+  { city: "Detroit", ianaTimezone: "America/New_York", state: "Michigan", stateAbbr: "MI" },
+  { city: "Indianapolis", ianaTimezone: "America/New_York", state: "Indiana", stateAbbr: "IN" },
+  { city: "Louisville", ianaTimezone: "America/New_York", state: "Kentucky", stateAbbr: "KY" },
   // Central Time — America/Chicago
   { city: "Chicago", ianaTimezone: "America/Chicago", state: "Illinois", stateAbbr: "IL" },
   { city: "Dallas", ianaTimezone: "America/Chicago", state: "Texas", stateAbbr: "TX" },

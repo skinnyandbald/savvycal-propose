@@ -9,9 +9,9 @@ interface TimezonePickerProps {
   onChange: (tz: string) => void;
 }
 
-function formatTimeInZone(tz: string): string {
+function formatTimeInZone(tz: string, date: Date = new Date()): string {
   try {
-    return new Date().toLocaleTimeString("en-US", {
+    return date.toLocaleTimeString("en-US", {
       timeZone: tz,
       hour: "numeric",
       minute: "2-digit",
@@ -71,6 +71,7 @@ export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
       : TIMEZONES.find((tz) => tz.value === value);
 
   const mounted = now !== null;
+  const nowDate = mounted ? new Date(now!) : undefined;
 
   function handleSelect(tz: TimezoneEntry) {
     setSelectedKey(timezoneKey(tz));
@@ -108,7 +109,7 @@ export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
           </span>
           {mounted && (
             <span className="text-zinc-500 text-xs tabular-nums">
-              {formatTimeInZone(tz.value)}
+              {formatTimeInZone(tz.value, nowDate)}
             </span>
           )}
         </button>
@@ -130,7 +131,7 @@ export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
         >
           {selected
             ? mounted
-              ? `${selected.abbr} · ${formatTimeInZone(selected.value)}`
+              ? `${selected.abbr} · ${formatTimeInZone(selected.value, nowDate)}`
               : selected.abbr
             : "Select timezone"}
         </button>

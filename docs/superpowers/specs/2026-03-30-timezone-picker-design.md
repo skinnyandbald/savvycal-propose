@@ -55,7 +55,7 @@ The data is generated via a script in `packages/core`, committed to the repo. Th
 
 ### File Structure
 
-```
+```text
 packages/core/
   scripts/
     generate-timezones.ts    ← main generation script
@@ -341,6 +341,6 @@ const defaultItemValue = TIMEZONES.find(tz => tz.value === timezone)
 | `packages/core/scripts/us-cities.ts` | New — curated US city list (~65 entries) |
 | `packages/core/scripts/generate-timezones.ts` | New — generation script with validation pass |
 | `packages/core/src/timezones.ts` | Add `badge` and `group` to `TimezoneEntry` interface |
-| `packages/core/src/timezones-data.json` | Regenerated — ~270–320 entries (65 US + ~200–250 World) |
+| `packages/core/src/timezones-data.json` | Regenerated — ~367 total entries (65 US + ~302 World) |
 | `packages/web/components/TimezonePicker.tsx` | Group headers, badge pill, trigger label fix, composite key, `selectedKey` state |
 | `packages/raycast/src/propose-times.tsx` | `Form.Dropdown.Section` wrappers, composite item values, `resolveTimezone()`, badge in keywords |

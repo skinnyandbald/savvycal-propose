@@ -3,8 +3,12 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 
 export default async function Home() {
-  const session = await auth.api.getSession({ headers: await headers() });
   const allowedEmail = process.env.ALLOWED_EMAIL?.toLowerCase();
+  if (!allowedEmail) {
+    throw new Error("ALLOWED_EMAIL is not configured");
+  }
+
+  const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session) {
     redirect("/login");

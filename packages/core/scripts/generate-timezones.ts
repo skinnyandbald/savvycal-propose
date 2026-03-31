@@ -115,7 +115,7 @@ const allEntries = [...usEntries, ...worldEntries];
 const seenKeys = new Set<string>();
 
 for (const entry of allEntries) {
-  if (!entry.title || !entry.abbr || !entry.badge) {
+  if (!entry.title || !entry.value || !entry.abbr || !entry.badge) {
     throw new Error(`Entry has empty required field: ${JSON.stringify(entry)}`);
   }
   const key = `${entry.group}-${entry.title}`;
