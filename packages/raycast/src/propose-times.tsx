@@ -234,6 +234,13 @@ function normalizeDate(d: Date): Date {
   return normalized;
 }
 
+// Raycast requires unique values per item. We use "group:title" as the item value
+// and resolve back to the IANA zone on selection.
+function resolveTimezone(itemValue: string): string {
+  const entry = TIMEZONES.find((tz) => `${tz.group}:${tz.title}` === itemValue);
+  return entry?.value ?? itemValue;
+}
+
 export default function Command() {
   const preferences = getPreferenceValues<Preferences>();
   const defaultDays = parseInt(preferences.defaultDaysAhead) || 10;
@@ -419,15 +426,6 @@ export default function Command() {
 
   const usTzs = TIMEZONES.filter((tz) => tz.group === "US");
   const worldTzs = TIMEZONES.filter((tz) => tz.group === "World");
-
-  // Raycast requires unique values per item. We use "group:title" as the item value
-  // and resolve back to the IANA zone on selection.
-  function resolveTimezone(itemValue: string): string {
-    const entry = TIMEZONES.find(
-      (tz) => `${tz.group}:${tz.title}` === itemValue,
-    );
-    return entry?.value ?? itemValue;
-  }
 
   // Map the stored IANA zone back to the composite item value for the controlled dropdown.
   // If multiple cities share the zone, the first one in TIMEZONES is used.
