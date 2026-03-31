@@ -1,16 +1,18 @@
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 
 export default async function Home() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+  const session = await auth.api.getSession({ headers: await headers() });
   const allowedEmail = process.env.ALLOWED_EMAIL?.toLowerCase();
-  if (user?.email?.toLowerCase() === allowedEmail) {
-    redirect("/propose");
+
+  if (!session) {
+    redirect("/login");
   }
 
-  redirect("/login");
+  if (session.user.email?.toLowerCase() !== allowedEmail) {
+    redirect("/login?error=unauthorized");
+  }
+
+  redirect("/propose");
 }
