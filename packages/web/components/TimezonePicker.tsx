@@ -21,6 +21,10 @@ function formatTimeInZone(tz: string): string {
   }
 }
 
+function timezoneKey(tz: TimezoneEntry): string {
+  return `${tz.group}-${tz.value}-${tz.title}`;
+}
+
 export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -40,6 +44,15 @@ export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
   }, []);
 
   useEffect(() => {
+    if (!open) return;
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [open]);
+
+  useEffect(() => {
     setNow(Date.now());
     const id = setInterval(() => setNow(Date.now()), 60_000);
     return () => clearInterval(id);
@@ -53,14 +66,14 @@ export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
   const selected: TimezoneEntry | undefined =
     selectedKey
       ? TIMEZONES.find(
-          (tz) => `${tz.group}-${tz.value}-${tz.title}` === selectedKey,
+          (tz) => timezoneKey(tz) === selectedKey,
         )
       : TIMEZONES.find((tz) => tz.value === value);
 
   const mounted = now !== null;
 
   function handleSelect(tz: TimezoneEntry) {
-    setSelectedKey(`${tz.group}-${tz.value}-${tz.title}`);
+    setSelectedKey(timezoneKey(tz));
     onChange(tz.value);
     setOpen(false);
     setSearch("");
@@ -68,7 +81,7 @@ export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
 
   function isHighlighted(tz: TimezoneEntry): boolean {
     if (selectedKey) {
-      return `${tz.group}-${tz.value}-${tz.title}` === selectedKey;
+      return timezoneKey(tz) === selectedKey;
     }
     // Fallback: highlight first entry with matching IANA zone (externally set value)
     return tz.value === value;
@@ -77,7 +90,7 @@ export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
   function renderEntry(tz: TimezoneEntry) {
     const highlighted = isHighlighted(tz);
     return (
-      <li key={`${tz.group}-${tz.value}-${tz.title}`}>
+      <li key={timezoneKey(tz)}>
         <button
           type="button"
           onClick={() => handleSelect(tz)}
@@ -110,6 +123,7 @@ export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
         <button
           type="button"
           onClick={() => setOpen(!open)}
+          aria-expanded={open}
           className="w-full rounded-lg bg-zinc-800 px-4 py-3 text-left text-base text-zinc-100"
         >
           {selected
