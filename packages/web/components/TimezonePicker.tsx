@@ -2,15 +2,16 @@
 
 import { useState, useRef, useEffect } from "react";
 import { TIMEZONES, searchTimezones } from "@/lib/config";
+import type { TimezoneEntry } from "@/lib/config";
 
 interface TimezonePickerProps {
   value: string;
   onChange: (tz: string) => void;
 }
 
-function formatTimeInZone(tz: string): string {
+function formatTimeInZone(tz: string, date: Date = new Date()): string {
   try {
-    return new Date().toLocaleTimeString("en-US", {
+    return date.toLocaleTimeString("en-US", {
       timeZone: tz,
       hour: "numeric",
       minute: "2-digit",
@@ -20,10 +21,16 @@ function formatTimeInZone(tz: string): string {
   }
 }
 
+function timezoneKey(tz: TimezoneEntry): string {
+  return `${tz.group}-${tz.value}-${tz.title}`;
+}
+
 export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [now, setNow] = useState<number | null>(null);
+  // Track the exact clicked entry so only one row highlights
+  const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -36,7 +43,15 @@ export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Tick every minute to keep times fresh (always, not just when open)
+  useEffect(() => {
+    if (!open) return;
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [open]);
+
   useEffect(() => {
     setNow(Date.now());
     const id = setInterval(() => setNow(Date.now()), 60_000);
@@ -44,8 +59,63 @@ export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
   }, []);
 
   const filtered = searchTimezones(search);
-  const selected = TIMEZONES.find((tz) => tz.value === value);
+  const usFiltered = filtered.filter((tz) => tz.group === "US");
+  const worldFiltered = filtered.filter((tz) => tz.group === "World");
+
+  // Find selected entry for trigger label: prefer selectedKey match, else first IANA match
+  const selected: TimezoneEntry | undefined =
+    selectedKey
+      ? TIMEZONES.find(
+          (tz) => timezoneKey(tz) === selectedKey,
+        )
+      : TIMEZONES.find((tz) => tz.value === value);
+
   const mounted = now !== null;
+  const nowDate = mounted ? new Date(now!) : undefined;
+
+  function handleSelect(tz: TimezoneEntry) {
+    setSelectedKey(timezoneKey(tz));
+    onChange(tz.value);
+    setOpen(false);
+    setSearch("");
+  }
+
+  function isHighlighted(tz: TimezoneEntry): boolean {
+    if (selectedKey) {
+      return timezoneKey(tz) === selectedKey;
+    }
+    // Multiple cities share one IANA zone (e.g. 18 cities on America/New_York).
+    // Only highlight the first match to avoid the whole group lighting up on initial open.
+    const firstMatch = TIMEZONES.find((t) => t.value === value);
+    return firstMatch ? timezoneKey(tz) === timezoneKey(firstMatch) : false;
+  }
+
+  function renderEntry(tz: TimezoneEntry) {
+    const highlighted = isHighlighted(tz);
+    return (
+      <li key={timezoneKey(tz)}>
+        <button
+          type="button"
+          onClick={() => handleSelect(tz)}
+          className={`flex w-full items-center justify-between px-4 py-2 text-left text-sm active:bg-zinc-700 ${
+            highlighted ? "bg-zinc-800 text-white" : "text-zinc-300"
+          }`}
+        >
+          <span className="flex items-center gap-2">
+            <span>{tz.title}</span>
+            <span className="rounded bg-zinc-700 px-1.5 py-0.5 text-[10px] text-zinc-400">
+              {tz.badge}
+            </span>
+          </span>
+          {mounted && (
+            <span className="text-zinc-500 text-xs tabular-nums">
+              {formatTimeInZone(tz.value, nowDate)}
+            </span>
+          )}
+        </button>
+      </li>
+    );
+  }
 
   return (
     <fieldset>
@@ -56,10 +126,13 @@ export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
         <button
           type="button"
           onClick={() => setOpen(!open)}
+          aria-expanded={open}
           className="w-full rounded-lg bg-zinc-800 px-4 py-3 text-left text-base text-zinc-100"
         >
           {selected
-            ? `${selected.title} (${selected.abbr})${mounted ? ` · ${formatTimeInZone(selected.value)}` : ""}`
+            ? mounted
+              ? `${selected.abbr} · ${formatTimeInZone(selected.value, nowDate)}`
+              : selected.abbr
             : "Select timezone"}
         </button>
 
@@ -73,27 +146,23 @@ export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
               className="w-full border-b border-zinc-700 bg-transparent px-4 py-2 text-base text-zinc-100 outline-none placeholder:text-zinc-500"
               autoFocus
             />
-            <ul className="max-h-60 overflow-y-auto py-1">
-              {filtered.map((tz) => (
-                <li key={tz.value}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onChange(tz.value);
-                      setOpen(false);
-                      setSearch("");
-                    }}
-                    className={`flex w-full items-center justify-between px-4 py-2 text-left text-sm active:bg-zinc-700 ${
-                      tz.value === value
-                        ? "bg-zinc-800 text-white"
-                        : "text-zinc-300"
-                    }`}
-                  >
-                    <span>{tz.title} ({tz.abbr})</span>
-                    {mounted && <span className="text-zinc-500">{formatTimeInZone(tz.value)}</span>}
-                  </button>
-                </li>
-              ))}
+            <ul className="max-h-72 overflow-y-auto py-1">
+              {usFiltered.length > 0 && (
+                <>
+                  <li className="px-4 py-1 text-[10px] font-semibold uppercase tracking-widest text-zinc-500">
+                    United States
+                  </li>
+                  {usFiltered.map(renderEntry)}
+                </>
+              )}
+              {worldFiltered.length > 0 && (
+                <>
+                  <li className="px-4 py-1 text-[10px] font-semibold uppercase tracking-widest text-zinc-500">
+                    World
+                  </li>
+                  {worldFiltered.map(renderEntry)}
+                </>
+              )}
               {filtered.length === 0 && (
                 <li className="px-4 py-2 text-sm text-zinc-500">
                   No timezones found

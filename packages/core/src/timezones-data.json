@@ -1,249 +1,5195 @@
 [
   {
-    "title": "Auckland",
-    "value": "Pacific/Auckland",
-    "abbr": "NZST",
-    "keywords": ["Wellington", "New Zealand", "NZ", "NZST", "NZDT"]
-  },
-  {
-    "title": "Sydney",
-    "value": "Australia/Sydney",
-    "abbr": "AEST",
-    "keywords": ["Melbourne", "Brisbane", "Canberra", "Australia", "AEST", "AEDT"]
-  },
-  {
-    "title": "Tokyo",
-    "value": "Asia/Tokyo",
-    "abbr": "JST",
-    "keywords": ["Osaka", "Japan", "Seoul", "South Korea", "Korea", "JST", "KST"]
-  },
-  {
-    "title": "Singapore",
-    "value": "Asia/Singapore",
-    "abbr": "SGT",
-    "keywords": [
-      "Kuala Lumpur", "Malaysia", "Hong Kong", "Beijing",
-      "Shanghai", "Taipei", "Perth", "Shenzhen",
-      "China", "Taiwan", "SGT", "HKT"
-    ]
-  },
-  {
-    "title": "Bangkok",
-    "value": "Asia/Bangkok",
-    "abbr": "ICT",
-    "keywords": [
-      "Thailand", "Vietnam", "Ho Chi Minh City", "Hanoi", "Jakarta",
-      "Indonesia", "ICT"
-    ]
-  },
-  {
-    "title": "Mumbai",
-    "value": "Asia/Kolkata",
-    "abbr": "IST",
-    "keywords": [
-      "Bombay", "Delhi", "Bangalore", "Bengaluru", "Hyderabad",
-      "Chennai", "Kolkata", "Calcutta", "Pune", "India", "IST"
-    ]
-  },
-  {
-    "title": "Dubai",
-    "value": "Asia/Dubai",
-    "abbr": "GST",
-    "keywords": [
-      "Abu Dhabi", "UAE", "United Arab Emirates", "Muscat",
-      "Oman", "GST", "Gulf"
-    ]
-  },
-  {
-    "title": "Moscow",
-    "value": "Europe/Moscow",
-    "abbr": "MSK",
-    "keywords": ["Russia", "St. Petersburg", "Saint Petersburg", "MSK"]
-  },
-  {
-    "title": "Istanbul",
-    "value": "Europe/Istanbul",
-    "abbr": "TRT",
-    "keywords": ["Turkey", "Ankara", "TRT"]
-  },
-  {
-    "title": "Tel Aviv",
-    "value": "Asia/Jerusalem",
-    "abbr": "IST",
-    "keywords": ["Jerusalem", "Israel", "IST", "IDT"]
-  },
-  {
-    "title": "Athens",
-    "value": "Europe/Athens",
-    "abbr": "EET",
-    "keywords": [
-      "Helsinki", "Bucharest", "Sofia", "Kyiv", "Tallinn",
-      "Riga", "Vilnius",
-      "Romania", "Greece", "Finland", "Bulgaria", "Ukraine", "Estonia",
-      "Latvia", "Lithuania",
-      "EET", "EEST", "Eastern Europe"
-    ]
-  },
-  {
-    "title": "Cairo",
-    "value": "Africa/Cairo",
-    "abbr": "EET",
-    "keywords": ["Egypt", "Alexandria", "EET"]
-  },
-  {
-    "title": "Johannesburg",
-    "value": "Africa/Johannesburg",
-    "abbr": "SAST",
-    "keywords": ["South Africa", "Cape Town", "Pretoria", "SAST", "Nairobi", "Kenya"]
-  },
-  {
-    "title": "Paris",
-    "value": "Europe/Paris",
-    "abbr": "CET",
-    "keywords": [
-      "Berlin", "Amsterdam", "Madrid", "Barcelona", "Rome",
-      "Munich", "Brussels", "Vienna", "Zurich", "Milan", "Stockholm",
-      "Oslo", "Copenhagen", "Prague", "Warsaw", "Budapest",
-      "France", "Germany", "Netherlands", "Spain", "Italy", "Belgium",
-      "Austria", "Switzerland", "Sweden", "Norway", "Denmark",
-      "Poland", "Czech Republic", "Hungary",
-      "CET", "CEST", "Central Europe", "Western Europe"
-    ]
-  },
-  {
-    "title": "Lagos",
-    "value": "Africa/Lagos",
-    "abbr": "WAT",
-    "keywords": ["Nigeria", "Accra", "Ghana", "West Africa", "WAT"]
-  },
-  {
-    "title": "London",
-    "value": "Europe/London",
-    "abbr": "GMT",
-    "keywords": [
-      "Edinburgh", "Manchester", "UK", "United Kingdom",
-      "England", "Scotland", "Wales", "Ireland", "Dublin", "Lisbon",
-      "GMT", "BST", "Britain", "Portugal"
-    ]
-  },
-  {
-    "title": "UTC",
-    "value": "UTC",
-    "abbr": "UTC",
-    "keywords": ["Coordinated Universal Time", "Greenwich", "Zulu"]
-  },
-  {
-    "title": "Sao Paulo",
-    "value": "America/Sao_Paulo",
-    "abbr": "BRT",
-    "keywords": ["Rio de Janeiro", "Rio", "Brazil", "Brasilia", "BRT", "BRST"]
-  },
-  {
-    "title": "Buenos Aires",
-    "value": "America/Argentina/Buenos_Aires",
-    "abbr": "ART",
-    "keywords": ["Argentina", "ART"]
-  },
-  {
-    "title": "Santiago",
-    "value": "America/Santiago",
-    "abbr": "CLT",
-    "keywords": ["Chile", "CLT", "CLST"]
-  },
-  {
-    "title": "Bogota",
-    "value": "America/Bogota",
-    "abbr": "COT",
-    "keywords": [
-      "Colombia", "Medellin", "Lima", "Peru", "Quito", "Ecuador", "COT"
-    ]
-  },
-  {
     "title": "New York",
     "value": "America/New_York",
     "abbr": "ET",
+    "badge": "ET · Eastern",
     "keywords": [
-      "NYC", "Boston", "Philadelphia", "Miami", "Atlanta",
-      "Washington", "DC", "Charlotte", "Pittsburgh", "Detroit", "Orlando",
-      "Tampa", "Raleigh", "Baltimore", "Richmond",
-      "Connecticut", "Delaware", "Florida", "Georgia", "Indiana", "Kentucky",
-      "Maine", "Maryland", "Massachusetts", "Michigan", "New Hampshire",
-      "New Jersey", "North Carolina", "Ohio", "Pennsylvania",
-      "Rhode Island", "South Carolina", "Tennessee", "Vermont", "Virginia",
-      "West Virginia",
-      "EST", "EDT", "Eastern"
-    ]
+      "New York",
+      "NY",
+      "ET · Eastern",
+      "EST",
+      "EDT",
+      "NYC",
+      "New York City"
+    ],
+    "group": "US"
   },
   {
-    "title": "Toronto",
-    "value": "America/Toronto",
+    "title": "Boston",
+    "value": "America/New_York",
     "abbr": "ET",
-    "keywords": ["Ottawa", "Montreal", "Quebec", "Ontario", "Canada Eastern"]
+    "badge": "ET · Eastern",
+    "keywords": [
+      "Massachusetts",
+      "MA",
+      "ET · Eastern",
+      "EST",
+      "EDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Philadelphia",
+    "value": "America/New_York",
+    "abbr": "ET",
+    "badge": "ET · Eastern",
+    "keywords": [
+      "Pennsylvania",
+      "PA",
+      "ET · Eastern",
+      "EST",
+      "EDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Washington DC",
+    "value": "America/New_York",
+    "abbr": "ET",
+    "badge": "ET · Eastern",
+    "keywords": [
+      "District of Columbia",
+      "DC",
+      "ET · Eastern",
+      "EST",
+      "EDT",
+      "Washington",
+      "Washington, DC",
+      "District of Columbia"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Atlanta",
+    "value": "America/New_York",
+    "abbr": "ET",
+    "badge": "ET · Eastern",
+    "keywords": [
+      "Georgia",
+      "GA",
+      "ET · Eastern",
+      "EST",
+      "EDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Miami",
+    "value": "America/New_York",
+    "abbr": "ET",
+    "badge": "ET · Eastern",
+    "keywords": [
+      "Florida",
+      "FL",
+      "ET · Eastern",
+      "EST",
+      "EDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Orlando",
+    "value": "America/New_York",
+    "abbr": "ET",
+    "badge": "ET · Eastern",
+    "keywords": [
+      "Florida",
+      "FL",
+      "ET · Eastern",
+      "EST",
+      "EDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Tampa",
+    "value": "America/New_York",
+    "abbr": "ET",
+    "badge": "ET · Eastern",
+    "keywords": [
+      "Florida",
+      "FL",
+      "ET · Eastern",
+      "EST",
+      "EDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Charlotte",
+    "value": "America/New_York",
+    "abbr": "ET",
+    "badge": "ET · Eastern",
+    "keywords": [
+      "North Carolina",
+      "NC",
+      "ET · Eastern",
+      "EST",
+      "EDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Raleigh",
+    "value": "America/New_York",
+    "abbr": "ET",
+    "badge": "ET · Eastern",
+    "keywords": [
+      "North Carolina",
+      "NC",
+      "ET · Eastern",
+      "EST",
+      "EDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Pittsburgh",
+    "value": "America/New_York",
+    "abbr": "ET",
+    "badge": "ET · Eastern",
+    "keywords": [
+      "Pennsylvania",
+      "PA",
+      "ET · Eastern",
+      "EST",
+      "EDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Baltimore",
+    "value": "America/New_York",
+    "abbr": "ET",
+    "badge": "ET · Eastern",
+    "keywords": [
+      "Maryland",
+      "MD",
+      "ET · Eastern",
+      "EST",
+      "EDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Cleveland",
+    "value": "America/New_York",
+    "abbr": "ET",
+    "badge": "ET · Eastern",
+    "keywords": [
+      "Ohio",
+      "OH",
+      "ET · Eastern",
+      "EST",
+      "EDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Columbus",
+    "value": "America/New_York",
+    "abbr": "ET",
+    "badge": "ET · Eastern",
+    "keywords": [
+      "Ohio",
+      "OH",
+      "ET · Eastern",
+      "EST",
+      "EDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Cincinnati",
+    "value": "America/New_York",
+    "abbr": "ET",
+    "badge": "ET · Eastern",
+    "keywords": [
+      "Ohio",
+      "OH",
+      "ET · Eastern",
+      "EST",
+      "EDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Richmond",
+    "value": "America/New_York",
+    "abbr": "ET",
+    "badge": "ET · Eastern",
+    "keywords": [
+      "Virginia",
+      "VA",
+      "ET · Eastern",
+      "EST",
+      "EDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Buffalo",
+    "value": "America/New_York",
+    "abbr": "ET",
+    "badge": "ET · Eastern",
+    "keywords": [
+      "New York",
+      "NY",
+      "ET · Eastern",
+      "EST",
+      "EDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Jacksonville",
+    "value": "America/New_York",
+    "abbr": "ET",
+    "badge": "ET · Eastern",
+    "keywords": [
+      "Florida",
+      "FL",
+      "ET · Eastern",
+      "EST",
+      "EDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Detroit",
+    "value": "America/New_York",
+    "abbr": "ET",
+    "badge": "ET · Eastern",
+    "keywords": [
+      "Michigan",
+      "MI",
+      "ET · Eastern",
+      "EST",
+      "EDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Indianapolis",
+    "value": "America/New_York",
+    "abbr": "ET",
+    "badge": "ET · Eastern",
+    "keywords": [
+      "Indiana",
+      "IN",
+      "ET · Eastern",
+      "EST",
+      "EDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Louisville",
+    "value": "America/New_York",
+    "abbr": "ET",
+    "badge": "ET · Eastern",
+    "keywords": [
+      "Kentucky",
+      "KY",
+      "ET · Eastern",
+      "EST",
+      "EDT"
+    ],
+    "group": "US"
   },
   {
     "title": "Chicago",
     "value": "America/Chicago",
     "abbr": "CT",
+    "badge": "CT · Central",
     "keywords": [
-      "Dallas", "Houston", "Austin", "San Antonio", "Nashville",
-      "Memphis", "Milwaukee", "Minneapolis", "St. Louis", "Kansas City",
-      "New Orleans", "Oklahoma City", "Omaha", "Tulsa", "Des Moines",
-      "Alabama", "Arkansas", "Illinois", "Iowa", "Kansas", "Louisiana",
-      "Minnesota", "Mississippi", "Missouri", "Nebraska", "North Dakota",
-      "Oklahoma", "South Dakota", "Texas", "Wisconsin",
-      "CST", "CDT", "Central"
-    ]
+      "Illinois",
+      "IL",
+      "CT · Central",
+      "CST",
+      "CDT"
+    ],
+    "group": "US"
   },
   {
-    "title": "Mexico City",
-    "value": "America/Mexico_City",
-    "abbr": "CST",
-    "keywords": ["Mexico", "Guadalajara", "Monterrey", "CDMX"]
+    "title": "Dallas",
+    "value": "America/Chicago",
+    "abbr": "CT",
+    "badge": "CT · Central",
+    "keywords": [
+      "Texas",
+      "TX",
+      "CT · Central",
+      "CST",
+      "CDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Houston",
+    "value": "America/Chicago",
+    "abbr": "CT",
+    "badge": "CT · Central",
+    "keywords": [
+      "Texas",
+      "TX",
+      "CT · Central",
+      "CST",
+      "CDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Austin",
+    "value": "America/Chicago",
+    "abbr": "CT",
+    "badge": "CT · Central",
+    "keywords": [
+      "Texas",
+      "TX",
+      "CT · Central",
+      "CST",
+      "CDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "San Antonio",
+    "value": "America/Chicago",
+    "abbr": "CT",
+    "badge": "CT · Central",
+    "keywords": [
+      "Texas",
+      "TX",
+      "CT · Central",
+      "CST",
+      "CDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Nashville",
+    "value": "America/Chicago",
+    "abbr": "CT",
+    "badge": "CT · Central",
+    "keywords": [
+      "Tennessee",
+      "TN",
+      "CT · Central",
+      "CST",
+      "CDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Memphis",
+    "value": "America/Chicago",
+    "abbr": "CT",
+    "badge": "CT · Central",
+    "keywords": [
+      "Tennessee",
+      "TN",
+      "CT · Central",
+      "CST",
+      "CDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Minneapolis",
+    "value": "America/Chicago",
+    "abbr": "CT",
+    "badge": "CT · Central",
+    "keywords": [
+      "Minnesota",
+      "MN",
+      "CT · Central",
+      "CST",
+      "CDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Milwaukee",
+    "value": "America/Chicago",
+    "abbr": "CT",
+    "badge": "CT · Central",
+    "keywords": [
+      "Wisconsin",
+      "WI",
+      "CT · Central",
+      "CST",
+      "CDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Kansas City",
+    "value": "America/Chicago",
+    "abbr": "CT",
+    "badge": "CT · Central",
+    "keywords": [
+      "Missouri",
+      "MO",
+      "CT · Central",
+      "CST",
+      "CDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "St. Louis",
+    "value": "America/Chicago",
+    "abbr": "CT",
+    "badge": "CT · Central",
+    "keywords": [
+      "Missouri",
+      "MO",
+      "CT · Central",
+      "CST",
+      "CDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "New Orleans",
+    "value": "America/Chicago",
+    "abbr": "CT",
+    "badge": "CT · Central",
+    "keywords": [
+      "Louisiana",
+      "LA",
+      "CT · Central",
+      "CST",
+      "CDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Oklahoma City",
+    "value": "America/Chicago",
+    "abbr": "CT",
+    "badge": "CT · Central",
+    "keywords": [
+      "Oklahoma",
+      "OK",
+      "CT · Central",
+      "CST",
+      "CDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Omaha",
+    "value": "America/Chicago",
+    "abbr": "CT",
+    "badge": "CT · Central",
+    "keywords": [
+      "Nebraska",
+      "NE",
+      "CT · Central",
+      "CST",
+      "CDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Des Moines",
+    "value": "America/Chicago",
+    "abbr": "CT",
+    "badge": "CT · Central",
+    "keywords": [
+      "Iowa",
+      "IA",
+      "CT · Central",
+      "CST",
+      "CDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Tulsa",
+    "value": "America/Chicago",
+    "abbr": "CT",
+    "badge": "CT · Central",
+    "keywords": [
+      "Oklahoma",
+      "OK",
+      "CT · Central",
+      "CST",
+      "CDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Wichita",
+    "value": "America/Chicago",
+    "abbr": "CT",
+    "badge": "CT · Central",
+    "keywords": [
+      "Kansas",
+      "KS",
+      "CT · Central",
+      "CST",
+      "CDT"
+    ],
+    "group": "US"
   },
   {
     "title": "Denver",
     "value": "America/Denver",
     "abbr": "MT",
+    "badge": "MT · Mountain",
     "keywords": [
-      "Salt Lake City", "Boise", "Albuquerque", "El Paso",
-      "Colorado Springs", "Boulder", "Santa Fe", "Billings", "Cheyenne",
-      "Colorado", "Idaho", "Montana", "New Mexico", "Utah", "Wyoming",
-      "MST", "MDT", "Mountain"
-    ]
+      "Colorado",
+      "CO",
+      "MT · Mountain",
+      "MST",
+      "MDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Salt Lake City",
+    "value": "America/Denver",
+    "abbr": "MT",
+    "badge": "MT · Mountain",
+    "keywords": [
+      "Utah",
+      "UT",
+      "MT · Mountain",
+      "MST",
+      "MDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Albuquerque",
+    "value": "America/Denver",
+    "abbr": "MT",
+    "badge": "MT · Mountain",
+    "keywords": [
+      "New Mexico",
+      "NM",
+      "MT · Mountain",
+      "MST",
+      "MDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Boise",
+    "value": "America/Denver",
+    "abbr": "MT",
+    "badge": "MT · Mountain",
+    "keywords": [
+      "Idaho",
+      "ID",
+      "MT · Mountain",
+      "MST",
+      "MDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Colorado Springs",
+    "value": "America/Denver",
+    "abbr": "MT",
+    "badge": "MT · Mountain",
+    "keywords": [
+      "Colorado",
+      "CO",
+      "MT · Mountain",
+      "MST",
+      "MDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Billings",
+    "value": "America/Denver",
+    "abbr": "MT",
+    "badge": "MT · Mountain",
+    "keywords": [
+      "Montana",
+      "MT",
+      "MT · Mountain",
+      "MST",
+      "MDT"
+    ],
+    "group": "US"
   },
   {
     "title": "Phoenix",
     "value": "America/Phoenix",
     "abbr": "MST",
-    "keywords": ["Tucson", "Scottsdale", "Mesa", "Tempe", "Flagstaff", "Arizona", "AZ"]
+    "badge": "MST · Arizona",
+    "keywords": [
+      "Arizona",
+      "AZ",
+      "MST · Arizona",
+      "MST"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Tucson",
+    "value": "America/Phoenix",
+    "abbr": "MST",
+    "badge": "MST · Arizona",
+    "keywords": [
+      "Arizona",
+      "AZ",
+      "MST · Arizona",
+      "MST"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Scottsdale",
+    "value": "America/Phoenix",
+    "abbr": "MST",
+    "badge": "MST · Arizona",
+    "keywords": [
+      "Arizona",
+      "AZ",
+      "MST · Arizona",
+      "MST"
+    ],
+    "group": "US"
   },
   {
     "title": "Los Angeles",
     "value": "America/Los_Angeles",
     "abbr": "PT",
+    "badge": "PT · Pacific",
     "keywords": [
-      "LA", "San Francisco", "SF", "Seattle", "Portland", "San Diego",
-      "San Jose", "Sacramento", "Las Vegas", "Oakland",
-      "California", "Nevada", "Oregon", "Washington",
-      "PST", "PDT", "Pacific", "Silicon Valley", "Hollywood"
-    ]
+      "California",
+      "CA",
+      "PT · Pacific",
+      "PST",
+      "PDT",
+      "LA",
+      "Hollywood"
+    ],
+    "group": "US"
   },
   {
-    "title": "Vancouver",
-    "value": "America/Vancouver",
+    "title": "San Francisco",
+    "value": "America/Los_Angeles",
     "abbr": "PT",
-    "keywords": ["British Columbia", "BC", "Canada Pacific", "Victoria", "Calgary"]
+    "badge": "PT · Pacific",
+    "keywords": [
+      "California",
+      "CA",
+      "PT · Pacific",
+      "PST",
+      "PDT",
+      "SF",
+      "Silicon Valley"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Seattle",
+    "value": "America/Los_Angeles",
+    "abbr": "PT",
+    "badge": "PT · Pacific",
+    "keywords": [
+      "Washington",
+      "WA",
+      "PT · Pacific",
+      "PST",
+      "PDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Portland",
+    "value": "America/Los_Angeles",
+    "abbr": "PT",
+    "badge": "PT · Pacific",
+    "keywords": [
+      "Oregon",
+      "OR",
+      "PT · Pacific",
+      "PST",
+      "PDT",
+      "Portland OR",
+      "Portland Oregon"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "San Diego",
+    "value": "America/Los_Angeles",
+    "abbr": "PT",
+    "badge": "PT · Pacific",
+    "keywords": [
+      "California",
+      "CA",
+      "PT · Pacific",
+      "PST",
+      "PDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "San Jose",
+    "value": "America/Los_Angeles",
+    "abbr": "PT",
+    "badge": "PT · Pacific",
+    "keywords": [
+      "California",
+      "CA",
+      "PT · Pacific",
+      "PST",
+      "PDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Sacramento",
+    "value": "America/Los_Angeles",
+    "abbr": "PT",
+    "badge": "PT · Pacific",
+    "keywords": [
+      "California",
+      "CA",
+      "PT · Pacific",
+      "PST",
+      "PDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Las Vegas",
+    "value": "America/Los_Angeles",
+    "abbr": "PT",
+    "badge": "PT · Pacific",
+    "keywords": [
+      "Nevada",
+      "NV",
+      "PT · Pacific",
+      "PST",
+      "PDT"
+    ],
+    "group": "US"
   },
   {
     "title": "Anchorage",
     "value": "America/Anchorage",
     "abbr": "AKT",
-    "keywords": ["Alaska", "Juneau", "Fairbanks", "AKST", "AKDT"]
+    "badge": "AKT · Alaska",
+    "keywords": [
+      "Alaska",
+      "AK",
+      "AKT · Alaska",
+      "AKST",
+      "AKDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Fairbanks",
+    "value": "America/Anchorage",
+    "abbr": "AKT",
+    "badge": "AKT · Alaska",
+    "keywords": [
+      "Alaska",
+      "AK",
+      "AKT · Alaska",
+      "AKST",
+      "AKDT"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Juneau",
+    "value": "America/Anchorage",
+    "abbr": "AKT",
+    "badge": "AKT · Alaska",
+    "keywords": [
+      "Alaska",
+      "AK",
+      "AKT · Alaska",
+      "AKST",
+      "AKDT"
+    ],
+    "group": "US"
   },
   {
     "title": "Honolulu",
     "value": "Pacific/Honolulu",
     "abbr": "HT",
-    "keywords": ["Hawaii", "Maui", "HST", "Hawaiian"]
+    "badge": "HT · Hawaii",
+    "keywords": [
+      "Hawaii",
+      "HI",
+      "HT · Hawaii",
+      "HST"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Kahului",
+    "value": "Pacific/Honolulu",
+    "abbr": "HT",
+    "badge": "HT · Hawaii",
+    "keywords": [
+      "Hawaii",
+      "HI",
+      "HT · Hawaii",
+      "HST",
+      "Maui"
+    ],
+    "group": "US"
+  },
+  {
+    "title": "Kiritimati",
+    "value": "Pacific/Kiritimati",
+    "abbr": "LINT",
+    "badge": "LINT · Kiribati",
+    "keywords": [
+      "Kiribati",
+      "KI",
+      "LINT · Kiribati"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Kanton",
+    "value": "Pacific/Kanton",
+    "abbr": "PHOT",
+    "badge": "PHOT · Kiribati",
+    "keywords": [
+      "Kiribati",
+      "KI",
+      "PHOT · Kiribati"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Apia",
+    "value": "Pacific/Apia",
+    "abbr": "SST",
+    "badge": "SST · Samoa",
+    "keywords": [
+      "Samoa",
+      "WS",
+      "SST · Samoa"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Fakaofo",
+    "value": "Pacific/Fakaofo",
+    "abbr": "TKT",
+    "badge": "TKT · Tokelau",
+    "keywords": [
+      "Tokelau",
+      "TK",
+      "TKT · Tokelau"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Nuku‘alofa",
+    "value": "Pacific/Tongatapu",
+    "abbr": "TOT",
+    "badge": "TOT · Tonga",
+    "keywords": [
+      "Tonga",
+      "TO",
+      "TOT · Tonga"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Chatham",
+    "value": "Pacific/Chatham",
+    "abbr": "CHAST",
+    "badge": "CHAST · New Zealand",
+    "keywords": [
+      "New Zealand",
+      "NZ",
+      "CHAST · New Zealand"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Nasinu",
+    "value": "Pacific/Fiji",
+    "abbr": "FJT",
+    "badge": "FJT · Fiji",
+    "keywords": [
+      "Fiji",
+      "FJ",
+      "FJT · Fiji",
+      "Suva",
+      "Lautoka",
+      "Nadi"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Tarawa",
+    "value": "Pacific/Tarawa",
+    "abbr": "GILT",
+    "badge": "GILT · Kiribati",
+    "keywords": [
+      "Kiribati",
+      "KI",
+      "GILT · Kiribati"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Petropavlovsk-Kamchatsky",
+    "value": "Asia/Kamchatka",
+    "abbr": "PETT",
+    "badge": "PETT · Russia",
+    "keywords": [
+      "Russia",
+      "RU",
+      "PETT · Russia",
+      "Yelizovo",
+      "Vilyuchinsk",
+      "Anadyr"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Majuro",
+    "value": "Pacific/Majuro",
+    "abbr": "MHT",
+    "badge": "MHT · Marshall Islands",
+    "keywords": [
+      "Marshall Islands",
+      "MH",
+      "MHT · Marshall Islands",
+      "Kwajalein"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Yaren",
+    "value": "Pacific/Nauru",
+    "abbr": "NRT",
+    "badge": "NRT · Nauru",
+    "keywords": [
+      "Nauru",
+      "NR",
+      "NRT · Nauru"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Funafuti",
+    "value": "Pacific/Funafuti",
+    "abbr": "TVT",
+    "badge": "TVT · Tuvalu",
+    "keywords": [
+      "Tuvalu",
+      "TV",
+      "TVT · Tuvalu"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Wake",
+    "value": "Pacific/Wake",
+    "abbr": "WAKT",
+    "badge": "WAKT · United States Minor Outlying Islands",
+    "keywords": [
+      "United States Minor Outlying Islands",
+      "UM",
+      "WAKT · United States Minor Outlying Islands"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Mata-Utu",
+    "value": "Pacific/Wallis",
+    "abbr": "WFT",
+    "badge": "WFT · Wallis and Futuna",
+    "keywords": [
+      "Wallis and Futuna",
+      "WF",
+      "WFT · Wallis and Futuna"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Auckland",
+    "value": "Pacific/Auckland",
+    "abbr": "NZST",
+    "badge": "NZST · New Zealand",
+    "keywords": [
+      "New Zealand",
+      "NZ",
+      "NZST · New Zealand",
+      "Christchurch",
+      "Wellington",
+      "Manukau City"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "McMurdo",
+    "value": "Antarctica/McMurdo",
+    "abbr": "NZST",
+    "badge": "NZST · Antarctica",
+    "keywords": [
+      "Antarctica",
+      "AQ",
+      "NZST · Antarctica"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Arawa",
+    "value": "Pacific/Bougainville",
+    "abbr": "BST",
+    "badge": "BST · Papua New Guinea",
+    "keywords": [
+      "Papua New Guinea",
+      "PG",
+      "BST · Papua New Guinea"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Kosrae",
+    "value": "Pacific/Kosrae",
+    "abbr": "KOST",
+    "badge": "KOST · Micronesia",
+    "keywords": [
+      "Micronesia",
+      "FM",
+      "KOST · Micronesia",
+      "Palikir"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Nouméa",
+    "value": "Pacific/Noumea",
+    "abbr": "NCT",
+    "badge": "NCT · New Caledonia",
+    "keywords": [
+      "New Caledonia",
+      "NC",
+      "NCT · New Caledonia",
+      "Mont-Dore",
+      "Dumbéa"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Yuzhno-Sakhalinsk",
+    "value": "Asia/Sakhalin",
+    "abbr": "SAKT",
+    "badge": "SAKT · Russia",
+    "keywords": [
+      "Russia",
+      "RU",
+      "SAKT · Russia",
+      "Magadan",
+      "Korsakov",
+      "Kholmsk"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Honiara",
+    "value": "Pacific/Guadalcanal",
+    "abbr": "SBT",
+    "badge": "SBT · Solomon Islands",
+    "keywords": [
+      "Solomon Islands",
+      "SB",
+      "SBT · Solomon Islands",
+      "Panatina",
+      "Nggosi",
+      "Tandai"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Port-Vila",
+    "value": "Pacific/Efate",
+    "abbr": "VUT",
+    "badge": "VUT · Vanuatu",
+    "keywords": [
+      "Vanuatu",
+      "VU",
+      "VUT · Vanuatu"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Kingston, Norfolk Island",
+    "value": "Pacific/Norfolk",
+    "abbr": "NFT",
+    "badge": "NFT · Norfolk Island",
+    "keywords": [
+      "Norfolk Island",
+      "NF",
+      "NFT · Norfolk Island"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Lord Howe",
+    "value": "Australia/Lord_Howe",
+    "abbr": "LHST",
+    "badge": "LHST · Australia",
+    "keywords": [
+      "Australia",
+      "AU",
+      "LHST · Australia"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Brisbane",
+    "value": "Australia/Brisbane",
+    "abbr": "AEST",
+    "badge": "AEST · Australia",
+    "keywords": [
+      "Australia",
+      "AU",
+      "AEST · Australia",
+      "Gold Coast",
+      "Sunshine Coast",
+      "Logan City"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Dededo Village",
+    "value": "Pacific/Guam",
+    "abbr": "ChST",
+    "badge": "ChST · Guam",
+    "keywords": [
+      "Guam",
+      "GU",
+      "ChST · Guam",
+      "Yigo Village",
+      "Tamuning-Tumon-Harmon Village",
+      "Tamuning"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Saipan",
+    "value": "Pacific/Saipan",
+    "abbr": "ChST",
+    "badge": "ChST · Northern Mariana Islands",
+    "keywords": [
+      "Northern Mariana Islands",
+      "MP",
+      "ChST · Northern Mariana Islands"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Chuuk",
+    "value": "Pacific/Chuuk",
+    "abbr": "CHUT",
+    "badge": "CHUT · Micronesia",
+    "keywords": [
+      "Micronesia",
+      "FM",
+      "CHUT · Micronesia"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "DumontDUrville",
+    "value": "Antarctica/DumontDUrville",
+    "abbr": "GMT+10",
+    "badge": "GMT+10 · Antarctica",
+    "keywords": [
+      "Antarctica",
+      "AQ",
+      "GMT+10 · Antarctica"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Port Moresby",
+    "value": "Pacific/Port_Moresby",
+    "abbr": "PGT",
+    "badge": "PGT · Papua New Guinea",
+    "keywords": [
+      "Papua New Guinea",
+      "PG",
+      "PGT · Papua New Guinea",
+      "Lae",
+      "Mount Hagen",
+      "Popondetta"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Khabarovsk",
+    "value": "Asia/Vladivostok",
+    "abbr": "VLAT",
+    "badge": "VLAT · Russia",
+    "keywords": [
+      "Russia",
+      "RU",
+      "VLAT · Russia",
+      "Vladivostok",
+      "Khabarovsk Vtoroy",
+      "Komsomolsk-on-Amur"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Sydney",
+    "value": "Australia/Sydney",
+    "abbr": "AEST",
+    "badge": "AEST · Australia",
+    "keywords": [
+      "Australia",
+      "AU",
+      "AEST · Australia",
+      "Melbourne",
+      "Newcastle",
+      "Canberra"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Darwin",
+    "value": "Australia/Darwin",
+    "abbr": "ACST",
+    "badge": "ACST · Australia",
+    "keywords": [
+      "Australia",
+      "AU",
+      "ACST · Australia",
+      "Palmerston",
+      "Alice Springs"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Adelaide",
+    "value": "Australia/Adelaide",
+    "abbr": "ACST",
+    "badge": "ACST · Australia",
+    "keywords": [
+      "Australia",
+      "AU",
+      "ACST · Australia",
+      "Adelaide Hills",
+      "Mount Gambier",
+      "Morphett Vale"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Jayapura",
+    "value": "Asia/Jayapura",
+    "abbr": "WIT",
+    "badge": "WIT · Indonesia",
+    "keywords": [
+      "Indonesia",
+      "ID",
+      "WIT · Indonesia",
+      "Ambon",
+      "Sorong",
+      "Ternate"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Tokyo",
+    "value": "Asia/Tokyo",
+    "abbr": "JST",
+    "badge": "JST · Japan",
+    "keywords": [
+      "Japan",
+      "JP",
+      "JST · Japan",
+      "Yokohama",
+      "Osaka",
+      "Nagoya"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Pyongyang",
+    "value": "Asia/Pyongyang",
+    "abbr": "KST",
+    "badge": "KST · North Korea",
+    "keywords": [
+      "North Korea",
+      "KP",
+      "KST · North Korea",
+      "Hamhŭng",
+      "Namp’o",
+      "Sunch’ŏn"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Seoul",
+    "value": "Asia/Seoul",
+    "abbr": "KST",
+    "badge": "KST · South Korea",
+    "keywords": [
+      "South Korea",
+      "KR",
+      "KST · South Korea",
+      "Busan",
+      "Incheon",
+      "Daegu"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Ngerulmud",
+    "value": "Pacific/Palau",
+    "abbr": "PWT",
+    "badge": "PWT · Palau",
+    "keywords": [
+      "Palau",
+      "PW",
+      "PWT · Palau"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Dili",
+    "value": "Asia/Dili",
+    "abbr": "GMT+9",
+    "badge": "GMT+9 · Timor Leste",
+    "keywords": [
+      "Timor Leste",
+      "TL",
+      "GMT+9 · Timor Leste",
+      "Maliana",
+      "Suai",
+      "Likisá"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Chita",
+    "value": "Asia/Chita",
+    "abbr": "YAKT",
+    "badge": "YAKT · Russia",
+    "keywords": [
+      "Russia",
+      "RU",
+      "YAKT · Russia",
+      "Yakutsk",
+      "Blagoveshchensk",
+      "Belogorsk"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Eucla",
+    "value": "Australia/Eucla",
+    "abbr": "ACWST",
+    "badge": "ACWST · Australia",
+    "keywords": [
+      "Australia",
+      "AU",
+      "ACWST · Australia"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Casey",
+    "value": "Antarctica/Casey",
+    "abbr": "AWST",
+    "badge": "AWST · Antarctica",
+    "keywords": [
+      "Antarctica",
+      "AQ",
+      "AWST · Antarctica"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Perth",
+    "value": "Australia/Perth",
+    "abbr": "AWST",
+    "badge": "AWST · Australia",
+    "keywords": [
+      "Australia",
+      "AU",
+      "AWST · Australia",
+      "Mandurah",
+      "Bunbury",
+      "Geraldton"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Bandar Seri Begawan",
+    "value": "Asia/Brunei",
+    "abbr": "GMT+8",
+    "badge": "GMT+8 · Brunei",
+    "keywords": [
+      "Brunei",
+      "BN",
+      "GMT+8 · Brunei",
+      "Sengkurong",
+      "Mentiri",
+      "Kuala Belait"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Makassar",
+    "value": "Asia/Makassar",
+    "abbr": "WITA",
+    "badge": "WITA · Indonesia",
+    "keywords": [
+      "Indonesia",
+      "ID",
+      "WITA · Indonesia",
+      "Samarinda",
+      "Denpasar",
+      "Balikpapan"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Macau",
+    "value": "Asia/Macau",
+    "abbr": "CST",
+    "badge": "CST · Macao",
+    "keywords": [
+      "Macao",
+      "MO",
+      "CST · Macao",
+      "Taipa",
+      "Sé",
+      "Luhuan"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Shanghai",
+    "value": "Asia/Shanghai",
+    "abbr": "CST",
+    "badge": "CST · China",
+    "keywords": [
+      "China",
+      "CN",
+      "CST · China",
+      "Beijing",
+      "Shenzhen",
+      "Guangzhou"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Hong Kong",
+    "value": "Asia/Hong_Kong",
+    "abbr": "HKT",
+    "badge": "HKT · Hong Kong",
+    "keywords": [
+      "Hong Kong",
+      "HK",
+      "HKT · Hong Kong",
+      "New Territories",
+      "Kowloon",
+      "Hong Kong Island"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Irkutsk",
+    "value": "Asia/Irkutsk",
+    "abbr": "IRKT",
+    "badge": "IRKT · Russia",
+    "keywords": [
+      "Russia",
+      "RU",
+      "IRKT · Russia",
+      "Ulan-Ude",
+      "Bratsk",
+      "Angarsk"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Kuala Lumpur",
+    "value": "Asia/Kuala_Lumpur",
+    "abbr": "MYT",
+    "badge": "MYT · Malaysia",
+    "keywords": [
+      "Malaysia",
+      "MY",
+      "MYT · Malaysia",
+      "Johor Bahru",
+      "Kampung Baru Subang",
+      "Petaling Jaya"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Quezon City",
+    "value": "Asia/Manila",
+    "abbr": "PHT",
+    "badge": "PHT · Philippines",
+    "keywords": [
+      "Philippines",
+      "PH",
+      "PHT · Philippines",
+      "Davao",
+      "Caloocan City",
+      "Manila"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Singapore",
+    "value": "Asia/Singapore",
+    "abbr": "SGT",
+    "badge": "SGT · Singapore",
+    "keywords": [
+      "Singapore",
+      "SG",
+      "SGT · Singapore",
+      "Ulu Bedok",
+      "Bedok New Town",
+      "Tampines Estate"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Taipei",
+    "value": "Asia/Taipei",
+    "abbr": "GMT+8",
+    "badge": "GMT+8 · Taiwan",
+    "keywords": [
+      "Taiwan",
+      "TW",
+      "GMT+8 · Taiwan",
+      "New Taipei City",
+      "Taichung",
+      "Kaohsiung"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Ulan Bator",
+    "value": "Asia/Ulaanbaatar",
+    "abbr": "ULAT",
+    "badge": "ULAT · Mongolia",
+    "keywords": [
+      "Mongolia",
+      "MN",
+      "ULAT · Mongolia",
+      "Erdenet",
+      "Darhan",
+      "Choibalsan"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Flying Fish Cove",
+    "value": "Indian/Christmas",
+    "abbr": "CXT",
+    "badge": "CXT · Christmas Island",
+    "keywords": [
+      "Christmas Island",
+      "CX",
+      "CXT · Christmas Island"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Davis",
+    "value": "Antarctica/Davis",
+    "abbr": "DAVT",
+    "badge": "DAVT · Antarctica",
+    "keywords": [
+      "Antarctica",
+      "AQ",
+      "DAVT · Antarctica"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Ulaangom",
+    "value": "Asia/Hovd",
+    "abbr": "HOVT",
+    "badge": "HOVT · Mongolia",
+    "keywords": [
+      "Mongolia",
+      "MN",
+      "HOVT · Mongolia",
+      "Khovd",
+      "Ölgii",
+      "Altai"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Bangkok",
+    "value": "Asia/Bangkok",
+    "abbr": "ICT",
+    "badge": "ICT · Thailand",
+    "keywords": [
+      "Thailand",
+      "TH",
+      "ICT · Thailand",
+      "Samut Prakan",
+      "Mueang Nonthaburi",
+      "Chon Buri"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Ho Chi Minh City",
+    "value": "Asia/Ho_Chi_Minh",
+    "abbr": "ICT",
+    "badge": "ICT · Vietnam",
+    "keywords": [
+      "Vietnam",
+      "VN",
+      "ICT · Vietnam",
+      "Cần Thơ",
+      "Da Nang",
+      "Biên Hòa"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Phnom Penh",
+    "value": "Asia/Phnom_Penh",
+    "abbr": "ICT",
+    "badge": "ICT · Cambodia",
+    "keywords": [
+      "Cambodia",
+      "KH",
+      "ICT · Cambodia",
+      "Takeo",
+      "Siem Reap",
+      "Battambang"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Vientiane",
+    "value": "Asia/Vientiane",
+    "abbr": "ICT",
+    "badge": "ICT · Laos",
+    "keywords": [
+      "Laos",
+      "LA",
+      "ICT · Laos",
+      "Savannakhet",
+      "Pakse",
+      "Thakhèk"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Novosibirsk",
+    "value": "Asia/Novosibirsk",
+    "abbr": "NOVT",
+    "badge": "NOVT · Russia",
+    "keywords": [
+      "Russia",
+      "RU",
+      "NOVT · Russia",
+      "Krasnoyarsk",
+      "Barnaul",
+      "Tomsk"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Jakarta",
+    "value": "Asia/Jakarta",
+    "abbr": "WIB",
+    "badge": "WIB · Indonesia",
+    "keywords": [
+      "Indonesia",
+      "ID",
+      "WIB · Indonesia",
+      "Surabaya",
+      "Bekasi",
+      "Bandung"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "West Island",
+    "value": "Indian/Cocos",
+    "abbr": "CCT",
+    "badge": "CCT · Cocos Islands",
+    "keywords": [
+      "Cocos Islands",
+      "CC",
+      "CCT · Cocos Islands"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Yangon",
+    "value": "Asia/Yangon",
+    "abbr": "MMT",
+    "badge": "MMT · Myanmar",
+    "keywords": [
+      "Myanmar",
+      "MM",
+      "MMT · Myanmar",
+      "Mandalay",
+      "Nay Pyi Taw",
+      "Hlaingthaya Township"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Dhaka",
+    "value": "Asia/Dhaka",
+    "abbr": "BST",
+    "badge": "BST · Bangladesh",
+    "keywords": [
+      "Bangladesh",
+      "BD",
+      "BST · Bangladesh",
+      "Chattogram",
+      "Gazipur",
+      "Khulna"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Thimphu",
+    "value": "Asia/Thimphu",
+    "abbr": "BTT",
+    "badge": "BTT · Bhutan",
+    "keywords": [
+      "Bhutan",
+      "BT",
+      "BTT · Bhutan",
+      "Phuntsholing",
+      "Tsirang",
+      "Punākha"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Ürümqi",
+    "value": "Asia/Urumqi",
+    "abbr": "CST",
+    "badge": "CST · China",
+    "keywords": [
+      "China",
+      "CN",
+      "CST · China",
+      "Shihezi",
+      "Korla",
+      "Aqsu"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Chagos",
+    "value": "Indian/Chagos",
+    "abbr": "IOT",
+    "badge": "IOT · British Indian Ocean Territory",
+    "keywords": [
+      "British Indian Ocean Territory",
+      "IO",
+      "IOT · British Indian Ocean Territory"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Bishkek",
+    "value": "Asia/Bishkek",
+    "abbr": "KGT",
+    "badge": "KGT · Kyrgyzstan",
+    "keywords": [
+      "Kyrgyzstan",
+      "KG",
+      "KGT · Kyrgyzstan",
+      "Osh",
+      "Jalal-Abad",
+      "Karakol"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Omsk",
+    "value": "Asia/Omsk",
+    "abbr": "OMST",
+    "badge": "OMST · Russia",
+    "keywords": [
+      "Russia",
+      "RU",
+      "OMST · Russia",
+      "Tara",
+      "Kalachinsk",
+      "Isil’kul’"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Kathmandu",
+    "value": "Asia/Kathmandu",
+    "abbr": "NPT",
+    "badge": "NPT · Nepal",
+    "keywords": [
+      "Nepal",
+      "NP",
+      "NPT · Nepal",
+      "Pokhara",
+      "Bharatpur",
+      "Pātan"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Colombo",
+    "value": "Asia/Colombo",
+    "abbr": "IST",
+    "badge": "IST · Sri Lanka",
+    "keywords": [
+      "Sri Lanka",
+      "LK",
+      "IST · Sri Lanka",
+      "Dehiwala-Mount Lavinia",
+      "Maharagama",
+      "Jaffna"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Mumbai",
+    "value": "Asia/Kolkata",
+    "abbr": "IST",
+    "badge": "IST · India",
+    "keywords": [
+      "India",
+      "IN",
+      "IST · India",
+      "Delhi",
+      "Bengaluru",
+      "Hyderabad"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Port-aux-Français",
+    "value": "Indian/Kerguelen",
+    "abbr": "FSAT",
+    "badge": "FSAT · French Southern Territories",
+    "keywords": [
+      "French Southern Territories",
+      "TF",
+      "FSAT · French Southern Territories"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Almaty",
+    "value": "Asia/Almaty",
+    "abbr": "GMT+5",
+    "badge": "GMT+5 · Kazakhstan",
+    "keywords": [
+      "Kazakhstan",
+      "KZ",
+      "GMT+5 · Kazakhstan",
+      "Shymkent",
+      "Aktobe",
+      "Karagandy"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Male",
+    "value": "Indian/Maldives",
+    "abbr": "MVT",
+    "badge": "MVT · Maldives",
+    "keywords": [
+      "Maldives",
+      "MV",
+      "MVT · Maldives"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Mawson",
+    "value": "Antarctica/Mawson",
+    "abbr": "MAWT",
+    "badge": "MAWT · Antarctica",
+    "keywords": [
+      "Antarctica",
+      "AQ",
+      "MAWT · Antarctica",
+      "Vostok"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Lahore",
+    "value": "Asia/Karachi",
+    "abbr": "PKT",
+    "badge": "PKT · Pakistan",
+    "keywords": [
+      "Pakistan",
+      "PK",
+      "PKT · Pakistan",
+      "Karachi",
+      "Peshawar",
+      "Faisalabad"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Dushanbe",
+    "value": "Asia/Dushanbe",
+    "abbr": "TJT",
+    "badge": "TJT · Tajikistan",
+    "keywords": [
+      "Tajikistan",
+      "TJ",
+      "TJT · Tajikistan",
+      "Isfara",
+      "Istaravshan",
+      "Kŭlob"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Ashgabat",
+    "value": "Asia/Ashgabat",
+    "abbr": "TMT",
+    "badge": "TMT · Turkmenistan",
+    "keywords": [
+      "Turkmenistan",
+      "TM",
+      "TMT · Turkmenistan",
+      "Türkmenabat",
+      "Daşoguz",
+      "Mary"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Tashkent",
+    "value": "Asia/Tashkent",
+    "abbr": "UZT",
+    "badge": "UZT · Uzbekistan",
+    "keywords": [
+      "Uzbekistan",
+      "UZ",
+      "UZT · Uzbekistan",
+      "Andijon",
+      "Namangan",
+      "Samarkand"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Yekaterinburg",
+    "value": "Asia/Yekaterinburg",
+    "abbr": "YEKT",
+    "badge": "YEKT · Russia",
+    "keywords": [
+      "Russia",
+      "RU",
+      "YEKT · Russia",
+      "Chelyabinsk",
+      "Ufa",
+      "Perm"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Kabul",
+    "value": "Asia/Kabul",
+    "abbr": "AFT",
+    "badge": "AFT · Afghanistan",
+    "keywords": [
+      "Afghanistan",
+      "AF",
+      "AFT · Afghanistan",
+      "Herāt",
+      "Mazār-e Sharīf",
+      "Kandahār"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Yerevan",
+    "value": "Asia/Yerevan",
+    "abbr": "AMT",
+    "badge": "AMT · Armenia",
+    "keywords": [
+      "Armenia",
+      "AM",
+      "AMT · Armenia",
+      "Malatia-Sebastia",
+      "Shengavit",
+      "Nor Nork"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Baku",
+    "value": "Asia/Baku",
+    "abbr": "AZT",
+    "badge": "AZT · Azerbaijan",
+    "keywords": [
+      "Azerbaijan",
+      "AZ",
+      "AZT · Azerbaijan",
+      "Sumqayıt",
+      "Ganja",
+      "Lankaran"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Tbilisi",
+    "value": "Asia/Tbilisi",
+    "abbr": "GET",
+    "badge": "GET · Georgia",
+    "keywords": [
+      "Georgia",
+      "GE",
+      "GET · Georgia",
+      "Batumi",
+      "Kutaisi",
+      "Rustavi"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Dubai",
+    "value": "Asia/Dubai",
+    "abbr": "GST",
+    "badge": "GST · United Arab Emirates",
+    "keywords": [
+      "United Arab Emirates",
+      "AE",
+      "GST · United Arab Emirates",
+      "Abu Dhabi",
+      "Sharjah",
+      "Al Ain City"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Muscat",
+    "value": "Asia/Muscat",
+    "abbr": "GST",
+    "badge": "GST · Oman",
+    "keywords": [
+      "Oman",
+      "OM",
+      "GST · Oman",
+      "Seeb",
+      "Bawshar",
+      "‘Ibrī"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Port Louis",
+    "value": "Indian/Mauritius",
+    "abbr": "MUT",
+    "badge": "MUT · Mauritius",
+    "keywords": [
+      "Mauritius",
+      "MU",
+      "MUT · Mauritius",
+      "Vacoas",
+      "Beau Bassin-Rose Hill",
+      "Curepipe"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Saint-Denis",
+    "value": "Indian/Reunion",
+    "abbr": "RET",
+    "badge": "RET · Reunion",
+    "keywords": [
+      "Reunion",
+      "RE",
+      "RET · Reunion",
+      "Saint-Paul",
+      "Saint-Pierre",
+      "Le Tampon"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Samara",
+    "value": "Europe/Samara",
+    "abbr": "SAMT",
+    "badge": "SAMT · Russia",
+    "keywords": [
+      "Russia",
+      "RU",
+      "SAMT · Russia",
+      "Saratov",
+      "Tolyatti",
+      "Izhevsk"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Victoria",
+    "value": "Indian/Mahe",
+    "abbr": "SCT",
+    "badge": "SCT · Seychelles",
+    "keywords": [
+      "Seychelles",
+      "SC",
+      "SCT · Seychelles"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Tehran",
+    "value": "Asia/Tehran",
+    "abbr": "IRST",
+    "badge": "IRST · Iran",
+    "keywords": [
+      "Iran",
+      "IR",
+      "IRST · Iran",
+      "Mashhad",
+      "Isfahan",
+      "Karaj"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Al Aḩmadī",
+    "value": "Asia/Kuwait",
+    "abbr": "AST",
+    "badge": "AST · Kuwait",
+    "keywords": [
+      "Kuwait",
+      "KW",
+      "AST · Kuwait",
+      "Ḩawallī",
+      "As Sālimīyah",
+      "Şabāḩ as Sālim"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Al Muharraq",
+    "value": "Asia/Bahrain",
+    "abbr": "AST",
+    "badge": "AST · Bahrain",
+    "keywords": [
+      "Bahrain",
+      "BH",
+      "AST · Bahrain",
+      "Manama",
+      "Madīnat Ḩamad",
+      "Ar Rifā‘"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Baghdad",
+    "value": "Asia/Baghdad",
+    "abbr": "AST",
+    "badge": "AST · Iraq",
+    "keywords": [
+      "Iraq",
+      "IQ",
+      "AST · Iraq",
+      "Al Mawşil al Jadīdah",
+      "Al Başrah al Qadīmah",
+      "Mosul"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Doha",
+    "value": "Asia/Qatar",
+    "abbr": "AST",
+    "badge": "AST · Qatar",
+    "keywords": [
+      "Qatar",
+      "QA",
+      "AST · Qatar",
+      "Ar Rayyān",
+      "Al Maţār al ‘Atīq",
+      "Al Manşūrah"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Jeddah",
+    "value": "Asia/Riyadh",
+    "abbr": "AST",
+    "badge": "AST · Saudi Arabia",
+    "keywords": [
+      "Saudi Arabia",
+      "SA",
+      "AST · Saudi Arabia",
+      "Riyadh",
+      "Makkah",
+      "Madinah"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Sanaa",
+    "value": "Asia/Aden",
+    "abbr": "AST",
+    "badge": "AST · Yemen",
+    "keywords": [
+      "Yemen",
+      "YE",
+      "AST · Yemen",
+      "Aden",
+      "Taiz",
+      "Ibb"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Amman",
+    "value": "Asia/Amman",
+    "abbr": "GMT+3",
+    "badge": "GMT+3 · Jordan",
+    "keywords": [
+      "Jordan",
+      "JO",
+      "GMT+3 · Jordan",
+      "Zarqa",
+      "Irbid",
+      "Russeifa"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Aleppo",
+    "value": "Asia/Damascus",
+    "abbr": "GMT+3",
+    "badge": "GMT+3 · Syria",
+    "keywords": [
+      "Syria",
+      "SY",
+      "GMT+3 · Syria",
+      "Damascus",
+      "Homs",
+      "Latakia"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Addis Ababa",
+    "value": "Africa/Addis_Ababa",
+    "abbr": "EAT",
+    "badge": "EAT · Ethiopia",
+    "keywords": [
+      "Ethiopia",
+      "ET",
+      "EAT · Ethiopia",
+      "Jijiga",
+      "Gonder",
+      "Mek'ele"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Antananarivo",
+    "value": "Indian/Antananarivo",
+    "abbr": "EAT",
+    "badge": "EAT · Madagascar",
+    "keywords": [
+      "Madagascar",
+      "MG",
+      "EAT · Madagascar",
+      "Toamasina",
+      "Antsirabe",
+      "Mahajanga"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Asmara",
+    "value": "Africa/Asmara",
+    "abbr": "EAT",
+    "badge": "EAT · Eritrea",
+    "keywords": [
+      "Eritrea",
+      "ER",
+      "EAT · Eritrea",
+      "Keren",
+      "Himora",
+      "Massawa"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Dar es Salaam",
+    "value": "Africa/Dar_es_Salaam",
+    "abbr": "EAT",
+    "badge": "EAT · Tanzania",
+    "keywords": [
+      "Tanzania",
+      "TZ",
+      "EAT · Tanzania",
+      "Mwanza",
+      "Dodoma",
+      "Zanzibar"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Djibouti",
+    "value": "Africa/Djibouti",
+    "abbr": "EAT",
+    "badge": "EAT · Djibouti",
+    "keywords": [
+      "Djibouti",
+      "DJ",
+      "EAT · Djibouti",
+      "Ali Sabih",
+      "Dikhil",
+      "Tadjoura"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Kampala",
+    "value": "Africa/Kampala",
+    "abbr": "EAT",
+    "badge": "EAT · Uganda",
+    "keywords": [
+      "Uganda",
+      "UG",
+      "EAT · Uganda",
+      "Nansana",
+      "Kira",
+      "Bunamwaya"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Mamoudzou",
+    "value": "Indian/Mayotte",
+    "abbr": "EAT",
+    "badge": "EAT · Mayotte",
+    "keywords": [
+      "Mayotte",
+      "YT",
+      "EAT · Mayotte",
+      "Koungou",
+      "Labattoir",
+      "Kaouéni"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Mogadishu",
+    "value": "Africa/Mogadishu",
+    "abbr": "EAT",
+    "badge": "EAT · Somalia",
+    "keywords": [
+      "Somalia",
+      "SO",
+      "EAT · Somalia",
+      "Borama",
+      "Hargeysa",
+      "Berbera"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Moroni",
+    "value": "Indian/Comoro",
+    "abbr": "EAT",
+    "badge": "EAT · Comoros",
+    "keywords": [
+      "Comoros",
+      "KM",
+      "EAT · Comoros",
+      "Moutsamoudou",
+      "Fomboni"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Nairobi",
+    "value": "Africa/Nairobi",
+    "abbr": "EAT",
+    "badge": "EAT · Kenya",
+    "keywords": [
+      "Kenya",
+      "KE",
+      "EAT · Kenya",
+      "Kakamega",
+      "Mombasa",
+      "Nakuru"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Minsk",
+    "value": "Europe/Minsk",
+    "abbr": "MSK",
+    "badge": "MSK · Belarus",
+    "keywords": [
+      "Belarus",
+      "BY",
+      "MSK · Belarus",
+      "Homyel'",
+      "Hrodna",
+      "Vitebsk"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Moscow",
+    "value": "Europe/Moscow",
+    "abbr": "MSK",
+    "badge": "MSK · Russia",
+    "keywords": [
+      "Russia",
+      "RU",
+      "MSK · Russia",
+      "Saint Petersburg",
+      "Nizhniy Novgorod",
+      "Kazan"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Sevastopol",
+    "value": "Europe/Simferopol",
+    "abbr": "MSK",
+    "badge": "MSK · Ukraine",
+    "keywords": [
+      "Ukraine",
+      "UA",
+      "MSK · Ukraine",
+      "Simferopol",
+      "Kerch",
+      "Yevpatoriya"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Syowa",
+    "value": "Antarctica/Syowa",
+    "abbr": "SYOT",
+    "badge": "SYOT · Antarctica",
+    "keywords": [
+      "Antarctica",
+      "AQ",
+      "SYOT · Antarctica"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Istanbul",
+    "value": "Europe/Istanbul",
+    "abbr": "TRT",
+    "badge": "TRT · Turkey",
+    "keywords": [
+      "Turkey",
+      "TR",
+      "TRT · Turkey",
+      "Ankara",
+      "Bursa",
+      "İzmir"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Bujumbura",
+    "value": "Africa/Bujumbura",
+    "abbr": "CAT",
+    "badge": "CAT · Burundi",
+    "keywords": [
+      "Burundi",
+      "BI",
+      "CAT · Burundi",
+      "Gitega",
+      "Ngozi",
+      "Rumonge"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Gaborone",
+    "value": "Africa/Gaborone",
+    "abbr": "CAT",
+    "badge": "CAT · Botswana",
+    "keywords": [
+      "Botswana",
+      "BW",
+      "CAT · Botswana",
+      "Francistown",
+      "Mogoditshane",
+      "Maun"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Harare",
+    "value": "Africa/Harare",
+    "abbr": "CAT",
+    "badge": "CAT · Zimbabwe",
+    "keywords": [
+      "Zimbabwe",
+      "ZW",
+      "CAT · Zimbabwe",
+      "Bulawayo",
+      "Chitungwiza",
+      "Mutare"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Juba",
+    "value": "Africa/Juba",
+    "abbr": "CAT",
+    "badge": "CAT · South Sudan",
+    "keywords": [
+      "South Sudan",
+      "SS",
+      "CAT · South Sudan",
+      "Winejok",
+      "Yei",
+      "Malakal"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Khartoum",
+    "value": "Africa/Khartoum",
+    "abbr": "CAT",
+    "badge": "CAT · Sudan",
+    "keywords": [
+      "Sudan",
+      "SD",
+      "CAT · Sudan",
+      "Omdurman",
+      "Khartoum North",
+      "Nyala"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Kigali",
+    "value": "Africa/Kigali",
+    "abbr": "CAT",
+    "badge": "CAT · Rwanda",
+    "keywords": [
+      "Rwanda",
+      "RW",
+      "CAT · Rwanda",
+      "Gisenyi",
+      "Musanze",
+      "Nyagatare"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Lilongwe",
+    "value": "Africa/Blantyre",
+    "abbr": "CAT",
+    "badge": "CAT · Malawi",
+    "keywords": [
+      "Malawi",
+      "MW",
+      "CAT · Malawi",
+      "Blantyre",
+      "Mzuzu",
+      "Zomba"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Lubumbashi",
+    "value": "Africa/Lubumbashi",
+    "abbr": "CAT",
+    "badge": "CAT · Democratic Republic of the Congo",
+    "keywords": [
+      "Democratic Republic of the Congo",
+      "CD",
+      "CAT · Democratic Republic of the Congo",
+      "Mbuji-Mayi",
+      "Kananga",
+      "Kisangani"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Lusaka",
+    "value": "Africa/Lusaka",
+    "abbr": "CAT",
+    "badge": "CAT · Zambia",
+    "keywords": [
+      "Zambia",
+      "ZM",
+      "CAT · Zambia",
+      "Kitwe",
+      "Ndola",
+      "Chipata"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Maputo",
+    "value": "Africa/Maputo",
+    "abbr": "CAT",
+    "badge": "CAT · Mozambique",
+    "keywords": [
+      "Mozambique",
+      "MZ",
+      "CAT · Mozambique",
+      "Matola",
+      "Nampula",
+      "Beira"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Cairo",
+    "value": "Africa/Cairo",
+    "abbr": "EET",
+    "badge": "EET · Egypt",
+    "keywords": [
+      "Egypt",
+      "EG",
+      "EET · Egypt",
+      "Alexandria",
+      "Giza",
+      "Shubrā al Khaymah"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Kaliningrad",
+    "value": "Europe/Kaliningrad",
+    "abbr": "EET",
+    "badge": "EET · Russia",
+    "keywords": [
+      "Russia",
+      "RU",
+      "EET · Russia",
+      "Chernyakhovsk",
+      "Sovetsk",
+      "Baltiysk"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Tripoli",
+    "value": "Africa/Tripoli",
+    "abbr": "EET",
+    "badge": "EET · Libya",
+    "keywords": [
+      "Libya",
+      "LY",
+      "EET · Libya",
+      "Benghazi",
+      "Misratah",
+      "Zliten"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Johannesburg",
+    "value": "Africa/Johannesburg",
+    "abbr": "SAST",
+    "badge": "SAST · South Africa",
+    "keywords": [
+      "South Africa",
+      "ZA",
+      "SAST · South Africa",
+      "Cape Town",
+      "Durban",
+      "Pretoria"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Manzini",
+    "value": "Africa/Mbabane",
+    "abbr": "SAST",
+    "badge": "SAST · Eswatini",
+    "keywords": [
+      "Eswatini",
+      "SZ",
+      "SAST · Eswatini",
+      "Mbabane",
+      "Lobamba"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Maseru",
+    "value": "Africa/Maseru",
+    "abbr": "SAST",
+    "badge": "SAST · Lesotho",
+    "keywords": [
+      "Lesotho",
+      "LS",
+      "SAST · Lesotho",
+      "Maputsoe",
+      "Mohale's Hoek",
+      "Mafeteng"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Athens",
+    "value": "Europe/Athens",
+    "abbr": "EET",
+    "badge": "EET · Greece",
+    "keywords": [
+      "Greece",
+      "GR",
+      "EET · Greece",
+      "Thessaloníki",
+      "Pátra",
+      "Piraeus"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Beirut",
+    "value": "Asia/Beirut",
+    "abbr": "EET",
+    "badge": "EET · Lebanon",
+    "keywords": [
+      "Lebanon",
+      "LB",
+      "EET · Lebanon",
+      "Ra’s Bayrūt",
+      "Tripoli",
+      "Sidon"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Bucharest",
+    "value": "Europe/Bucharest",
+    "abbr": "EET",
+    "badge": "EET · Romania",
+    "keywords": [
+      "Romania",
+      "RO",
+      "EET · Romania",
+      "Sector 3",
+      "Iaşi",
+      "Sector 6"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Chisinau",
+    "value": "Europe/Chisinau",
+    "abbr": "EET",
+    "badge": "EET · Moldova",
+    "keywords": [
+      "Moldova",
+      "MD",
+      "EET · Moldova",
+      "Tiraspol",
+      "Bălţi",
+      "Bender"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "East Jerusalem",
+    "value": "Asia/Hebron",
+    "abbr": "EET",
+    "badge": "EET · Palestinian Territory",
+    "keywords": [
+      "Palestinian Territory",
+      "PS",
+      "EET · Palestinian Territory",
+      "Gaza",
+      "Khān Yūnis",
+      "Jabālyā"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Helsinki",
+    "value": "Europe/Helsinki",
+    "abbr": "EET",
+    "badge": "EET · Finland",
+    "keywords": [
+      "Finland",
+      "FI",
+      "EET · Finland",
+      "Espoo",
+      "Tampere",
+      "Vantaa"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Kyiv",
+    "value": "Europe/Kyiv",
+    "abbr": "EET",
+    "badge": "EET · Ukraine",
+    "keywords": [
+      "Ukraine",
+      "UA",
+      "EET · Ukraine",
+      "Kharkiv",
+      "Odesa",
+      "Dnipro"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Mariehamn",
+    "value": "Europe/Mariehamn",
+    "abbr": "EET",
+    "badge": "EET · Aland Islands",
+    "keywords": [
+      "Aland Islands",
+      "AX",
+      "EET · Aland Islands"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Nicosia",
+    "value": "Asia/Nicosia",
+    "abbr": "EET",
+    "badge": "EET · Cyprus",
+    "keywords": [
+      "Cyprus",
+      "CY",
+      "EET · Cyprus",
+      "Limassol",
+      "Larnaca",
+      "Stróvolos"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Riga",
+    "value": "Europe/Riga",
+    "abbr": "EET",
+    "badge": "EET · Latvia",
+    "keywords": [
+      "Latvia",
+      "LV",
+      "EET · Latvia",
+      "Daugavpils",
+      "Liepāja",
+      "Jelgava"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Sofia",
+    "value": "Europe/Sofia",
+    "abbr": "EET",
+    "badge": "EET · Bulgaria",
+    "keywords": [
+      "Bulgaria",
+      "BG",
+      "EET · Bulgaria",
+      "Plovdiv",
+      "Varna",
+      "Burgas"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Tallinn",
+    "value": "Europe/Tallinn",
+    "abbr": "EET",
+    "badge": "EET · Estonia",
+    "keywords": [
+      "Estonia",
+      "EE",
+      "EET · Estonia",
+      "Tartu",
+      "Narva",
+      "Pärnu"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Vilnius",
+    "value": "Europe/Vilnius",
+    "abbr": "EET",
+    "badge": "EET · Lithuania",
+    "keywords": [
+      "Lithuania",
+      "LT",
+      "EET · Lithuania",
+      "Kaunas",
+      "Klaipėda",
+      "Šiauliai"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Jerusalem",
+    "value": "Asia/Jerusalem",
+    "abbr": "IST",
+    "badge": "IST · Israel",
+    "keywords": [
+      "Israel",
+      "IL",
+      "IST · Israel",
+      "Tel Aviv",
+      "West Jerusalem",
+      "Haifa"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Algiers",
+    "value": "Africa/Algiers",
+    "abbr": "CET",
+    "badge": "CET · Algeria",
+    "keywords": [
+      "Algeria",
+      "DZ",
+      "CET · Algeria",
+      "Oran",
+      "Constantine",
+      "Annaba"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Tunis",
+    "value": "Africa/Tunis",
+    "abbr": "CET",
+    "badge": "CET · Tunisia",
+    "keywords": [
+      "Tunisia",
+      "TN",
+      "CET · Tunisia",
+      "Sfax",
+      "Sousse",
+      "Kairouan"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Bangui",
+    "value": "Africa/Bangui",
+    "abbr": "WAT",
+    "badge": "WAT · Central African Republic",
+    "keywords": [
+      "Central African Republic",
+      "CF",
+      "WAT · Central African Republic",
+      "Bimbo",
+      "Bégoua",
+      "Carnot"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Bata",
+    "value": "Africa/Malabo",
+    "abbr": "WAT",
+    "badge": "WAT · Equatorial Guinea",
+    "keywords": [
+      "Equatorial Guinea",
+      "GQ",
+      "WAT · Equatorial Guinea",
+      "Malabo",
+      "Ebebiyin"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Brazzaville",
+    "value": "Africa/Brazzaville",
+    "abbr": "WAT",
+    "badge": "WAT · Republic of the Congo",
+    "keywords": [
+      "Republic of the Congo",
+      "CG",
+      "WAT · Republic of the Congo",
+      "Pointe-Noire",
+      "Dolisie",
+      "Nkayi"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Cotonou",
+    "value": "Africa/Porto-Novo",
+    "abbr": "WAT",
+    "badge": "WAT · Benin",
+    "keywords": [
+      "Benin",
+      "BJ",
+      "WAT · Benin",
+      "Abomey-Calavi",
+      "Porto-Novo",
+      "Parakou"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Douala",
+    "value": "Africa/Douala",
+    "abbr": "WAT",
+    "badge": "WAT · Cameroon",
+    "keywords": [
+      "Cameroon",
+      "CM",
+      "WAT · Cameroon",
+      "Yaoundé",
+      "Bamenda",
+      "Bafoussam"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Kinshasa",
+    "value": "Africa/Kinshasa",
+    "abbr": "WAT",
+    "badge": "WAT · Democratic Republic of the Congo",
+    "keywords": [
+      "Democratic Republic of the Congo",
+      "CD",
+      "WAT · Democratic Republic of the Congo",
+      "Kikwit",
+      "Masina",
+      "Mbandaka"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Lagos",
+    "value": "Africa/Lagos",
+    "abbr": "WAT",
+    "badge": "WAT · Nigeria",
+    "keywords": [
+      "Nigeria",
+      "NG",
+      "WAT · Nigeria",
+      "Kano",
+      "Ibadan",
+      "Abuja"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Libreville",
+    "value": "Africa/Libreville",
+    "abbr": "WAT",
+    "badge": "WAT · Gabon",
+    "keywords": [
+      "Gabon",
+      "GA",
+      "WAT · Gabon",
+      "Port-Gentil",
+      "Franceville",
+      "Owendo"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Luanda",
+    "value": "Africa/Luanda",
+    "abbr": "WAT",
+    "badge": "WAT · Angola",
+    "keywords": [
+      "Angola",
+      "AO",
+      "WAT · Angola",
+      "Lubango",
+      "Huambo",
+      "Benguela"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "N'Djamena",
+    "value": "Africa/Ndjamena",
+    "abbr": "WAT",
+    "badge": "WAT · Chad",
+    "keywords": [
+      "Chad",
+      "TD",
+      "WAT · Chad",
+      "Moundou",
+      "Abéché",
+      "Sarh"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Niamey",
+    "value": "Africa/Niamey",
+    "abbr": "WAT",
+    "badge": "WAT · Niger",
+    "keywords": [
+      "Niger",
+      "NE",
+      "WAT · Niger",
+      "Maradi",
+      "Zinder",
+      "Tahoua"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Windhoek",
+    "value": "Africa/Windhoek",
+    "abbr": "CAT",
+    "badge": "CAT · Namibia",
+    "keywords": [
+      "Namibia",
+      "NA",
+      "CAT · Namibia",
+      "Rundu",
+      "Walvis Bay",
+      "Swakopmund"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Andorra la Vella",
+    "value": "Europe/Andorra",
+    "abbr": "CET",
+    "badge": "CET · Andorra",
+    "keywords": [
+      "Andorra",
+      "AD",
+      "CET · Andorra",
+      "les Escaldes"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Belgrade",
+    "value": "Europe/Belgrade",
+    "abbr": "CET",
+    "badge": "CET · Serbia",
+    "keywords": [
+      "Serbia",
+      "RS",
+      "CET · Serbia",
+      "Niš",
+      "Novi Sad",
+      "Zemun"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Berlin",
+    "value": "Europe/Berlin",
+    "abbr": "CET",
+    "badge": "CET · Germany",
+    "keywords": [
+      "Germany",
+      "DE",
+      "CET · Germany",
+      "Hamburg",
+      "Munich",
+      "Köln"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Bratislava",
+    "value": "Europe/Bratislava",
+    "abbr": "CET",
+    "badge": "CET · Slovakia",
+    "keywords": [
+      "Slovakia",
+      "SK",
+      "CET · Slovakia",
+      "Košice",
+      "Petržalka",
+      "Nitra"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Brussels",
+    "value": "Europe/Brussels",
+    "abbr": "CET",
+    "badge": "CET · Belgium",
+    "keywords": [
+      "Belgium",
+      "BE",
+      "CET · Belgium",
+      "Antwerpen",
+      "Gent",
+      "Charleroi"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Budapest",
+    "value": "Europe/Budapest",
+    "abbr": "CET",
+    "badge": "CET · Hungary",
+    "keywords": [
+      "Hungary",
+      "HU",
+      "CET · Hungary",
+      "Debrecen",
+      "Szeged",
+      "Miskolc"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Copenhagen",
+    "value": "Europe/Copenhagen",
+    "abbr": "CET",
+    "badge": "CET · Denmark",
+    "keywords": [
+      "Denmark",
+      "DK",
+      "CET · Denmark",
+      "Århus",
+      "Odense",
+      "Aalborg"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Gibraltar",
+    "value": "Europe/Gibraltar",
+    "abbr": "CET",
+    "badge": "CET · Gibraltar",
+    "keywords": [
+      "Gibraltar",
+      "GI",
+      "CET · Gibraltar"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Ljubljana",
+    "value": "Europe/Ljubljana",
+    "abbr": "CET",
+    "badge": "CET · Slovenia",
+    "keywords": [
+      "Slovenia",
+      "SI",
+      "CET · Slovenia",
+      "Maribor",
+      "Celje",
+      "Kranj"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Longyearbyen",
+    "value": "Arctic/Longyearbyen",
+    "abbr": "CET",
+    "badge": "CET · Svalbard and Jan Mayen",
+    "keywords": [
+      "Svalbard and Jan Mayen",
+      "SJ",
+      "CET · Svalbard and Jan Mayen"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Luxembourg",
+    "value": "Europe/Luxembourg",
+    "abbr": "CET",
+    "badge": "CET · Luxembourg",
+    "keywords": [
+      "Luxembourg",
+      "LU",
+      "CET · Luxembourg",
+      "Esch-sur-Alzette",
+      "Dudelange"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Madrid",
+    "value": "Europe/Madrid",
+    "abbr": "CET",
+    "badge": "CET · Spain",
+    "keywords": [
+      "Spain",
+      "ES",
+      "CET · Spain",
+      "Barcelona",
+      "Valencia",
+      "Zaragoza"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Monaco",
+    "value": "Europe/Monaco",
+    "abbr": "CET",
+    "badge": "CET · Monaco",
+    "keywords": [
+      "Monaco",
+      "MC",
+      "CET · Monaco",
+      "Monte-Carlo"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Oslo",
+    "value": "Europe/Oslo",
+    "abbr": "CET",
+    "badge": "CET · Norway",
+    "keywords": [
+      "Norway",
+      "NO",
+      "CET · Norway",
+      "Bergen",
+      "Trondheim",
+      "Stavanger"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Paris",
+    "value": "Europe/Paris",
+    "abbr": "CET",
+    "badge": "CET · France",
+    "keywords": [
+      "France",
+      "FR",
+      "CET · France",
+      "Marseille",
+      "Lyon",
+      "Toulouse"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Podgorica",
+    "value": "Europe/Podgorica",
+    "abbr": "CET",
+    "badge": "CET · Montenegro",
+    "keywords": [
+      "Montenegro",
+      "ME",
+      "CET · Montenegro",
+      "Nikšić",
+      "Herceg Novi",
+      "Pljevlja"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Prague",
+    "value": "Europe/Prague",
+    "abbr": "CET",
+    "badge": "CET · Czechia",
+    "keywords": [
+      "Czechia",
+      "CZ",
+      "CET · Czechia",
+      "Brno",
+      "Ostrava",
+      "Pilsen"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Rome",
+    "value": "Europe/Rome",
+    "abbr": "CET",
+    "badge": "CET · Italy",
+    "keywords": [
+      "Italy",
+      "IT",
+      "CET · Italy",
+      "Milan",
+      "Naples",
+      "Turin"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Rotterdam",
+    "value": "Europe/Amsterdam",
+    "abbr": "CET",
+    "badge": "CET · The Netherlands",
+    "keywords": [
+      "The Netherlands",
+      "NL",
+      "CET · The Netherlands",
+      "Amsterdam",
+      "The Hague",
+      "Utrecht"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "San Marino",
+    "value": "Europe/San_Marino",
+    "abbr": "CET",
+    "badge": "CET · San Marino",
+    "keywords": [
+      "San Marino",
+      "SM",
+      "CET · San Marino"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "San Pawl il-Baħar",
+    "value": "Europe/Malta",
+    "abbr": "CET",
+    "badge": "CET · Malta",
+    "keywords": [
+      "Malta",
+      "MT",
+      "CET · Malta",
+      "Birkirkara",
+      "Mosta",
+      "Sliema"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Sarajevo",
+    "value": "Europe/Sarajevo",
+    "abbr": "CET",
+    "badge": "CET · Bosnia and Herzegovina",
+    "keywords": [
+      "Bosnia and Herzegovina",
+      "BA",
+      "CET · Bosnia and Herzegovina",
+      "Banja Luka",
+      "Zenica",
+      "Tuzla"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Skopje",
+    "value": "Europe/Skopje",
+    "abbr": "CET",
+    "badge": "CET · North Macedonia",
+    "keywords": [
+      "North Macedonia",
+      "MK",
+      "CET · North Macedonia",
+      "Kumanovo",
+      "Prilep",
+      "Bitola"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Stockholm",
+    "value": "Europe/Stockholm",
+    "abbr": "CET",
+    "badge": "CET · Sweden",
+    "keywords": [
+      "Sweden",
+      "SE",
+      "CET · Sweden",
+      "Göteborg",
+      "Malmö",
+      "Uppsala"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Tirana",
+    "value": "Europe/Tirane",
+    "abbr": "CET",
+    "badge": "CET · Albania",
+    "keywords": [
+      "Albania",
+      "AL",
+      "CET · Albania",
+      "Durrës",
+      "Vlorë",
+      "Elbasan"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Vaduz",
+    "value": "Europe/Vaduz",
+    "abbr": "CET",
+    "badge": "CET · Liechtenstein",
+    "keywords": [
+      "Liechtenstein",
+      "LI",
+      "CET · Liechtenstein"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Vatican City",
+    "value": "Europe/Vatican",
+    "abbr": "CET",
+    "badge": "CET · Vatican",
+    "keywords": [
+      "Vatican",
+      "VA",
+      "CET · Vatican"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Vienna",
+    "value": "Europe/Vienna",
+    "abbr": "CET",
+    "badge": "CET · Austria",
+    "keywords": [
+      "Austria",
+      "AT",
+      "CET · Austria",
+      "Graz",
+      "Linz",
+      "Favoriten"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Warsaw",
+    "value": "Europe/Warsaw",
+    "abbr": "CET",
+    "badge": "CET · Poland",
+    "keywords": [
+      "Poland",
+      "PL",
+      "CET · Poland",
+      "Łódź",
+      "Kraków",
+      "Wrocław"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Zagreb",
+    "value": "Europe/Zagreb",
+    "abbr": "CET",
+    "badge": "CET · Croatia",
+    "keywords": [
+      "Croatia",
+      "HR",
+      "CET · Croatia",
+      "Split",
+      "Rijeka",
+      "Osijek"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Zürich",
+    "value": "Europe/Zurich",
+    "abbr": "CET",
+    "badge": "CET · Switzerland",
+    "keywords": [
+      "Switzerland",
+      "CH",
+      "CET · Switzerland",
+      "Genève",
+      "Basel",
+      "Lausanne"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Abidjan",
+    "value": "Africa/Abidjan",
+    "abbr": "GMT",
+    "badge": "GMT · Ivory Coast",
+    "keywords": [
+      "Ivory Coast",
+      "CI",
+      "GMT · Ivory Coast",
+      "Abobo",
+      "Bouaké",
+      "Korhogo"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Bamako",
+    "value": "Africa/Bamako",
+    "abbr": "GMT",
+    "badge": "GMT · Mali",
+    "keywords": [
+      "Mali",
+      "ML",
+      "GMT · Mali",
+      "Sikasso",
+      "Koutiala",
+      "Ségou"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Bissau",
+    "value": "Africa/Bissau",
+    "abbr": "GMT",
+    "badge": "GMT · Guinea-Bissau",
+    "keywords": [
+      "Guinea-Bissau",
+      "GW",
+      "GMT · Guinea-Bissau",
+      "Gabú",
+      "Bafatá",
+      "Xitole"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Conakry",
+    "value": "Africa/Conakry",
+    "abbr": "GMT",
+    "badge": "GMT · Guinea",
+    "keywords": [
+      "Guinea",
+      "GN",
+      "GMT · Guinea",
+      "Camayenne",
+      "Nzérékoré",
+      "Kankan"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Dakar",
+    "value": "Africa/Dakar",
+    "abbr": "GMT",
+    "badge": "GMT · Senegal",
+    "keywords": [
+      "Senegal",
+      "SN",
+      "GMT · Senegal",
+      "Touba",
+      "Pikine",
+      "Guédiawaye"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Danmarkshavn",
+    "value": "America/Danmarkshavn",
+    "abbr": "GMT",
+    "badge": "GMT · Greenland",
+    "keywords": [
+      "Greenland",
+      "GL",
+      "GMT · Greenland"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Freetown",
+    "value": "Africa/Freetown",
+    "abbr": "GMT",
+    "badge": "GMT · Sierra Leone",
+    "keywords": [
+      "Sierra Leone",
+      "SL",
+      "GMT · Sierra Leone",
+      "Bo",
+      "Kenema",
+      "Koidu"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Jamestown",
+    "value": "Atlantic/St_Helena",
+    "abbr": "GMT",
+    "badge": "GMT · Saint Helena",
+    "keywords": [
+      "Saint Helena",
+      "SH",
+      "GMT · Saint Helena"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Kumasi",
+    "value": "Africa/Accra",
+    "abbr": "GMT",
+    "badge": "GMT · Ghana",
+    "keywords": [
+      "Ghana",
+      "GH",
+      "GMT · Ghana",
+      "Accra",
+      "Tamale",
+      "Takoradi"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Lomé",
+    "value": "Africa/Lome",
+    "abbr": "GMT",
+    "badge": "GMT · Togo",
+    "keywords": [
+      "Togo",
+      "TG",
+      "GMT · Togo",
+      "Sokodé",
+      "Kara",
+      "Atakpamé"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Monrovia",
+    "value": "Africa/Monrovia",
+    "abbr": "GMT",
+    "badge": "GMT · Liberia",
+    "keywords": [
+      "Liberia",
+      "LR",
+      "GMT · Liberia",
+      "Gbarnga",
+      "Buchanan",
+      "Ganta"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Nouakchott",
+    "value": "Africa/Nouakchott",
+    "abbr": "GMT",
+    "badge": "GMT · Mauritania",
+    "keywords": [
+      "Mauritania",
+      "MR",
+      "GMT · Mauritania",
+      "Nouadhibou",
+      "Kiffa",
+      "Dar Naim"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Ouagadougou",
+    "value": "Africa/Ouagadougou",
+    "abbr": "GMT",
+    "badge": "GMT · Burkina Faso",
+    "keywords": [
+      "Burkina Faso",
+      "BF",
+      "GMT · Burkina Faso",
+      "Bobo-Dioulasso",
+      "Koudougou",
+      "Saaba"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Reykjavík",
+    "value": "Atlantic/Reykjavik",
+    "abbr": "GMT",
+    "badge": "GMT · Iceland",
+    "keywords": [
+      "Iceland",
+      "IS",
+      "GMT · Iceland",
+      "Kópavogur",
+      "Hafnarfjörður",
+      "Reykjanesbær"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "São Tomé",
+    "value": "Africa/Sao_Tome",
+    "abbr": "GMT",
+    "badge": "GMT · Sao Tome and Principe",
+    "keywords": [
+      "Sao Tome and Principe",
+      "ST",
+      "GMT · Sao Tome and Principe"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Serekunda",
+    "value": "Africa/Banjul",
+    "abbr": "GMT",
+    "badge": "GMT · Gambia",
+    "keywords": [
+      "Gambia",
+      "GM",
+      "GMT · Gambia",
+      "Brikama",
+      "Bununka Kunda",
+      "Sukuta"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Douglas",
+    "value": "Europe/Isle_of_Man",
+    "abbr": "GMT",
+    "badge": "GMT · Isle of Man",
+    "keywords": [
+      "Isle of Man",
+      "IM",
+      "GMT · Isle of Man"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Dublin",
+    "value": "Europe/Dublin",
+    "abbr": "GMT",
+    "badge": "GMT · Ireland",
+    "keywords": [
+      "Ireland",
+      "IE",
+      "GMT · Ireland",
+      "South Dublin",
+      "Cork",
+      "Limerick"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "London",
+    "value": "Europe/London",
+    "abbr": "GMT",
+    "badge": "GMT · United Kingdom",
+    "keywords": [
+      "United Kingdom",
+      "GB",
+      "GMT · United Kingdom",
+      "Birmingham",
+      "Glasgow",
+      "Manchester"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Saint Helier",
+    "value": "Europe/Jersey",
+    "abbr": "GMT",
+    "badge": "GMT · Jersey",
+    "keywords": [
+      "Jersey",
+      "JE",
+      "GMT · Jersey"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Saint Peter Port",
+    "value": "Europe/Guernsey",
+    "abbr": "GMT",
+    "badge": "GMT · Guernsey",
+    "keywords": [
+      "Guernsey",
+      "GG",
+      "GMT · Guernsey"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Casablanca",
+    "value": "Africa/Casablanca",
+    "abbr": "WET",
+    "badge": "WET · Morocco",
+    "keywords": [
+      "Morocco",
+      "MA",
+      "WET · Morocco",
+      "Rabat",
+      "Fes",
+      "Tangier"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Laayoune",
+    "value": "Africa/El_Aaiun",
+    "abbr": "WET",
+    "badge": "WET · Western Sahara",
+    "keywords": [
+      "Western Sahara",
+      "EH",
+      "WET · Western Sahara",
+      "Dakhla",
+      "Boujdour"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Las Palmas de Gran Canaria",
+    "value": "Atlantic/Canary",
+    "abbr": "WET",
+    "badge": "WET · Spain",
+    "keywords": [
+      "Spain",
+      "ES",
+      "WET · Spain",
+      "Santa Cruz de Tenerife",
+      "La Laguna",
+      "Telde"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Lisbon",
+    "value": "Europe/Lisbon",
+    "abbr": "WET",
+    "badge": "WET · Portugal",
+    "keywords": [
+      "Portugal",
+      "PT",
+      "WET · Portugal",
+      "Porto",
+      "Amadora",
+      "Braga"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Tórshavn",
+    "value": "Atlantic/Faroe",
+    "abbr": "WET",
+    "badge": "WET · Faroe Islands",
+    "keywords": [
+      "Faroe Islands",
+      "FO",
+      "WET · Faroe Islands"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Troll",
+    "value": "Antarctica/Troll",
+    "abbr": "GMT",
+    "badge": "GMT · Antarctica",
+    "keywords": [
+      "Antarctica",
+      "AQ",
+      "GMT · Antarctica"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Praia",
+    "value": "Atlantic/Cape_Verde",
+    "abbr": "CVT",
+    "badge": "CVT · Cabo Verde",
+    "keywords": [
+      "Cabo Verde",
+      "CV",
+      "CVT · Cabo Verde",
+      "Mindelo",
+      "Espargos",
+      "Assomada"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Ponta Delgada",
+    "value": "Atlantic/Azores",
+    "abbr": "AZOT",
+    "badge": "AZOT · Portugal",
+    "keywords": [
+      "Portugal",
+      "PT",
+      "AZOT · Portugal"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Noronha",
+    "value": "America/Noronha",
+    "abbr": "FNT",
+    "badge": "FNT · Brazil",
+    "keywords": [
+      "Brazil",
+      "BR",
+      "FNT · Brazil"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Grytviken",
+    "value": "Atlantic/South_Georgia",
+    "abbr": "GST",
+    "badge": "GST · South Georgia and the South Sandwich Islands",
+    "keywords": [
+      "South Georgia and the South Sandwich Islands",
+      "GS",
+      "GST · South Georgia and the South Sandwich Islands"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Nuuk",
+    "value": "America/Nuuk",
+    "abbr": "GMT-2",
+    "badge": "GMT-2 · Greenland",
+    "keywords": [
+      "Greenland",
+      "GL",
+      "GMT-2 · Greenland",
+      "Scoresbysund"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Buenos Aires",
+    "value": "America/Argentina/Buenos_Aires",
+    "abbr": "ART",
+    "badge": "ART · Argentina",
+    "keywords": [
+      "Argentina",
+      "AR",
+      "ART · Argentina",
+      "Córdoba",
+      "Rosario",
+      "Mar del Plata"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "São Paulo",
+    "value": "America/Sao_Paulo",
+    "abbr": "BRT",
+    "badge": "BRT · Brazil",
+    "keywords": [
+      "Brazil",
+      "BR",
+      "BRT · Brazil",
+      "Rio de Janeiro",
+      "Belo Horizonte",
+      "Salvador"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Palmer",
+    "value": "Antarctica/Palmer",
+    "abbr": "CLT",
+    "badge": "CLT · Antarctica",
+    "keywords": [
+      "Antarctica",
+      "AQ",
+      "CLT · Antarctica",
+      "Rothera"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Punta Arenas",
+    "value": "America/Punta_Arenas",
+    "abbr": "CLT",
+    "badge": "CLT · Chile",
+    "keywords": [
+      "Chile",
+      "CL",
+      "CLT · Chile",
+      "Coyhaique",
+      "Puerto Natales",
+      "Puerto Aysén"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Stanley",
+    "value": "Atlantic/Stanley",
+    "abbr": "FKST",
+    "badge": "FKST · Falkland Islands",
+    "keywords": [
+      "Falkland Islands",
+      "FK",
+      "FKST · Falkland Islands"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Cayenne",
+    "value": "America/Cayenne",
+    "abbr": "GFT",
+    "badge": "GFT · French Guiana",
+    "keywords": [
+      "French Guiana",
+      "GF",
+      "GFT · French Guiana",
+      "Matoury",
+      "Saint-Laurent-du-Maroni",
+      "Kourou"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Asunción",
+    "value": "America/Asuncion",
+    "abbr": "PYT",
+    "badge": "PYT · Paraguay",
+    "keywords": [
+      "Paraguay",
+      "PY",
+      "PYT · Paraguay",
+      "Ciudad del Este",
+      "San Lorenzo",
+      "Capiatá"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Paramaribo",
+    "value": "America/Paramaribo",
+    "abbr": "SRT",
+    "badge": "SRT · Suriname",
+    "keywords": [
+      "Suriname",
+      "SR",
+      "SRT · Suriname",
+      "Blauwgrond",
+      "Rainville",
+      "Flora"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Montevideo",
+    "value": "America/Montevideo",
+    "abbr": "UYT",
+    "badge": "UYT · Uruguay",
+    "keywords": [
+      "Uruguay",
+      "UY",
+      "UYT · Uruguay",
+      "Salto",
+      "Paysandú",
+      "Las Piedras"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Saint-Pierre",
+    "value": "America/Miquelon",
+    "abbr": "PM",
+    "badge": "PM · Saint Pierre and Miquelon",
+    "keywords": [
+      "Saint Pierre and Miquelon",
+      "PM",
+      "PM · Saint Pierre and Miquelon"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "St. John's",
+    "value": "America/St_Johns",
+    "abbr": "NST",
+    "badge": "NST · Canada",
+    "keywords": [
+      "Canada",
+      "CA",
+      "NST · Canada",
+      "Mount Pearl",
+      "Paradise",
+      "Corner Brook"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Manaus",
+    "value": "America/Manaus",
+    "abbr": "AMT",
+    "badge": "AMT · Brazil",
+    "keywords": [
+      "Brazil",
+      "BR",
+      "AMT · Brazil",
+      "Campo Grande",
+      "Cuiabá",
+      "Porto Velho"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Basseterre",
+    "value": "America/St_Kitts",
+    "abbr": "AST",
+    "badge": "AST · Saint Kitts and Nevis",
+    "keywords": [
+      "Saint Kitts and Nevis",
+      "KN",
+      "AST · Saint Kitts and Nevis"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Blanc-Sablon",
+    "value": "America/Blanc-Sablon",
+    "abbr": "AST",
+    "badge": "AST · Canada",
+    "keywords": [
+      "Canada",
+      "CA",
+      "AST · Canada"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Brades",
+    "value": "America/Montserrat",
+    "abbr": "AST",
+    "badge": "AST · Montserrat",
+    "keywords": [
+      "Montserrat",
+      "MS",
+      "AST · Montserrat",
+      "Plymouth"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Bridgetown",
+    "value": "America/Barbados",
+    "abbr": "AST",
+    "badge": "AST · Barbados",
+    "keywords": [
+      "Barbados",
+      "BB",
+      "AST · Barbados"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Chaguanas",
+    "value": "America/Port_of_Spain",
+    "abbr": "AST",
+    "badge": "AST · Trinidad and Tobago",
+    "keywords": [
+      "Trinidad and Tobago",
+      "TT",
+      "AST · Trinidad and Tobago",
+      "Mon Repos",
+      "San Fernando",
+      "Port of Spain"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Fort-de-France",
+    "value": "America/Martinique",
+    "abbr": "AST",
+    "badge": "AST · Martinique",
+    "keywords": [
+      "Martinique",
+      "MQ",
+      "AST · Martinique",
+      "Le Lamentin",
+      "Le Robert",
+      "Sainte-Marie"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Gros Islet",
+    "value": "America/St_Lucia",
+    "abbr": "AST",
+    "badge": "AST · Saint Lucia",
+    "keywords": [
+      "Saint Lucia",
+      "LC",
+      "AST · Saint Lucia",
+      "Castries"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Gustavia",
+    "value": "America/St_Barthelemy",
+    "abbr": "AST",
+    "badge": "AST · Saint Barthelemy",
+    "keywords": [
+      "Saint Barthelemy",
+      "BL",
+      "AST · Saint Barthelemy"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Kingstown",
+    "value": "America/St_Vincent",
+    "abbr": "AST",
+    "badge": "AST · Saint Vincent and the Grenadines",
+    "keywords": [
+      "Saint Vincent and the Grenadines",
+      "VC",
+      "AST · Saint Vincent and the Grenadines",
+      "Calliaqua"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Kralendijk",
+    "value": "America/Kralendijk",
+    "abbr": "AST",
+    "badge": "AST · Bonaire, Saint Eustatius and Saba ",
+    "keywords": [
+      "Bonaire, Saint Eustatius and Saba ",
+      "BQ",
+      "AST · Bonaire, Saint Eustatius and Saba "
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Les Abymes",
+    "value": "America/Guadeloupe",
+    "abbr": "AST",
+    "badge": "AST · Guadeloupe",
+    "keywords": [
+      "Guadeloupe",
+      "GP",
+      "AST · Guadeloupe",
+      "Baie-Mahault",
+      "Le Gosier",
+      "Petit-Bourg"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Marigot",
+    "value": "America/Marigot",
+    "abbr": "AST",
+    "badge": "AST · Saint Martin",
+    "keywords": [
+      "Saint Martin",
+      "MF",
+      "AST · Saint Martin"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Oranjestad",
+    "value": "America/Aruba",
+    "abbr": "AST",
+    "badge": "AST · Aruba",
+    "keywords": [
+      "Aruba",
+      "AW",
+      "AST · Aruba",
+      "Noord",
+      "Tanki Leendert",
+      "San Nicolas"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Philipsburg",
+    "value": "America/Lower_Princes",
+    "abbr": "AST",
+    "badge": "AST · Sint Maarten",
+    "keywords": [
+      "Sint Maarten",
+      "SX",
+      "AST · Sint Maarten"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Road Town",
+    "value": "America/Tortola",
+    "abbr": "AST",
+    "badge": "AST · British Virgin Islands",
+    "keywords": [
+      "British Virgin Islands",
+      "VG",
+      "AST · British Virgin Islands"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Roseau",
+    "value": "America/Dominica",
+    "abbr": "AST",
+    "badge": "AST · Dominica",
+    "keywords": [
+      "Dominica",
+      "DM",
+      "AST · Dominica"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Saint Croix",
+    "value": "America/St_Thomas",
+    "abbr": "AST",
+    "badge": "AST · U.S. Virgin Islands",
+    "keywords": [
+      "U.S. Virgin Islands",
+      "VI",
+      "AST · U.S. Virgin Islands",
+      "Charlotte Amalie"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Saint George's",
+    "value": "America/Grenada",
+    "abbr": "AST",
+    "badge": "AST · Grenada",
+    "keywords": [
+      "Grenada",
+      "GD",
+      "AST · Grenada"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Saint John’s",
+    "value": "America/Antigua",
+    "abbr": "AST",
+    "badge": "AST · Antigua and Barbuda",
+    "keywords": [
+      "Antigua and Barbuda",
+      "AG",
+      "AST · Antigua and Barbuda"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "San Juan",
+    "value": "America/Puerto_Rico",
+    "abbr": "AST",
+    "badge": "AST · Puerto Rico",
+    "keywords": [
+      "Puerto Rico",
+      "PR",
+      "AST · Puerto Rico",
+      "Bayamón",
+      "Carolina",
+      "Ponce"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Santo Domingo",
+    "value": "America/Santo_Domingo",
+    "abbr": "AST",
+    "badge": "AST · Dominican Republic",
+    "keywords": [
+      "Dominican Republic",
+      "DO",
+      "AST · Dominican Republic",
+      "Santiago de los Caballeros",
+      "Santo Domingo Oeste",
+      "Santo Domingo Este"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "The Valley",
+    "value": "America/Anguilla",
+    "abbr": "AST",
+    "badge": "AST · Anguilla",
+    "keywords": [
+      "Anguilla",
+      "AI",
+      "AST · Anguilla"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Willemstad",
+    "value": "America/Curacao",
+    "abbr": "AST",
+    "badge": "AST · Curacao",
+    "keywords": [
+      "Curacao",
+      "CW",
+      "AST · Curacao",
+      "Bandariba"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "La Paz",
+    "value": "America/La_Paz",
+    "abbr": "BOT",
+    "badge": "BOT · Bolivia",
+    "keywords": [
+      "Bolivia",
+      "BO",
+      "BOT · Bolivia",
+      "Santa Cruz de la Sierra",
+      "Cochabamba",
+      "Sucre"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Georgetown",
+    "value": "America/Guyana",
+    "abbr": "GYT",
+    "badge": "GYT · Guyana",
+    "keywords": [
+      "Guyana",
+      "GY",
+      "GYT · Guyana",
+      "Linden",
+      "New Amsterdam"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Caracas",
+    "value": "America/Caracas",
+    "abbr": "VET",
+    "badge": "VET · Venezuela",
+    "keywords": [
+      "Venezuela",
+      "VE",
+      "VET · Venezuela",
+      "Maracaibo",
+      "Valencia",
+      "Barquisimeto"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Halifax",
+    "value": "America/Halifax",
+    "abbr": "AST",
+    "badge": "AST · Canada",
+    "keywords": [
+      "Canada",
+      "CA",
+      "AST · Canada",
+      "Sydney",
+      "Dartmouth",
+      "Moncton"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Hamilton",
+    "value": "Atlantic/Bermuda",
+    "abbr": "AST",
+    "badge": "AST · Bermuda",
+    "keywords": [
+      "Bermuda",
+      "BM",
+      "AST · Bermuda"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Thule",
+    "value": "America/Thule",
+    "abbr": "AST",
+    "badge": "AST · Greenland",
+    "keywords": [
+      "Greenland",
+      "GL",
+      "AST · Greenland"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Santiago",
+    "value": "America/Santiago",
+    "abbr": "CLT",
+    "badge": "CLT · Chile",
+    "keywords": [
+      "Chile",
+      "CL",
+      "CLT · Chile",
+      "Puente Alto",
+      "Maipú",
+      "Antofagasta"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Rio Branco",
+    "value": "America/Rio_Branco",
+    "abbr": "ACT",
+    "badge": "ACT · Brazil",
+    "keywords": [
+      "Brazil",
+      "BR",
+      "ACT · Brazil",
+      "Cruzeiro do Sul",
+      "Tarauacá",
+      "Sena Madureira"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Bogotá",
+    "value": "America/Bogota",
+    "abbr": "COT",
+    "badge": "COT · Colombia",
+    "keywords": [
+      "Colombia",
+      "CO",
+      "COT · Colombia",
+      "Cali",
+      "Medellín",
+      "Barranquilla"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Atikokan",
+    "value": "America/Atikokan",
+    "abbr": "EST",
+    "badge": "EST · Canada",
+    "keywords": [
+      "Canada",
+      "CA",
+      "EST · Canada"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Cancún",
+    "value": "America/Cancun",
+    "abbr": "EST",
+    "badge": "EST · Mexico",
+    "keywords": [
+      "Mexico",
+      "MX",
+      "EST · Mexico",
+      "Chetumal",
+      "Playa del Carmen",
+      "Cozumel"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "George Town",
+    "value": "America/Cayman",
+    "abbr": "EST",
+    "badge": "EST · Cayman Islands",
+    "keywords": [
+      "Cayman Islands",
+      "KY",
+      "EST · Cayman Islands",
+      "West Bay"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Kingston, Jamaica",
+    "value": "America/Jamaica",
+    "abbr": "EST",
+    "badge": "EST · Jamaica",
+    "keywords": [
+      "Jamaica",
+      "JM",
+      "EST · Jamaica",
+      "New Kingston",
+      "Spanish Town",
+      "Portmore"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Panamá",
+    "value": "America/Panama",
+    "abbr": "EST",
+    "badge": "EST · Panama",
+    "keywords": [
+      "Panama",
+      "PA",
+      "EST · Panama",
+      "San Miguelito",
+      "Juan Díaz",
+      "David"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Quito",
+    "value": "America/Guayaquil",
+    "abbr": "ECT",
+    "badge": "ECT · Ecuador",
+    "keywords": [
+      "Ecuador",
+      "EC",
+      "ECT · Ecuador",
+      "Guayaquil",
+      "Cuenca",
+      "Santo Domingo de los Colorados"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Lima",
+    "value": "America/Lima",
+    "abbr": "PET",
+    "badge": "PET · Peru",
+    "keywords": [
+      "Peru",
+      "PE",
+      "PET · Peru",
+      "Callao",
+      "Arequipa",
+      "Trujillo"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Havana",
+    "value": "America/Havana",
+    "abbr": "CST",
+    "badge": "CST · Cuba",
+    "keywords": [
+      "Cuba",
+      "CU",
+      "CST · Cuba",
+      "Santiago de Cuba",
+      "Camagüey",
+      "Holguín"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Nassau",
+    "value": "America/Nassau",
+    "abbr": "EST",
+    "badge": "EST · Bahamas",
+    "keywords": [
+      "Bahamas",
+      "BS",
+      "EST · Bahamas",
+      "Lucaya",
+      "Freeport",
+      "Killarney"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Port-au-Prince",
+    "value": "America/Port-au-Prince",
+    "abbr": "EST",
+    "badge": "EST · Haiti",
+    "keywords": [
+      "Haiti",
+      "HT",
+      "EST · Haiti",
+      "Carrefour",
+      "Delmas",
+      "Port-de-Paix"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Providenciales",
+    "value": "America/Grand_Turk",
+    "abbr": "EST",
+    "badge": "EST · Turks and Caicos Islands",
+    "keywords": [
+      "Turks and Caicos Islands",
+      "TC",
+      "EST · Turks and Caicos Islands",
+      "Cockburn Town"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Toronto",
+    "value": "America/Toronto",
+    "abbr": "EST",
+    "badge": "EST · Canada",
+    "keywords": [
+      "Canada",
+      "CA",
+      "EST · Canada",
+      "Montréal",
+      "Ottawa",
+      "Mississauga"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Belize City",
+    "value": "America/Belize",
+    "abbr": "CST",
+    "badge": "CST · Belize",
+    "keywords": [
+      "Belize",
+      "BZ",
+      "CST · Belize",
+      "San Pedro",
+      "Orange Walk",
+      "Belmopan"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Guatemala City",
+    "value": "America/Guatemala",
+    "abbr": "CST",
+    "badge": "CST · Guatemala",
+    "keywords": [
+      "Guatemala",
+      "GT",
+      "CST · Guatemala",
+      "Villa Nueva",
+      "Mixco",
+      "Cobán"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Managua",
+    "value": "America/Managua",
+    "abbr": "CST",
+    "badge": "CST · Nicaragua",
+    "keywords": [
+      "Nicaragua",
+      "NI",
+      "CST · Nicaragua",
+      "León",
+      "Masaya",
+      "Chinandega"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Mexico City",
+    "value": "America/Mexico_City",
+    "abbr": "CST",
+    "badge": "CST · Mexico",
+    "keywords": [
+      "Mexico",
+      "MX",
+      "CST · Mexico",
+      "Iztapalapa",
+      "Puebla",
+      "Ecatepec de Morelos"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "San José",
+    "value": "America/Costa_Rica",
+    "abbr": "CST",
+    "badge": "CST · Costa Rica",
+    "keywords": [
+      "Costa Rica",
+      "CR",
+      "CST · Costa Rica",
+      "Limón",
+      "San Francisco",
+      "Alajuela"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "San Salvador",
+    "value": "America/El_Salvador",
+    "abbr": "CST",
+    "badge": "CST · El Salvador",
+    "keywords": [
+      "El Salvador",
+      "SV",
+      "CST · El Salvador",
+      "Soyapango",
+      "San Miguel",
+      "Santa Ana"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Saskatoon",
+    "value": "America/Regina",
+    "abbr": "CST",
+    "badge": "CST · Canada",
+    "keywords": [
+      "Canada",
+      "CA",
+      "CST · Canada",
+      "Regina",
+      "Prince Albert",
+      "Moose Jaw"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Tegucigalpa",
+    "value": "America/Tegucigalpa",
+    "abbr": "CST",
+    "badge": "CST · Honduras",
+    "keywords": [
+      "Honduras",
+      "HN",
+      "CST · Honduras",
+      "San Pedro Sula",
+      "La Ceiba",
+      "Choloma"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Galapagos",
+    "value": "Pacific/Galapagos",
+    "abbr": "GALT",
+    "badge": "GALT · Ecuador",
+    "keywords": [
+      "Ecuador",
+      "EC",
+      "GALT · Ecuador"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Reynosa",
+    "value": "America/Matamoros",
+    "abbr": "CST",
+    "badge": "CST · Mexico",
+    "keywords": [
+      "Mexico",
+      "MX",
+      "CST · Mexico",
+      "Heroica Matamoros",
+      "Nuevo Laredo",
+      "Ciudad Acuña"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Winnipeg",
+    "value": "America/Winnipeg",
+    "abbr": "CST",
+    "badge": "CST · Canada",
+    "keywords": [
+      "Canada",
+      "CA",
+      "CST · Canada",
+      "Brandon",
+      "Steinbach",
+      "Kenora"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Easter",
+    "value": "Pacific/Easter",
+    "abbr": "EAST",
+    "badge": "EAST · Chile",
+    "keywords": [
+      "Chile",
+      "CL",
+      "EAST · Chile"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Hermosillo",
+    "value": "America/Hermosillo",
+    "abbr": "GMT-7",
+    "badge": "GMT-7 · Mexico",
+    "keywords": [
+      "Mexico",
+      "MX",
+      "GMT-7 · Mexico",
+      "Culiacán",
+      "Mazatlán",
+      "Tepic"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Whitehorse",
+    "value": "America/Whitehorse",
+    "abbr": "YT",
+    "badge": "YT · Canada",
+    "keywords": [
+      "Canada",
+      "CA",
+      "YT · Canada",
+      "Fort St. John",
+      "Creston",
+      "Dawson"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Calgary",
+    "value": "America/Edmonton",
+    "abbr": "MST",
+    "badge": "MST · Canada",
+    "keywords": [
+      "Canada",
+      "CA",
+      "MST · Canada",
+      "Edmonton",
+      "Lethbridge",
+      "Red Deer"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Ciudad Juárez",
+    "value": "America/Ciudad_Juarez",
+    "abbr": "MST",
+    "badge": "MST · Mexico",
+    "keywords": [
+      "Mexico",
+      "MX",
+      "MST · Mexico"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Adamstown",
+    "value": "Pacific/Pitcairn",
+    "abbr": "PST",
+    "badge": "PST · Pitcairn",
+    "keywords": [
+      "Pitcairn",
+      "PN",
+      "PST · Pitcairn"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Tijuana",
+    "value": "America/Tijuana",
+    "abbr": "PST",
+    "badge": "PST · Mexico",
+    "keywords": [
+      "Mexico",
+      "MX",
+      "PST · Mexico",
+      "Mexicali",
+      "Ensenada",
+      "Rosarito"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Vancouver",
+    "value": "America/Vancouver",
+    "abbr": "PST",
+    "badge": "PST · Canada",
+    "keywords": [
+      "Canada",
+      "CA",
+      "PST · Canada",
+      "Surrey",
+      "Victoria",
+      "Burnaby"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Gambier",
+    "value": "Pacific/Gambier",
+    "abbr": "GAMT",
+    "badge": "GAMT · French Polynesia",
+    "keywords": [
+      "French Polynesia",
+      "PF",
+      "GAMT · French Polynesia"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Marquesas",
+    "value": "Pacific/Marquesas",
+    "abbr": "MART",
+    "badge": "MART · French Polynesia",
+    "keywords": [
+      "French Polynesia",
+      "PF",
+      "MART · French Polynesia"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Avarua",
+    "value": "Pacific/Rarotonga",
+    "abbr": "CKT",
+    "badge": "CKT · Cook Islands",
+    "keywords": [
+      "Cook Islands",
+      "CK",
+      "CKT · Cook Islands"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Faaa",
+    "value": "Pacific/Tahiti",
+    "abbr": "TAHT",
+    "badge": "TAHT · French Polynesia",
+    "keywords": [
+      "French Polynesia",
+      "PF",
+      "TAHT · French Polynesia",
+      "Papeete",
+      "Punaauia"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Midway",
+    "value": "Pacific/Midway",
+    "abbr": "GMT-11",
+    "badge": "GMT-11 · United States Minor Outlying Islands",
+    "keywords": [
+      "United States Minor Outlying Islands",
+      "UM",
+      "GMT-11 · United States Minor Outlying Islands"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Pago Pago",
+    "value": "Pacific/Pago_Pago",
+    "abbr": "GMT-11",
+    "badge": "GMT-11 · American Samoa",
+    "keywords": [
+      "American Samoa",
+      "AS",
+      "GMT-11 · American Samoa"
+    ],
+    "group": "World"
+  },
+  {
+    "title": "Alofi",
+    "value": "Pacific/Niue",
+    "abbr": "NUT",
+    "badge": "NUT · Niue",
+    "keywords": [
+      "Niue",
+      "NU",
+      "NUT · Niue"
+    ],
+    "group": "World"
   }
 ]

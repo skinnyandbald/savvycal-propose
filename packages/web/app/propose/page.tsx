@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 import { ProposalForm } from "@/components/ProposalForm";
 import { SignOutButton } from "@/components/SignOutButton";
 
@@ -11,14 +12,11 @@ function parseSlugs(raw: string): string[] {
 
 export default async function ProposePage() {
   // Verify auth
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const session = await auth.api.getSession({ headers: await headers() });
 
   const allowedEmail = process.env.ALLOWED_EMAIL?.toLowerCase();
-  if (!user || user.email?.toLowerCase() !== allowedEmail) {
-    redirect("/login");
+  if (!session || session.user.email?.toLowerCase() !== allowedEmail) {
+    redirect("/login?error=unauthorized");
   }
 
   // Read link slugs from env

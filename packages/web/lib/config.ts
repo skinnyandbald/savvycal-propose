@@ -1,4 +1,5 @@
 export { TIMEZONES, searchTimezones } from "@propose/core";
+export type { TimezoneEntry } from "@propose/core";
 
 export interface UserPreferences {
   timezone: string;
