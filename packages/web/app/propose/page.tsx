@@ -15,7 +15,13 @@ export default async function ProposePage() {
   const session = await auth.api.getSession({ headers: await headers() });
 
   const allowedEmail = process.env.ALLOWED_EMAIL?.toLowerCase();
-  if (!session || session.user.email?.toLowerCase() !== allowedEmail) {
+  if (!allowedEmail) {
+    throw new Error("ALLOWED_EMAIL is not configured");
+  }
+  if (!session) {
+    redirect("/login");
+  }
+  if (session.user.email?.toLowerCase() !== allowedEmail) {
     redirect("/login?error=unauthorized");
   }
 

@@ -56,7 +56,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  if (session.user.email?.toLowerCase() !== process.env.ALLOWED_EMAIL?.toLowerCase()) {
+  const allowedEmail = process.env.ALLOWED_EMAIL?.toLowerCase();
+  if (!allowedEmail) {
+    console.error("ALLOWED_EMAIL is not configured");
+    return NextResponse.json({ error: "Server misconfiguration" }, { status: 500 });
+  }
+
+  if (session.user.email?.toLowerCase() !== allowedEmail) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 

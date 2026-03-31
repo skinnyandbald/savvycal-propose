@@ -11,6 +11,9 @@ export default async function LoginPage({
 }) {
   const session = await auth.api.getSession({ headers: await headers() });
   const allowedEmail = process.env.ALLOWED_EMAIL?.toLowerCase();
+  if (!allowedEmail) {
+    throw new Error("ALLOWED_EMAIL is not configured");
+  }
 
   // Redirect authorized users away from login
   if (session?.user.email?.toLowerCase() === allowedEmail) {

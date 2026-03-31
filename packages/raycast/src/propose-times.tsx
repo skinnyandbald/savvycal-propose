@@ -250,11 +250,20 @@ function formatTimeInZone(tzValue: string): string {
 const US_TZS = TIMEZONES.filter((tz) => tz.group === "US");
 const WORLD_TZS = TIMEZONES.filter((tz) => tz.group === "World");
 
-// Raycast requires unique values per item. We use "group:title" as the item value
-// and resolve back to the IANA zone on selection.
+// Raycast requires unique values per item. We use "group:value:title" as the item value
+// so cities that share the same IANA zone (e.g. New York + Philadelphia → America/New_York)
+// each get a distinct key, and we can round-trip back to the exact city on re-render.
+const toTimezoneItemValue = (tz: { group: string; value: string; title: string }) =>
+  `${tz.group}:${tz.value}:${tz.title}`;
+
 function resolveTimezone(itemValue: string): string {
-  const entry = TIMEZONES.find((tz) => `${tz.group}:${tz.title}` === itemValue);
-  return entry?.value ?? itemValue;
+  const parts = itemValue.split(":");
+  // Format is "group:value:title" — value is the IANA zone (may contain "/")
+  // Rejoin parts[1..n-1] to handle zones like "America/New_York"
+  if (parts.length >= 3) {
+    return parts.slice(1, -1).join(":");
+  }
+  return itemValue;
 }
 
 export default function Command() {
@@ -443,9 +452,7 @@ export default function Command() {
   // Map the stored IANA zone back to the composite item value for the controlled dropdown.
   // If multiple cities share the zone, the first one in TIMEZONES is used.
   const firstMatch = TIMEZONES.find((tz) => tz.value === timezone);
-  const timezoneItemValue = firstMatch
-    ? `${firstMatch.group}:${firstMatch.title}`
-    : timezone;
+  const timezoneItemValue = firstMatch ? toTimezoneItemValue(firstMatch) : timezone;
 
   return (
     <Form
@@ -550,7 +557,7 @@ export default function Command() {
           {US_TZS.map((tz) => (
             <Form.Dropdown.Item
               key={`${tz.group}-${tz.value}-${tz.title}`}
-              value={`${tz.group}:${tz.title}`}
+              value={toTimezoneItemValue(tz)}
               title={`${tz.title}  ·  ${formatTimeInZone(tz.value)}`}
               keywords={[tz.title, tz.abbr, tz.badge, ...tz.keywords]}
             />
@@ -560,7 +567,7 @@ export default function Command() {
           {WORLD_TZS.map((tz) => (
             <Form.Dropdown.Item
               key={`${tz.group}-${tz.value}-${tz.title}`}
-              value={`${tz.group}:${tz.title}`}
+              value={toTimezoneItemValue(tz)}
               title={`${tz.title}  ·  ${formatTimeInZone(tz.value)}`}
               keywords={[tz.title, tz.abbr, tz.badge, ...tz.keywords]}
             />
