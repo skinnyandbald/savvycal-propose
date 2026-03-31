@@ -71,7 +71,7 @@ export function TimezonePicker({ value, onChange }: TimezonePickerProps) {
       : TIMEZONES.find((tz) => tz.value === value);
 
   const mounted = now !== null;
-  const nowDate = mounted ? new Date(now!) : undefined;
+  const nowDate = new Date(now ?? Date.now());
 
   function handleSelect(tz: TimezoneEntry) {
     setSelectedKey(timezoneKey(tz));
