@@ -12,6 +12,8 @@ interface TimezoneEntry {
   group: "US" | "World";
 }
 
+// Intentionally limited to zones used in us-cities.ts.
+// Adding a city with a different IANA zone will throw at generation time — update this map accordingly.
 const US_ZONE_INFO: Record<string, { abbr: string; badge: string }> = {
   "America/New_York": { abbr: "ET", badge: "ET · Eastern" },
   "America/Chicago": { abbr: "CT", badge: "CT · Central" },
@@ -64,8 +66,9 @@ const usEntries: TimezoneEntry[] = US_CITIES.map((city) => {
 // Sort descending by rawOffsetInMinutes (east to west).
 // Stable sort: cities in the same IANA zone keep their us-cities.ts order.
 usEntries.sort((a, b) => {
-  const ra = tzdbMap.get(a.value)!.rawOffsetInMinutes;
-  const rb = tzdbMap.get(b.value)!.rawOffsetInMinutes;
+  // All US entries have valid IANA zones checked during mapping, so these lookups are guaranteed to succeed
+  const ra = tzdbMap.get(a.value)?.rawOffsetInMinutes ?? 0;
+  const rb = tzdbMap.get(b.value)?.rawOffsetInMinutes ?? 0;
   return rb - ra;
 });
 
@@ -75,7 +78,7 @@ const worldEntries: TimezoneEntry[] = tzdb
     (tz) =>
       tz.countryCode !== "US" &&
       tz.mainCities.length > 0 &&
-      !tz.name.startsWith("Etc/"),
+      !tz.name.startsWith("Etc/"), // exclude meta/offset zones (no country context)
   )
   .map((tz) => ({
     title: tz.mainCities[0],
