@@ -1,0 +1,21 @@
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.3",
+  "base_commit_sha": "ccf146ef4dc2298da8e74dd0581f05dbb2e7450b",
+  "prompts": {
+    "fdd23872d0032030": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e3d5415c-b889-4874-9388-1a012e7593ea",
+        "model": "<synthetic>"
+      },
+      "human_author": "Ben Fisher",
+      "messages": [],
+      "total_additions": 1383,
+      "total_deletions": 151,
+      "accepted_lines": 0,
+      "overriden_lines": 0
+    }
+  }
+}
