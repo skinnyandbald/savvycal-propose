@@ -1,13 +1,12 @@
 "use client";
 
-import { authClient } from "@/lib/auth/client";
+import { authClient } from "@/lib/auth-client";
 
 export function LoginButton() {
   const handleLogin = async () => {
     await authClient.signIn.social({
       provider: "google",
       callbackURL: "/propose",
-      errorCallbackURL: "/login?error=auth",
     });
   };
 

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import {
   getProvider,
   selectSmartSlots,
@@ -50,14 +51,17 @@ function parseLocalDate(iso: string): Date {
 
 export async function POST(request: Request) {
   // Verify authentication
-  const session = await auth.api.getSession({ headers: request.headers });
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  if (session.user.email?.toLowerCase() !== process.env.ALLOWED_EMAIL?.toLowerCase()) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const allowedEmail = process.env.ALLOWED_EMAIL?.toLowerCase();
+  if (allowedEmail && session.user.email?.toLowerCase() !== allowedEmail) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   let body: SlotsRequestBody;

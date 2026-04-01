@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
-import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import { ProposalForm } from "@/components/ProposalForm";
 import { SignOutButton } from "@/components/SignOutButton";
 
@@ -11,11 +11,17 @@ function parseSlugs(raw: string): string[] {
 }
 
 export default async function ProposePage() {
-  // Verify auth
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
+  if (!session) {
+    redirect("/login");
+  }
+
+  // Enforce ALLOWED_EMAIL if set
   const allowedEmail = process.env.ALLOWED_EMAIL?.toLowerCase();
-  if (!session || session.user.email?.toLowerCase() !== allowedEmail) {
+  if (allowedEmail && session.user.email?.toLowerCase() !== allowedEmail) {
     redirect("/login?error=unauthorized");
   }
 
