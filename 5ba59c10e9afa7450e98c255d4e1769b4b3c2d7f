@@ -1,0 +1,23 @@
+packages/web/lib/auth/index.ts
+  89bc6f6a0e684afd 6-18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.3",
+  "base_commit_sha": "5ba59c10e9afa7450e98c255d4e1769b4b3c2d7f",
+  "prompts": {
+    "89bc6f6a0e684afd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bf5fcfe7-a4ce-4ecb-bf8f-1ec2e7905d7e",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Ben Fisher",
+      "messages": [],
+      "total_additions": 13,
+      "total_deletions": 0,
+      "accepted_lines": 13,
+      "overriden_lines": 0
+    }
+  }
+}
