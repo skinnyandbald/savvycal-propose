@@ -1,0 +1,25 @@
+packages/web/components/LoginButton.tsx
+  89bc6f6a0e684afd 3
+packages/web/components/SignOutButton.tsx
+  89bc6f6a0e684afd 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.3",
+  "base_commit_sha": "4a606db804c038b62b063289706673f8af597e72",
+  "prompts": {
+    "89bc6f6a0e684afd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bf5fcfe7-a4ce-4ecb-bf8f-1ec2e7905d7e",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Ben Fisher",
+      "messages": [],
+      "total_additions": 2,
+      "total_deletions": 2,
+      "accepted_lines": 2,
+      "overriden_lines": 0
+    }
+  }
+}
