@@ -1,0 +1,37 @@
+packages/web/app/api/slots/route.ts
+  89bc6f6a0e684afd 64
+packages/web/middleware.ts
+  89bc6f6a0e684afd 8-10,18
+packages/web/components/LoginButton.tsx
+  89bc6f6a0e684afd 10
+packages/web/app/login/page.tsx
+  89bc6f6a0e684afd 5,16-20,28-31
+.github/workflows/claude.yml
+  89bc6f6a0e684afd 16-27
+.github/workflows/claude-code-review.yml
+  89bc6f6a0e684afd 10
+packages/web/components/SignOutButton.tsx
+  89bc6f6a0e684afd 10-15
+packages/web/lib/auth.ts
+  89bc6f6a0e684afd 4-17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.3",
+  "base_commit_sha": "9f02eafc86bcc0d858b517aa77429c329e3ee945",
+  "prompts": {
+    "89bc6f6a0e684afd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bf5fcfe7-a4ce-4ecb-bf8f-1ec2e7905d7e",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Ben Fisher",
+      "messages": [],
+      "total_additions": 49,
+      "total_deletions": 14,
+      "accepted_lines": 49,
+      "overriden_lines": 0
+    }
+  }
+}
