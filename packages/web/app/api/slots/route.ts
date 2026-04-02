@@ -61,7 +61,7 @@ export async function POST(request: Request) {
 
   const allowedEmail = process.env.ALLOWED_EMAIL?.toLowerCase();
   if (allowedEmail && session.user.email?.toLowerCase() !== allowedEmail) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   let body: SlotsRequestBody;

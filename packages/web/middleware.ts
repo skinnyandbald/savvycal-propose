@@ -5,8 +5,9 @@ export async function middleware(request: NextRequest) {
   const sessionCookie = getSessionCookie(request);
   const { pathname } = request.nextUrl;
 
-  // Already authenticated — redirect away from login
-  if (sessionCookie && pathname === "/login") {
+  // Already authenticated — redirect away from login (unless they have an error param)
+  const hasError = request.nextUrl.searchParams.has("error");
+  if (sessionCookie && pathname === "/login" && !hasError) {
     return NextResponse.redirect(new URL("/propose", request.url));
   }
 
@@ -14,7 +15,7 @@ export async function middleware(request: NextRequest) {
   if (
     !sessionCookie &&
     pathname !== "/login" &&
-    !pathname.startsWith("/api/auth")
+    !(pathname === "/api/auth" || pathname.startsWith("/api/auth/"))
   ) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
