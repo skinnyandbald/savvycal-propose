@@ -203,6 +203,16 @@ function generateDateSuggestions(from: Date, selected?: Date | null, actualToday
   add("in-2-weeks", "In 2 weeks", addDays(from, 14));
   add("in-3-weeks", "In 3 weeks", addDays(from, 21));
 
+  // Every remaining day out to 90 days, so any date can be typed-to-filter.
+  // The `added` set keeps curated entries above with their friendly labels.
+  for (let offset = 7; offset <= 90; offset++) {
+    const d = addDays(from, offset);
+    const key = format(d, "yyyy-MM-dd");
+    if (added.has(key)) continue;
+    added.add(key);
+    suggestions.push({ id: `day-${offset}`, label: fmt(d), date: d });
+  }
+
   // If the currently selected date isn't already listed, add it
   if (selected) {
     const key = format(selected, "yyyy-MM-dd");
@@ -489,7 +499,13 @@ export default function Command() {
             key={s.id}
             value={format(s.date, "yyyy-MM-dd")}
             title={s.label}
-            keywords={[format(s.date, "EEE, MMM d"), format(s.date, "MMM d"), s.label.split("  ·  ")[0]]}
+            keywords={[
+              format(s.date, "EEE, MMM d"),
+              format(s.date, "MMM d"),
+              format(s.date, "yyyy-MM-dd"),
+              format(s.date, "d"),
+              s.label.split("  ·  ")[0],
+            ]}
           />
         ))}
       </Form.Dropdown>
@@ -505,7 +521,13 @@ export default function Command() {
             key={s.id}
             value={format(s.date, "yyyy-MM-dd")}
             title={s.label}
-            keywords={[format(s.date, "EEE, MMM d"), format(s.date, "MMM d"), s.label.split("  ·  ")[0]]}
+            keywords={[
+              format(s.date, "EEE, MMM d"),
+              format(s.date, "MMM d"),
+              format(s.date, "yyyy-MM-dd"),
+              format(s.date, "d"),
+              s.label.split("  ·  ")[0],
+            ]}
           />
         ))}
       </Form.Dropdown>
