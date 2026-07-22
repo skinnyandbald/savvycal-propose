@@ -165,10 +165,11 @@ interface DateSuggestion {
 const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 function generateDateSuggestions(from: Date, selected?: Date | null, actualToday?: Date): DateSuggestion[] {
-  const fmt = (d: Date) => format(d, "EEE, MMM d");
   const added = new Set<string>();
   const suggestions: DateSuggestion[] = [];
   const reference = actualToday ?? from;
+  // Include the year once a date crosses into the next calendar year
+  const fmt = (d: Date) => format(d, d.getFullYear() === reference.getFullYear() ? "EEE, MMM d" : "EEE, MMM d, yyyy");
 
   const relativeLabel = (date: Date): string => {
     const diff = differenceInCalendarDays(date, reference);
@@ -202,6 +203,16 @@ function generateDateSuggestions(from: Date, selected?: Date | null, actualToday
   // Two and three weeks out
   add("in-2-weeks", "In 2 weeks", addDays(from, 14));
   add("in-3-weeks", "In 3 weeks", addDays(from, 21));
+
+  // Every remaining day out to 90 days, so any date can be typed-to-filter.
+  // The `added` set keeps curated entries above with their friendly labels.
+  for (let offset = 7; offset <= 90; offset++) {
+    const d = addDays(from, offset);
+    const key = format(d, "yyyy-MM-dd");
+    if (added.has(key)) continue;
+    added.add(key);
+    suggestions.push({ id: `day-${offset}`, label: fmt(d), date: d });
+  }
 
   // If the currently selected date isn't already listed, add it
   if (selected) {
@@ -489,7 +500,13 @@ export default function Command() {
             key={s.id}
             value={format(s.date, "yyyy-MM-dd")}
             title={s.label}
-            keywords={[format(s.date, "EEE, MMM d"), format(s.date, "MMM d"), s.label.split("  ·  ")[0]]}
+            keywords={[
+              format(s.date, "EEE, MMM d"),
+              format(s.date, "MMM d"),
+              format(s.date, "yyyy-MM-dd"),
+              format(s.date, "d"),
+              ...(s.label.includes("  ·  ") ? [s.label.split("  ·  ")[0]] : []),
+            ]}
           />
         ))}
       </Form.Dropdown>
@@ -505,7 +522,13 @@ export default function Command() {
             key={s.id}
             value={format(s.date, "yyyy-MM-dd")}
             title={s.label}
-            keywords={[format(s.date, "EEE, MMM d"), format(s.date, "MMM d"), s.label.split("  ·  ")[0]]}
+            keywords={[
+              format(s.date, "EEE, MMM d"),
+              format(s.date, "MMM d"),
+              format(s.date, "yyyy-MM-dd"),
+              format(s.date, "d"),
+              ...(s.label.includes("  ·  ") ? [s.label.split("  ·  ")[0]] : []),
+            ]}
           />
         ))}
       </Form.Dropdown>
