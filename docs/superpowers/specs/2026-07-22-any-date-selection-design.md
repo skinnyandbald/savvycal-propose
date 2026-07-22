@@ -9,10 +9,10 @@ The Raycast `propose-times` form limits Start/End date selection to a fixed sugg
 
 ## Design
 
-All changes live in `generateDateSuggestions()` in `packages/raycast/src/propose-times.tsx`.
+Changes live in `packages/raycast/src/propose-times.tsx`: the suggestion list in `generateDateSuggestions()` and the type-to-filter keywords on the Start/End `Form.Dropdown.Item`s.
 
 1. **Keep the curated suggestions unchanged:** Today/Tomorrow, weekday names for the next 5 days, Next Monday–Friday, In 2 weeks, In 3 weeks.
-2. **Append every remaining day out to 90 days** from the `from` date, labeled `EEE, MMM d` (e.g. "Wed, Aug 10"). The existing `added` set dedups so curated entries keep their friendly labels; the existing chronological sort keeps ordering correct.
+2. **Append every remaining day out to 90 days** from the `from` date, labeled `EEE, MMM d` (or `EEE, MMM d, yyyy` once a date crosses into the next calendar year), e.g. "Mon, Aug 10". The existing `added` set dedups so curated entries keep their friendly labels; the existing chronological sort keeps ordering correct.
 3. **Type-to-filter keywords:** items already carry `"EEE, MMM d"` and `"MMM d"` keywords. Add `"yyyy-MM-dd"` and the bare day number so "aug 10", "2026-08-10", and "10" all match.
 4. **End date** uses the same generator anchored at the start date, so it gets the same 90-day horizon automatically.
 5. **No changes** to core, providers, or slot-search logic — the selected range already flows through; only the picker was the bottleneck.
