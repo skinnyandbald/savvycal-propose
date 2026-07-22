@@ -165,10 +165,11 @@ interface DateSuggestion {
 const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 function generateDateSuggestions(from: Date, selected?: Date | null, actualToday?: Date): DateSuggestion[] {
-  const fmt = (d: Date) => format(d, "EEE, MMM d");
   const added = new Set<string>();
   const suggestions: DateSuggestion[] = [];
   const reference = actualToday ?? from;
+  // Include the year once a date crosses into the next calendar year
+  const fmt = (d: Date) => format(d, d.getFullYear() === reference.getFullYear() ? "EEE, MMM d" : "EEE, MMM d, yyyy");
 
   const relativeLabel = (date: Date): string => {
     const diff = differenceInCalendarDays(date, reference);
@@ -504,7 +505,7 @@ export default function Command() {
               format(s.date, "MMM d"),
               format(s.date, "yyyy-MM-dd"),
               format(s.date, "d"),
-              s.label.split("  ·  ")[0],
+              ...(s.label.includes("  ·  ") ? [s.label.split("  ·  ")[0]] : []),
             ]}
           />
         ))}
@@ -526,7 +527,7 @@ export default function Command() {
               format(s.date, "MMM d"),
               format(s.date, "yyyy-MM-dd"),
               format(s.date, "d"),
-              s.label.split("  ·  ")[0],
+              ...(s.label.includes("  ·  ") ? [s.label.split("  ·  ")[0]] : []),
             ]}
           />
         ))}
