@@ -73,30 +73,44 @@ You'll need **Node.js** installed on your computer. To check if you have it:
 If you see a version number (like `v20.10.0`), you're good. If you see "command not found":
 - 🔗 [Download Node.js](https://nodejs.org) — choose the "LTS" version, run the installer
 
+This project is a **pnpm** workspace, so the commands below start with `corepack enable`.
+That ships with Node.js and switches on pnpm — you don't need a separate install. `npm` will
+not work here and will stop with a message telling you the same thing.
+
 ### Step-by-Step Installation
 
 **Option A: Download ZIP (easiest)**
 
-1. Go to [github.com/skinnyandbald/propose-times](https://github.com/skinnyandbald/propose-times)
+1. Go to [github.com/skinnyandbald/savvycal-propose](https://github.com/skinnyandbald/savvycal-propose)
 2. Click the green **"Code"** button → **"Download ZIP"**
 3. Unzip the downloaded file (double-click it)
 4. Open **Terminal** and run:
    ```bash
-   cd ~/Downloads/propose-times-main
-   npm install && npm run dev
+   cd ~/Downloads/savvycal-propose-master
+   corepack enable
+   pnpm install
+   pnpm build
    ```
 5. The extension now appears in Raycast — search for "Propose Times"
-6. Press `Ctrl + C` in Terminal to stop the dev server (extension stays installed)
+
+`pnpm build` finishes and exits on its own. You don't need to leave Terminal open, and
+there's nothing to stop with `Ctrl + C` — the extension stays installed.
 
 **Option B: Use git (if you have it)**
 
 ```bash
-git clone https://github.com/skinnyandbald/propose-times.git
-cd propose-times
-npm install && npm run dev
+git clone https://github.com/skinnyandbald/savvycal-propose.git
+cd savvycal-propose
+corepack enable
+pnpm install
+pnpm build
 ```
 
-The extension now appears in Raycast — search for "Propose Times". Press `Ctrl + C` to stop the dev server (extension stays installed).
+The extension now appears in Raycast — search for "Propose Times".
+
+Use `pnpm build` whenever you pull down changes. `pnpm dev` also installs the extension, but
+it starts a hot-reloading dev server that only lives as long as the terminal stays open — see
+[Development](#development).
 
 ### Quick Access (Optional but Recommended)
 
@@ -112,16 +126,26 @@ Assign a keyboard shortcut so you can launch it instantly:
 **"git: command not found"**
 - Install Xcode Command Line Tools: open Terminal, run `xcode-select --install`
 
-**"npm: command not found"**
-- Install Node.js from [nodejs.org](https://nodejs.org)
+**"npm: command not found"** or **"pnpm: command not found"**
+- Install Node.js from [nodejs.org](https://nodejs.org), then run `corepack enable`
 
-**Can't find the propose-times folder?**
-- If you downloaded the ZIP, it's in `~/Downloads/propose-times-main`
+**Can't find the savvycal-propose folder?**
+- If you downloaded the ZIP, it's in `~/Downloads/savvycal-propose-master`
 - If you used `git clone`, it's in whichever folder you ran the command from
 
+**Raycast says "Missing executable. You might need to build the extension."**
+- Raycast has the command registered but no compiled output. Build it:
+  ```bash
+  cd savvycal-propose
+  pnpm install
+  pnpm build
+  ```
+- This writes `~/.config/raycast/extensions/propose-times/propose-times.js`, which is the
+  file Raycast was looking for.
+
 **Extension not showing in Raycast?**
-- Make sure `npm run dev` completed without errors
-- Try running `npm run dev` again
+- Make sure `pnpm build` completed without errors
+- Try running `pnpm build` again
 
 ---
 
@@ -130,8 +154,17 @@ Assign a keyboard shortcut so you can launch it instantly:
 If you want to make changes to the extension:
 
 ```bash
-npm run dev  # Hot-reloads changes, but terminal must stay open
+pnpm dev    # Hot-reloads as you edit; the terminal must stay open (Ctrl + C to stop)
+pnpm build  # One-off build; installs into Raycast and exits
+pnpm lint   # ESLint + Prettier, via `ray lint`
+pnpm test:run  # Core test suite (packages/core); `pnpm test` watches
 ```
+
+Run these from the repo root. They are thin wrappers around the `propose-times`
+workspace package, so `pnpm --filter propose-times dev` works too.
+
+`pnpm dev` is for editing the extension — Raycast reloads it on every save. If you only
+want the extension installed and working, use `pnpm build`.
 
 ### Configuration
 

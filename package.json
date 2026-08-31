@@ -1,6 +1,18 @@
 {
+  "name": "savvycal-propose",
   "private": true,
+  "packageManager": "pnpm@10.16.0",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
+    "preinstall": "node scripts/check-package-manager.mjs",
+    "dev": "pnpm --filter propose-times dev",
+    "build": "pnpm --filter propose-times build",
+    "lint": "pnpm --filter propose-times lint",
+    "fix-lint": "pnpm --filter propose-times fix-lint",
+    "dev:raycast": "pnpm --filter propose-times dev",
+    "build:raycast": "pnpm --filter propose-times build",
     "test": "pnpm --filter @propose/core test",
     "test:run": "pnpm --filter @propose/core test:run",
     "dev:web": "pnpm --filter @propose/web dev",

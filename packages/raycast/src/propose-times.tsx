@@ -12,8 +12,21 @@ import {
 import { useState, useEffect, useMemo, useRef } from "react";
 import { format, addDays, differenceInCalendarDays } from "date-fns";
 import { formatInTimeZone, utcToZonedTime } from "date-fns-tz";
-import type { ProviderType, ProviderConfig, TimeSlot, LinkInfo } from "@propose/core";
-import { getProvider, selectSmartSlots, filterSlotsByDuration, filterSlotsByTime, TIMEZONES, getTimezoneAbbr, parseNaturalDate } from "@propose/core";
+import type {
+  ProviderType,
+  ProviderConfig,
+  TimeSlot,
+  LinkInfo,
+} from "@propose/core";
+import {
+  getProvider,
+  selectSmartSlots,
+  filterSlotsByDuration,
+  filterSlotsByTime,
+  TIMEZONES,
+  getTimezoneAbbr,
+  parseNaturalDate,
+} from "@propose/core";
 
 interface Preferences {
   provider: ProviderType;
@@ -31,7 +44,6 @@ interface Preferences {
   maxSlotsPerDay: string;
   bookerUrl?: string;
 }
-
 
 function parseSlugs(raw: string | undefined): string[] {
   if (!raw) return [];
@@ -162,14 +174,32 @@ interface DateSuggestion {
   date: Date;
 }
 
-const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const DAY_NAMES = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 
-function generateDateSuggestions(from: Date, selected?: Date | null, actualToday?: Date): DateSuggestion[] {
+function generateDateSuggestions(
+  from: Date,
+  selected?: Date | null,
+  actualToday?: Date,
+): DateSuggestion[] {
   const added = new Set<string>();
   const suggestions: DateSuggestion[] = [];
   const reference = actualToday ?? from;
   // Include the year once a date crosses into the next calendar year
-  const fmt = (d: Date) => format(d, d.getFullYear() === reference.getFullYear() ? "EEE, MMM d" : "EEE, MMM d, yyyy");
+  const fmt = (d: Date) =>
+    format(
+      d,
+      d.getFullYear() === reference.getFullYear()
+        ? "EEE, MMM d"
+        : "EEE, MMM d, yyyy",
+    );
 
   const relativeLabel = (date: Date): string => {
     const diff = differenceInCalendarDays(date, reference);
@@ -311,8 +341,14 @@ export default function Command() {
   const [selectedDuration, setSelectedDuration] = useState<string>("25");
   const [, setLinkInfo] = useState<LinkInfo | null>(null);
 
-  const startSuggestions = useMemo(() => generateDateSuggestions(today, startDate), [today, startDate]);
-  const endSuggestions = useMemo(() => generateDateSuggestions(startDate ?? today, endDate, today), [startDate, today, endDate]);
+  const startSuggestions = useMemo(
+    () => generateDateSuggestions(today, startDate),
+    [today, startDate],
+  );
+  const endSuggestions = useMemo(
+    () => generateDateSuggestions(startDate ?? today, endDate, today),
+    [startDate, today, endDate],
+  );
 
   // Fetch link info to get available durations
   useEffect(() => {
