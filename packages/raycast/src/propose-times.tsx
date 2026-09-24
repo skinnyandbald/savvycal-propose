@@ -13,6 +13,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { format, addDays, differenceInCalendarDays } from "date-fns";
 import { formatInTimeZone, utcToZonedTime } from "date-fns-tz";
 import type { ProviderType, ProviderConfig, TimeSlot, LinkInfo } from "@propose/core";
+import { copyRichText } from "./copyRichText";
 import { getProvider, selectSmartSlots, filterSlotsByDuration, filterSlotsByTime, TIMEZONES, getTimezoneAbbr, parseNaturalDate } from "@propose/core";
 
 interface Preferences {
@@ -426,10 +427,11 @@ export default function Command() {
       );
 
       // Copy as rich text (HTML) with plain text fallback
-      await Clipboard.copy({
-        text: plainTextMessage,
-        html: htmlMessage.replace(/\n/g, "<br>").replace(/• /g, "• "),
-      });
+      await copyRichText(
+        htmlMessage.replace(/\n/g, "<br>").replace(/• /g, "• "),
+        plainTextMessage,
+        (content) => Clipboard.copy(content),
+      );
       await showHUD("✓ Meeting times copied to clipboard!");
     } catch (error) {
       console.error("Error fetching slots:", error);
