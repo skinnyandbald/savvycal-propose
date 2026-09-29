@@ -14,6 +14,7 @@ import { format, addDays, differenceInCalendarDays } from "date-fns";
 import { formatInTimeZone, utcToZonedTime } from "date-fns-tz";
 import type { ProviderType, ProviderConfig, TimeSlot, LinkInfo } from "@propose/core";
 import { getProvider, selectSmartSlots, filterSlotsByDuration, filterSlotsByTime, TIMEZONES, getTimezoneAbbr, parseNaturalDate } from "@propose/core";
+import { copyRichText } from "./copyRichText";
 
 interface Preferences {
   provider: ProviderType;
@@ -426,11 +427,16 @@ export default function Command() {
       );
 
       // Copy as rich text (HTML) with plain text fallback
-      await Clipboard.copy({
-        text: plainTextMessage,
-        html: htmlMessage.replace(/\n/g, "<br>").replace(/• /g, "• "),
-      });
-      await showHUD("✓ Meeting times copied to clipboard!");
+      const copiedAsRichText = await copyRichText(
+        htmlMessage.replace(/\n/g, "<br>").replace(/• /g, "• "),
+        plainTextMessage,
+        (content) => Clipboard.copy(content),
+      );
+      await showHUD(
+        copiedAsRichText
+          ? "✓ Meeting times copied to clipboard!"
+          : "⚠️ Copied, but time links may paste as plain text",
+      );
     } catch (error) {
       console.error("Error fetching slots:", error);
       await showToast({
