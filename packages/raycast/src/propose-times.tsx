@@ -13,8 +13,8 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { format, addDays, differenceInCalendarDays } from "date-fns";
 import { formatInTimeZone, utcToZonedTime } from "date-fns-tz";
 import type { ProviderType, ProviderConfig, TimeSlot, LinkInfo } from "@propose/core";
-import { copyRichText } from "./copyRichText";
 import { getProvider, selectSmartSlots, filterSlotsByDuration, filterSlotsByTime, TIMEZONES, getTimezoneAbbr, parseNaturalDate } from "@propose/core";
+import { copyRichText } from "./copyRichText";
 
 interface Preferences {
   provider: ProviderType;
