@@ -25,7 +25,7 @@
     "@types/pg": "^8.23.1",
     "@types/react": "^19.0.0",
     "drizzle-kit": "^0.31.11",
-    "tailwindcss": "^4.3.3",
+    "tailwindcss": "^4.3.5",
     "typescript": "^5.2.2"
   }
 }
